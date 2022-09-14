@@ -6,11 +6,28 @@
     "prettier"
   ],
   "rules": {
+    // 안 쓰는 변수는 에러 처리
+    "no-unused-vars": "error",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": [
       "warn",
       {
         "additionalHooks": "useRecoilCallback"
+      }
+    ],
+    // 중복 import는 에러 처리
+    "import/no-duplicates": "error",
+    // import 순서를 자동으로 처리
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          ["builtin", "external", "internal"],
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "alphabetize": { "order": "asc" }
       }
     ]
   }
