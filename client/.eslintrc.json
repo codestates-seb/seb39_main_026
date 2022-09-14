@@ -29,6 +29,12 @@
         ],
         "alphabetize": { "order": "asc" }
       }
-    ]
+    ],
+    // === 사용하도록 처리
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    // 재할당하지 않으면 const 로 쓰도록 처리
+    "prefer-const": "error",
+    // var는 반드시 안 쓰도록 처리
+    "no-var": "error"
   }
 }
