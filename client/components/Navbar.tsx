@@ -49,7 +49,6 @@ export default function Navbar() {
     width: 100%;
     background-color: #fff3e3;
     a {
-      text-align: justify;
       text-decoration: none;
       color: black;
       font-size: 1rem;
@@ -57,9 +56,11 @@ export default function Navbar() {
         font-weight: 500;
       }
     }
+    .logo {
+      color: #dc602a;
+      font-weight: 700;
+    }
     .menus {
-      width: 95%;
-      float: right;
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -98,15 +99,15 @@ export default function Navbar() {
         </Link>
       </nav>
       <nav css={desktop_navbar}>
-        <Link href="/">로고</Link>
         <div className="menus">
           <div className="tabs">
+            <Link href="/">
+              <a className="logo">로고</a>
+            </Link>
             <Link href="/">메인</Link>
             <Link href="/walks">산책 찾기</Link>
           </div>
-          <div className="auth">
-            <Link href="/login">로그인/회원가입</Link>
-          </div>
+          <Link href="/login">로그인/회원가입</Link>
         </div>
       </nav>
     </>
