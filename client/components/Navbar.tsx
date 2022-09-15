@@ -45,6 +45,31 @@ export default function Navbar() {
     @media screen and (max-width: 768px) {
       display: none;
     }
+    height: 75px;
+    width: 100%;
+    background-color: #fff3e3;
+    a {
+      text-align: justify;
+      text-decoration: none;
+      color: black;
+      font-size: 1rem;
+      :hover {
+        font-weight: 500;
+      }
+    }
+    .menus {
+      width: 95%;
+      float: right;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
+    }
+    .tabs {
+      a {
+        margin-right: 2rem;
+      }
+    }
   `;
 
   return (
@@ -73,13 +98,15 @@ export default function Navbar() {
         </Link>
       </nav>
       <nav css={desktop_navbar}>
-        <Link href="/">ㅅㅊ</Link>
-        <div>
-          <Link href="/">메인</Link>
-          <Link href="/walks">산책 찾기</Link>
-        </div>
-        <div>
-          <Link href="/login">로그인/회원가입</Link>
+        <Link href="/">로고</Link>
+        <div className="menus">
+          <div className="tabs">
+            <Link href="/">메인</Link>
+            <Link href="/walks">산책 찾기</Link>
+          </div>
+          <div className="auth">
+            <Link href="/login">로그인/회원가입</Link>
+          </div>
         </div>
       </nav>
     </>
