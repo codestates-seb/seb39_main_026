@@ -1,7 +1,1 @@
-- 패키지 매니저 : yarn
-- 언어 : Typescript
-- 프레임워크 : Next JS
-- 데이터 패치 라이브러리 : React Query, Axios
-- 전역 상태 관리 라이브러리 : Recoil
-- CSS 라이브러리 : emotion
-- 배포 : Vercel
+# ㅅㅊ
