@@ -28,14 +28,14 @@ public class MemberService {
     }
 
     //R
-    public MemberDto.Response findByNickName(String nickname){
-        Member member = memberRepository.findByNickName(nickname).orElseThrow();
+    public MemberDto.Response findMember(Long memberId){
+        Member member = memberRepository.findById(memberId).orElseThrow();
         return memberMapper.memberToMemberResponseDto(member);
     }
 
     //U
-    public MemberDto.Response updateMember(String nickname,MemberDto.Patch patchMemberDto){
-        Member member = memberRepository.findByNickName(nickname).orElseThrow();
+    public MemberDto.Response updateMember(Long memberId,MemberDto.Patch patchMemberDto){
+        Member member = memberRepository.findById(memberId).orElseThrow();
         member.update(patchMemberDto);
 
         //TODO
