@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import Image from 'next/image';
 
-interface iWalkItem {
+interface EachWalk {
   walk: {
     title: string;
     time: string;
@@ -10,7 +10,7 @@ interface iWalkItem {
   };
 }
 
-export default function WalkItem({ walk }: iWalkItem) {
+export default function WalkItem({ walk }: EachWalk) {
   const walkitem = css`
     width: 320px;
     height: 216px;

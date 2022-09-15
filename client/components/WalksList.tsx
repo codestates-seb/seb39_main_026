@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import WalksApi from '../apis/WalksApi';
 import WalkItem from './WalkItem';
 
-interface iWalk {
+interface WalkDefault {
   createAt: string;
   title: string;
   time: string;
@@ -23,7 +23,7 @@ export default function WalksList() {
   return (
     <section css={walksList}>
       {allWalks
-        ? allWalks.map((walk: iWalk) => {
+        ? allWalks.map((walk: WalkDefault) => {
             return <WalkItem key={walk.createAt} walk={walk} />;
           })
         : ''}
