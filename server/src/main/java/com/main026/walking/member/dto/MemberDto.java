@@ -1,7 +1,6 @@
-package com.main026.walking.Member.dto;
+package com.main026.walking.member.dto;
 
-import com.main026.walking.Pet.dto.PetDto;
-import com.main026.walking.Pet.entity.Pet;
+import com.main026.walking.pet.dto.PetDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +19,7 @@ public class MemberDto {
         private String email;
         private String password;
         private String nickName;
+        private String address;
 
         public void setPassword(String password){
             this.password = password;

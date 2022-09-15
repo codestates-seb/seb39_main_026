@@ -1,4 +1,4 @@
-package com.main026.walking.Pet.dto;
+package com.main026.walking.pet.dto;
 
 public class PetDto {
 
