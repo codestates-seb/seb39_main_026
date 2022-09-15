@@ -17,14 +17,14 @@ public class MemberController {
         return memberService.saveMember(memberPostDto);
     }
 
-    @GetMapping("/{nickname}")
-    public MemberDto.Response getMember(@PathVariable String nickname){
-        return memberService.findByNickName(nickname);
+    @GetMapping("/{memberId}")
+    public MemberDto.Response getMember(@PathVariable Long memberId){
+        return memberService.findMember(memberId);
     }
 
-    @PatchMapping("/{nickname}")
-    public MemberDto.Response patchMember(@PathVariable String nickname,MemberDto.Patch patchDto){
-        return memberService.updateMember(nickname,patchDto);
+    @PatchMapping("/{memberId}")
+    public MemberDto.Response patchMember(@PathVariable Long memberId,MemberDto.Patch patchDto){
+        return memberService.updateMember(memberId,patchDto);
     }
 
     @DeleteMapping("/{memberId}")
