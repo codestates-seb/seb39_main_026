@@ -13,7 +13,7 @@ export default function WalksList() {
     <section css={walksList}>
       {data.communities
         ? data.communities.map((walk: WalkDefault) => {
-            return <WalkItem key={walk.projectId} walk={walk} />;
+            return <WalkItem key={walk.communityId} walk={walk} />;
           })
         : ''}
     </section>
