@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -20,11 +22,15 @@ public class Pet {
     @JoinColumn(name = "memberId")
     private Member member;
     private String neuter;
+    //날짜 데이터를 받아서 동적으로 처리
     private Integer petAge;
     private String personality;
     private String breed;
     private String about;
     private String imgUrl;
+
+    @OneToMany(mappedBy = "pet")
+    private List<CommunityPet> communityPets = new ArrayList<>();
 
     @Builder
     public Pet(Long id, String petName, String petGender, Member member, String neuter, Integer petAge, String personality, String breed, String about, String imgUrl) {
