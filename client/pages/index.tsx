@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import type { NextPage } from 'next';
 import MainImage from '../components/MainImage';
 import TabTitle from '../components/TabTitle';
-import WalksList from '../components/WalksList';
+import WalksList from '../components/walks/WalksList';
 
 const Home: NextPage = () => {
   const index = css`
