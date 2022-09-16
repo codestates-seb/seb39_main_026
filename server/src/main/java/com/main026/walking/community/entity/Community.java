@@ -1,13 +1,11 @@
 package com.main026.walking.community.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.main026.walking.comment.entity.Comment;
+import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.entity.CommunityPet;
-import com.main026.walking.pet.entity.Pet;
+import com.main026.walking.util.dto.Address;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,12 +18,6 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-
-//무한참조를 막아주는 어노테이션. TODO Dto를 응답함으로써 근본적인 해결이 필요함
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-@JsonIdentityReference(alwaysAsId = true)
-
 public class Community {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,17 +27,21 @@ public class Community {
   private String name;
 
   @Column(nullable = false)
-  private String title;
-
-  @Column(nullable = false)
   private String body;
 
   @Column(nullable = false)
-  private String address;
+  //Todo 날짜를 객체로 받을 수 있도록 그러나 연관관계 매핑없이 객체받기는 불가능하다?
+  //private String address;
+  @Embedded
+  private Address address;
 
+  //Todo 이미지를 여러개 받을 수 있도록
   private String imgUrl;
 
   @Column//(nullable = false)
+  /**Todo
+   * 요일 혹은 날짜로 받을 수 있어야한다 -> 객체
+  */
   private LocalDateTime time;
 
   @OneToOne(fetch = FetchType.LAZY)
@@ -77,19 +73,21 @@ public class Community {
       comment.setCommunity(this);
     }
   }
-//  public void setNotice(Notice notice){
-//    notices.add(notice);
-//    if(notice.getCommunity() != this){
-//      notice.setCommunity(this);
-//    }
-//  }
+
   public void countView(){
     viewed++;
   }
-//  public void setPet(Pet pet){
-//    pets.add(pet);
-//    if(pet.getCommunity() != this){
-//      pet.setCommunity(this);
-//    }
-//  }
+
+  public void update(CommunityDto.Patch patchDto){
+    this.name = patchDto.getName();
+    this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
+    this.body = patchDto.getBody();
+    this.capacity = patchDto.getCapacity();
+    this.time = patchDto.getTime();
+    this.imgUrl = patchDto.getImgUrl();
+  }
+
+  public void setAddress(String si,String gu,String dong){
+    this.address = new Address(si,gu,dong);
+  }
 }

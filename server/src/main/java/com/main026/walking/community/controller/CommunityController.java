@@ -23,13 +23,11 @@ public class CommunityController {
 
 //  Create
   @PostMapping("/post")
-  public ResponseEntity postCommunity(@RequestBody CommunityDto.Post dto){
+  public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto){
 
     //TODO 유저 수정 필요
-
-
-    Community community = communityMapper.postDtoToEntity(dto);
-    Community createdCommunity = communityService.createCommunity(community);
+    //Todo address mapping
+    Community createdCommunity = communityService.createCommunity(postDto);
 
     return new ResponseEntity(communityMapper.entityToDtoResponse(createdCommunity), HttpStatus.CREATED);
   }
@@ -53,7 +51,9 @@ public class CommunityController {
 
     List<Community> communities = communityPage.getContent();
 
-    return new ResponseEntity(new MultiResponseDto<>(communityMapper.multiEntityToDtoInfo(communities), communityPage), HttpStatus.OK);
+    //Todo 정보를 보여주는 dto 에 대한 고민
+    return null;
+    //return new ResponseEntity(new MultiResponseDto<>(communityMapper.multiEntityToDtoInfo(communities), communityPage), HttpStatus.OK);
   }
 
 //  Update

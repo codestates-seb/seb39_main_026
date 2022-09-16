@@ -6,6 +6,7 @@ import com.main026.walking.community.mapper.CommunityMapper;
 import com.main026.walking.community.repository.CommunityRepository;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
+import com.main026.walking.util.dto.Address;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,11 +28,14 @@ public class CommunityService {
   }
 
 //  Create
-  public Community createCommunity(Community entity) {
-    //Todo 시큐리티 이후 유저 세팅
-    entity.setRepresentMember(testMember());
+  public Community createCommunity(CommunityDto.Post postDto) {
+    Community community = communityMapper.postDtoToEntity(postDto);
 
-    return communityRepository.save(entity);
+    //Todo 시큐리티 이후 유저 세팅
+    community.setRepresentMember(testMember());
+    community.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
+
+    return communityRepository.save(community);
   }
 
 //  Read
@@ -46,9 +50,10 @@ public class CommunityService {
   }
 
 //  Update
-  public Community updateCommunity(long communityId, CommunityDto.Patch dto) {
+  public Community updateCommunity(long communityId, CommunityDto.Patch patchDto) {
     Community community = findVerifiedCommunity(communityId);
-    communityMapper.updateEntityFromDto(dto, community);
+    community.update(patchDto);
+    //communityMapper.updateEntityFromDto(dto, community);
 
     return communityRepository.save(community);
   }

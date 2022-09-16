@@ -14,15 +14,15 @@ import org.mapstruct.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface CommunityMapper {
 
 //  Post
   Community postDtoToEntity(CommunityDto.Post dto);
 
 //  Patch
-  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-  void updateEntityFromDto(CommunityDto.Patch dto, @MappingTarget Community entity);
+//  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+//  void updateEntityFromDto(CommunityDto.Patch dto, @MappingTarget Community entity);
 
   // TODO 매퍼 최적화 필요
   default CommunityDto.Response entityToDtoResponse(Community entity){
@@ -34,8 +34,8 @@ public interface CommunityMapper {
     MemberDto.Response responseMemberDto = new MemberDto.Response(entity.getRepresentMember());
 
     response.name(entity.getName());
+    //Todo 주소설정
     response.address(entity.getAddress());
-    response.title(entity.getTitle());
     response.body(entity.getBody());
     response.member(responseMemberDto);
     response.capacity(entity.getCapacity());
@@ -90,5 +90,5 @@ public interface CommunityMapper {
     return response.build();
   }
 
-  List<CommunityDto.Info> multiEntityToDtoInfo(List<Community> entities);
+  //List<CommunityDto.Info> multiEntityToDtoInfo(List<Community> entities);
 }
