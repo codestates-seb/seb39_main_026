@@ -24,6 +24,10 @@ public class CommunityController {
 //  Create
   @PostMapping("/post")
   public ResponseEntity postCommunity(@RequestBody CommunityDto.Post dto){
+
+    //TODO 유저 수정 필요
+
+
     Community community = communityMapper.postDtoToEntity(dto);
     Community createdCommunity = communityService.createCommunity(community);
 
@@ -32,13 +36,13 @@ public class CommunityController {
 
 //  Read
   @GetMapping("/{community-id}")
-  public ResponseEntity getCommunity(
-    @PathVariable("community-id") long communityId){
+  public ResponseEntity getCommunity(@PathVariable("community-id") long communityId){
     Community community = communityService.findCommunity(communityId);
     community.countView();
 
     return new ResponseEntity(communityMapper.entityToDtoResponse(community), HttpStatus.OK);
   }
+
 
   @GetMapping
   public ResponseEntity getCommunities(

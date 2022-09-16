@@ -4,6 +4,8 @@ import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.community.mapper.CommunityMapper;
 import com.main026.walking.community.repository.CommunityRepository;
+import com.main026.walking.member.entity.Member;
+import com.main026.walking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,8 +20,17 @@ public class CommunityService {
   private final CommunityRepository communityRepository;
   private final CommunityMapper communityMapper;
 
+  private final MemberRepository memberRepository;
+
+  private Member testMember(){
+    return memberRepository.findById(1L).orElseThrow();
+  }
+
 //  Create
   public Community createCommunity(Community entity) {
+    //Todo 시큐리티 이후 유저 세팅
+    entity.setRepresentMember(testMember());
+
     return communityRepository.save(entity);
   }
 
