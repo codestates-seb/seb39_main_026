@@ -20,6 +20,7 @@ public class Member {
     private String email;
     private String password;
     private String nickName;
+    //Todo 객체 - 시군구로 받을 것
     private String address;
     private String imgUrl;
     @OneToMany(mappedBy = "member")
