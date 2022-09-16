@@ -1,6 +1,8 @@
 package com.main026.walking.community.dto;
 
 import com.main026.walking.comment.dto.CommentDto;
+import com.main026.walking.member.dto.MemberDto;
+import com.main026.walking.notice.dto.NoticeDto;
 import com.main026.walking.pet.dto.PetDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,9 +49,11 @@ public class CommunityDto {
     private String body;
     private Long capacity;
     private LocalDateTime time;
+    private MemberDto.Response member;
     private String imgUrl;
     private List<PetDto.Response> pets;
     private List<CommentDto.Response> comments;
+    private List<NoticeDto.Response> notices;
     private int participant;
     private LocalDateTime createdAt;
     private Long viewed;

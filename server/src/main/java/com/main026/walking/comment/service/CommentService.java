@@ -6,6 +6,8 @@ import com.main026.walking.comment.mapper.CommentMapper;
 import com.main026.walking.comment.repository.CommentRepository;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.community.repository.CommunityRepository;
+import com.main026.walking.member.entity.Member;
+import com.main026.walking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,11 +22,17 @@ public class CommentService {
   private final CommentMapper mapper;
   private final CommentRepository commentRepository;
   private final CommunityRepository communityRepository;
-  
+
+  private final MemberRepository memberRepository;
+  private Member testMember(){
+    return memberRepository.findById(1L).orElseThrow();
+  }
+
 //  Create
   public Comment createComment(Long communityId,Comment comment) {
     Community community = communityRepository.findById(communityId).orElseThrow();
     comment.setCommunity(community);
+    comment.setMember(testMember());
     return commentRepository.save(comment);
   }
 

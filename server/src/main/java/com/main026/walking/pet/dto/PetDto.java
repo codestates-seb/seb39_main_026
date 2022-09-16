@@ -19,7 +19,6 @@ public class PetDto {
         private String breed;
         private MultipartFile imgFile;
         private String about;
-
     }
 
     @Getter
@@ -51,7 +50,7 @@ public class PetDto {
     @Getter
     @NoArgsConstructor
     public static class Response{
-        private Long petId;
+        private Long id;
         private String petName;
         private MemberDto.Response member;
         private String petGender;
@@ -63,8 +62,8 @@ public class PetDto {
         private String about;
 
         @Builder
-        public Response(Long petId, String petName, MemberDto.Response member, String petGender, String neuter, Integer petAge, String personality, String breed, String imgUrl, String about) {
-            this.petId = petId;
+        public Response(Long id, String petName, MemberDto.Response member, String petGender, String neuter, Integer petAge, String personality, String breed, String imgUrl, String about) {
+            this.id = id;
             this.petName = petName;
             this.member = member;
             this.petGender = petGender;

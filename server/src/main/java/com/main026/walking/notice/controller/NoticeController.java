@@ -24,13 +24,11 @@ public class NoticeController {
 
   //  Create
   @PostMapping("/{community-id}")
-  public ResponseEntity postNotice(
-    @PathVariable("community-id") long communityId,
-    @RequestBody NoticeDto.Post dto){
+  public ResponseEntity postNotice(@PathVariable("community-id") long communityId, @RequestBody NoticeDto.Post dto){
     Notice notice = noticeMapper.postDtoToEntity(dto);
     Notice createdEntity = noticeService.createNotice(notice,communityId);
 
-    return new ResponseEntity(noticeMapper.entityToDtoResponse(notice), HttpStatus.CREATED);
+    return new ResponseEntity(noticeMapper.entityToDtoResponse(createdEntity), HttpStatus.CREATED);
   }
 
   //  Read

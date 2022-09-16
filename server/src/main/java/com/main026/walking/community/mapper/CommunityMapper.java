@@ -5,7 +5,8 @@ import com.main026.walking.comment.entity.Comment;
 import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.member.dto.MemberDto;
-import com.main026.walking.member.entity.Member;
+import com.main026.walking.notice.dto.NoticeDto;
+import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.Pet;
 import org.mapstruct.*;
@@ -23,22 +24,20 @@ public interface CommunityMapper {
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
   void updateEntityFromDto(CommunityDto.Patch dto, @MappingTarget Community entity);
 
-  //  Response
-
-  //Pets, Comments, Members -> List<>.size() 매핑 어노테이션
-  //@Mapping(target = "petCount", expression = "java(community.getPets().size())")
-  //@Mapping(target = "commentCount", expression = "java(community.getComments().size())")
-  //@Mapping(target = "participant", expression = "java(community.getParticipant().size())")
+  // TODO 매퍼 최적화 필요
   default CommunityDto.Response entityToDtoResponse(Community entity){
     if (entity == null){
       return null;
     }
     CommunityDto.Response.ResponseBuilder response = CommunityDto.Response.builder();
 
+    MemberDto.Response responseMemberDto = new MemberDto.Response(entity.getRepresentMember());
+
     response.name(entity.getName());
     response.address(entity.getAddress());
     response.title(entity.getTitle());
     response.body(entity.getBody());
+    response.member(responseMemberDto);
     response.capacity(entity.getCapacity());
     response.time(entity.getTime());
     response.imgUrl(entity.getImgUrl());
@@ -51,7 +50,7 @@ public interface CommunityMapper {
       MemberDto.Response responseDto = new MemberDto.Response(pet.getMember());
 
       pets.add(PetDto.Response.builder()
-              .petId(pet.getId())
+              .id(pet.getId())
               .about(pet.getAbout())
               .breed(pet.getBreed())
               .neuter(pet.getNeuter())
@@ -62,8 +61,8 @@ public interface CommunityMapper {
               .member(responseDto)
               .build());
     }
-
     response.pets(pets);
+
     List<CommentDto.Response> comments = new ArrayList<>();
     for (int i = 0; i < entity.getComments().size(); i++) {
       Comment comment = entity.getComments().get(i);
@@ -76,6 +75,17 @@ public interface CommunityMapper {
 
     }
     response.comments(comments);
+
+    List<NoticeDto.Response> notices = new ArrayList<>();
+    for (int i = 0; i < entity.getNotices().size(); i++) {
+      Notice notice = entity.getNotices().get(i);
+      notices.add(NoticeDto.Response.builder()
+              .title(notice.getTitle())
+              .body(notice.getBody())
+              .build());
+    }
+    response.notices(notices);
+
 
     return response.build();
   }

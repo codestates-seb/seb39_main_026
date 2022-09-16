@@ -46,6 +46,10 @@ public class Pet {
         this.imgUrl = imgUrl;
     }
 
+    public void setMember(Member member){
+        this.member = member;
+    }
+
 
     public void update(PetDto.Patch patchDto) {
         this.petName = patchDto.getPerName();
