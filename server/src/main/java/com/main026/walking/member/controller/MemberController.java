@@ -13,7 +13,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public MemberDto.Response signUp(MemberDto.Post memberPostDto){
+    public MemberDto.Response signUp(@RequestBody MemberDto.Post memberPostDto){
         return memberService.saveMember(memberPostDto);
     }
 

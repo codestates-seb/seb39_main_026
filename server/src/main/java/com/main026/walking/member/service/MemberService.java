@@ -17,8 +17,9 @@ public class MemberService {
     private final MemberMapper memberMapper;
 
     //C
-    public MemberDto.Response saveMember(MemberDto.Post postMemberDto){
-        Member member = memberMapper.memberPostDtoToMember(postMemberDto);
+    public MemberDto.Response saveMember(MemberDto.Post postDto){
+        Member member = memberMapper.memberPostDtoToMember(postDto);
+        member.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
 
         //TODO
         //member.setImgUrl()
