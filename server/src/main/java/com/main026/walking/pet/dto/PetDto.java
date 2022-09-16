@@ -1,5 +1,6 @@
 package com.main026.walking.pet.dto;
 
+import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,7 +53,7 @@ public class PetDto {
     public static class Response{
         private Long petId;
         private String petName;
-        private Member member;
+        private MemberDto.Response member;
         private String petGender;
         private String neuter;
         private Integer petAge;
@@ -62,7 +63,7 @@ public class PetDto {
         private String about;
 
         @Builder
-        public Response(Long petId, String petName, Member member, String petGender, String neuter, Integer petAge, String personality, String breed, String imgUrl, String about) {
+        public Response(Long petId, String petName, MemberDto.Response member, String petGender, String neuter, Integer petAge, String personality, String breed, String imgUrl, String about) {
             this.petId = petId;
             this.petName = petName;
             this.member = member;

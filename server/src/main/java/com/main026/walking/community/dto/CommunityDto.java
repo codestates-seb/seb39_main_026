@@ -1,7 +1,9 @@
 package com.main026.walking.community.dto;
 
-import com.main026.walking.comment.entity.Comment;
+import com.main026.walking.comment.dto.CommentDto;
+import com.main026.walking.pet.dto.PetDto;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,7 +38,8 @@ public class CommunityDto {
   }
 
   @Getter
-  @AllArgsConstructor
+  @AllArgsConstructor @NoArgsConstructor
+  @Builder
   public static class Response{
     private String name;
     private String address;
@@ -45,9 +48,9 @@ public class CommunityDto {
     private Long capacity;
     private LocalDateTime time;
     private String imgUrl;
-//    private List<Pet> pets;
-    private List<Comment> comments;
-//    private int participant;
+    private List<PetDto.Response> pets;
+    private List<CommentDto.Response> comments;
+    private int participant;
     private LocalDateTime createdAt;
     private Long viewed;
     private Long liked;

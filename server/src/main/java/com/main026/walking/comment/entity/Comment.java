@@ -1,6 +1,7 @@
 package com.main026.walking.comment.entity;
 
 import com.main026.walking.community.entity.Community;
+import com.main026.walking.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,17 +25,9 @@ public class Comment {
   @JoinColumn(name = "COMMUNITY_ID")
   private Community community;
 
-  public void setCommunity(Community community) {
-    this.setCommunity(community);
-  }
-
-/*
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "MEMBER_ID")
   private Member member;
 
-  public void setMember(Member member) {
-    this.setMember(member);
-  }
-*/
+
 }

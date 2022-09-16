@@ -35,6 +35,7 @@ public class CommunityController {
   public ResponseEntity getCommunity(
     @PathVariable("community-id") long communityId){
     Community community = communityService.findCommunity(communityId);
+    community.countView();
 
     return new ResponseEntity(communityMapper.entityToDtoResponse(community), HttpStatus.OK);
   }

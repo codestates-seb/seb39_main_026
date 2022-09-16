@@ -22,10 +22,11 @@ public class CommentController {
   private final CommentService commentService;
   
 //  Create
-  @PostMapping("/post")
-  public ResponseEntity postComment(@RequestBody CommentDto.Post dto){
+  @PostMapping("/post/{communityId}")
+  public ResponseEntity postComment(@PathVariable Long communityId, @RequestBody CommentDto.Post dto){
     Comment comment = commentMapper.postDtoToEntity(dto);
-    Comment createdComment = commentService.createComment(comment);
+
+    Comment createdComment = commentService.createComment(communityId,comment);
 
     return new ResponseEntity(commentMapper.entityToDtoResponse(createdComment), HttpStatus.CREATED);
   }

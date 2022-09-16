@@ -1,5 +1,6 @@
 package com.main026.walking.member.dto;
 
+import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,6 +59,13 @@ public class MemberDto {
             this.email = email;
             this.nickName = nickName;
             this.petResponseDtoList = petResponseDtoList;
+        }
+
+        public Response(Member member){
+            this.id = member.getId();
+            this.email = member.getEmail();
+            this.nickName = member.getNickName();
+            //this.petResponseDtoList = member.getPetList();
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.main026.walking.comment.dto;
 
+import com.main026.walking.member.dto.MemberDto;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,9 +25,10 @@ public class CommentDto {
 
   @Getter
   @AllArgsConstructor @NoArgsConstructor
+  @Builder
   public static class Response{
     private String body;
     private LocalDateTime createdAt;
-    private String author;
+    private MemberDto.Response member;
   }
 }

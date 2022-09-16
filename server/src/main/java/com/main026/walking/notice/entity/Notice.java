@@ -29,7 +29,4 @@ public class Notice {
   @JoinColumn(name = "community_id")
   private Community community;
 
-  public void setCommunity(Community community){
-    this.community = community;
-  }
 }

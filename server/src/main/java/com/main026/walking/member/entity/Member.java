@@ -1,8 +1,8 @@
 package com.main026.walking.member.entity;
 
+import com.main026.walking.comment.entity.Comment;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.pet.entity.Pet;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +24,11 @@ public class Member {
     private String imgUrl;
     @OneToMany(mappedBy = "member")
     private List<Pet> petList;
+
+    //모임 목록은 펫리스트로 조회가능
+
+    @OneToMany(mappedBy = "member")
+    private List<Comment> commentList;
 
     @Builder
     public Member(Long id, String email, String password, String nickName, String address, String imgUrl, List<Pet> petList) {
