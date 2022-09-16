@@ -9,6 +9,7 @@ import NameInput from '../../components/walks/wirte/NameInput';
 import PersonCountInput from '../../components/walks/wirte/PersonCountInput';
 import PlaceInput from '../../components/walks/wirte/PlaceInput';
 import { WalksMoim } from '../../models/WalksMoim';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function Write() {
   const {
@@ -74,7 +75,13 @@ export default function Write() {
                 날짜로 선택하기
               </button>
             </li>
-            <li>{plan === 'day' ? <DaySelectBox /> : <DateSelectBox />}</li>
+            <li>
+              {plan === 'day' ? (
+                <DaySelectBox />
+              ) : (
+                <DateSelectBox control={control} />
+              )}
+            </li>
             <li>
               <button
                 type="button"
@@ -93,12 +100,14 @@ export default function Write() {
 }
 
 const moimFormContainer = css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   max-width: 800px;
   border: 1px solid;
   margin: 0 auto;
+
+  h1 {
+    margin: 38px;
+    text-align: start;
+  }
 
   form ul li {
     margin-top: 20px;

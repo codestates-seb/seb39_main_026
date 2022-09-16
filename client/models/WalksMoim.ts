@@ -3,4 +3,5 @@ export interface WalksMoim {
   place: string;
   description: string;
   personCount: number;
+  plannedDate: Date;
 }
