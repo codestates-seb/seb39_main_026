@@ -30,8 +30,6 @@ public class Community {
   private String body;
 
   @Column(nullable = false)
-  //Todo 날짜를 객체로 받을 수 있도록 그러나 연관관계 매핑없이 객체받기는 불가능하다?
-  //private String address;
   @Embedded
   private Address address;
 

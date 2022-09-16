@@ -21,7 +21,6 @@ public class Member {
     private String email;
     private String password;
     private String nickName;
-    //Todo 객체 - 시군구로 받을 것
     @Embedded
     private Address address;
     private String imgUrl;

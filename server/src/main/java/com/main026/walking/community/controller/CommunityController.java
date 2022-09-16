@@ -26,7 +26,6 @@ public class CommunityController {
   public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto){
 
     //TODO 유저 수정 필요
-    //Todo address mapping
     Community createdCommunity = communityService.createCommunity(postDto);
 
     return new ResponseEntity(communityMapper.entityToDtoResponse(createdCommunity), HttpStatus.CREATED);

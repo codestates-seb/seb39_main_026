@@ -34,7 +34,6 @@ public interface CommunityMapper {
     MemberDto.Response responseMemberDto = new MemberDto.Response(entity.getRepresentMember());
 
     response.name(entity.getName());
-    //Todo 주소설정
     response.address(entity.getAddress());
     response.body(entity.getBody());
     response.member(responseMemberDto);
