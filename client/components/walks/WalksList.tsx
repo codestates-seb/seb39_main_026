@@ -1,16 +1,7 @@
 import { css } from '@emotion/react';
+import { WalkDefault } from '../../models/WalkDefault';
 import WalkItem from './WalkItem';
 import { useGetWalksQuery } from './WalksListQuery';
-
-interface WalkDefault {
-  projectId: number;
-  title: string;
-  time: string;
-  address: string;
-  imgUrl: string;
-  capacity: number;
-  participant: number;
-}
 
 export default function WalksList() {
   const data = useGetWalksQuery();
