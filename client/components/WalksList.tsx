@@ -9,6 +9,8 @@ interface WalkDefault {
   time: string;
   address: string;
   imgUrl: string;
+  capacity: number;
+  participant: number;
 }
 
 export default function WalksList() {
