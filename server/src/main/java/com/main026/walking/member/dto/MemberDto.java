@@ -2,6 +2,7 @@ package com.main026.walking.member.dto;
 
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
+import com.main026.walking.util.dto.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,10 @@ public class MemberDto {
         private String email;
         private String password;
         private String nickName;
-        private String address;
+
+        private String si;
+        private String gu;
+        private String dong;
 
         public void setPassword(String password){
             this.password = password;
@@ -32,17 +36,22 @@ public class MemberDto {
     public static class Patch{
         private String password;
         private String nickName;
-        private String address;
+
+        private String si;
+        private String gu;
+        private String dong;
+
         private MultipartFile imgFile;
 
         @Builder
-        public Patch(String password,String nickName, String address, MultipartFile imgFile){
+        public Patch(String password, String nickName, String si, String gu, String dong, MultipartFile imgFile) {
             this.password = password;
             this.nickName = nickName;
-            this.address = address;
+            this.si = si;
+            this.gu = gu;
+            this.dong = dong;
             this.imgFile = imgFile;
         }
-
     }
     @Getter
     @NoArgsConstructor
@@ -51,13 +60,14 @@ public class MemberDto {
         private String email;
         private String nickName;
         private List<PetDto.Response> petResponseDtoList = new ArrayList<>();
-        //private List<CommunityDto.Response> communityList = new ArrayList<>();
+        private Address address;
 
         @Builder
-        public Response(Long id, String email, String nickName, List<PetDto.Response> petResponseDtoList) {
+        public Response(Long id, String email, String nickName,Address address, List<PetDto.Response> petResponseDtoList) {
             this.id = id;
             this.email = email;
             this.nickName = nickName;
+            this.address = address;
             this.petResponseDtoList = petResponseDtoList;
         }
 
