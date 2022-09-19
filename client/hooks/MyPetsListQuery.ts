@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
+import { API } from '../apis/api';
 
 export function useMyPetsListQuery() {
   const { status, data, error } = useQuery('pets', async () => {
-    const { data } = await axios.get('/data/members/pets.json');
+    const { data } = await axios.get(API.PICKPET);
     return data;
   });
 

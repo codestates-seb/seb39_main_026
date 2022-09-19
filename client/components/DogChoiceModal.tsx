@@ -62,6 +62,7 @@ const modalContainer = (isModalOpen: boolean) => css`
         border-radius: 50%;
         object-fit: cover;
         cursor: pointer;
+        filter: grayscale(100%);
         -webkit-user-drag: none;
         -khtml-user-drag: none;
         -moz-user-drag: none;
@@ -81,7 +82,7 @@ const modalContainer = (isModalOpen: boolean) => css`
 
     ul li.pick {
       img {
-        filter: grayscale(100%);
+        filter: grayscale(0);
       }
 
       p {
@@ -152,6 +153,7 @@ export default function DogChoiceModal({
       <section onClick={(e) => e.stopPropagation()} className="modal">
         <h1>어떤 강아지랑 산책할 건가요?</h1>
         <ul>
+          {petData === 'loading' ? <p>loading</p> : null}
           {(petData.pets ?? []).map((pet: MyPets) => (
             <li
               key={pet.id}
