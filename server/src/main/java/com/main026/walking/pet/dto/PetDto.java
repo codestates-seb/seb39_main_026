@@ -13,11 +13,11 @@ public class PetDto {
     public static class Post{
         private String petName;
         private String petGender;
+        private MultipartFile profileImg;
         private String neuter;
         private Integer petAge;
         private String personality;
         private String breed;
-        private MultipartFile imgFile;
         private String about;
     }
 
@@ -30,18 +30,18 @@ public class PetDto {
         private Integer petAge;
         private String personality;
         private String breed;
-        private MultipartFile imgFile;
+        private MultipartFile profileImg;
         private String about;
 
         @Builder
-        public Patch(String perName, String petGender, String neuter, Integer petAge, String personality, String breed, MultipartFile imgFile, String about) {
+        public Patch(String perName, String petGender, String neuter, Integer petAge, String personality, String breed, MultipartFile profileImg, String about) {
             this.perName = perName;
             this.petGender = petGender;
             this.neuter = neuter;
             this.petAge = petAge;
             this.personality = personality;
             this.breed = breed;
-            this.imgFile = imgFile;
+            this.profileImg = profileImg;
             this.about = about;
         }
     }

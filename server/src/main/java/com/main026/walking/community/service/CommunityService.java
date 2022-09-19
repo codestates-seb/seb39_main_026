@@ -35,7 +35,7 @@ public class CommunityService {
   }
 
 //  Create
-  public Community createCommunity(CommunityDto.Post postDto) throws IOException {
+  public Community createCommunity(CommunityDto.Post postDto){
     Community community = communityMapper.postDtoToEntity(postDto);
 
     String[] dayInfo = postDto.getDayInfo();
@@ -54,14 +54,20 @@ public class CommunityService {
     //이미지 세팅
     Community savedCommunity = communityRepository.save(community);
     List<MultipartFile> attachFiles = postDto.getImages();
-    for (MultipartFile attachFile : attachFiles) {
-      String storeFile = fileStore.storeFile(attachFile);
-      Image image = Image.builder()
-              .storeFilename(storeFile)
-              .community(savedCommunity)
-              .build();
-      imageRepository.save(image);
+
+    try {
+      for (MultipartFile attachFile : attachFiles) {
+        String storeFile = fileStore.storeFile(attachFile);
+        Image image = Image.builder()
+                .storeFilename(storeFile)
+                .community(savedCommunity)
+                .build();
+        imageRepository.save(image);
+      }
+    }catch (IOException e){
+     e.printStackTrace();
     }
+
     return communityRepository.save(community);
   }
 

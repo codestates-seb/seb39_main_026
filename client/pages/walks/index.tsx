@@ -6,10 +6,8 @@ import TabTitle from '../../components/TabTitle';
 import AddButton from '../../components/walks/AddButton';
 import AddressPicker from '../../components/walks/AddressPicker';
 import WalksList from '../../components/walks/WalksList';
-
 export default function Walks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const handleModalClick = () => {
     setIsModalOpen(!isModalOpen);
   };

@@ -1,6 +1,7 @@
 package com.main026.walking.member.entity;
 
 import com.main026.walking.comment.entity.Comment;
+import com.main026.walking.image.entity.Image;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.embedded.Address;
@@ -48,6 +49,10 @@ public class Member {
         this.password = patchDto.getPassword();
         this.nickName = patchDto.getNickName();
         this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
+    }
+
+    public void setImgUrl(String imgUrl){
+        this.imgUrl = imgUrl;
     }
 
     public void setAddress(String si,String gu,String dong){

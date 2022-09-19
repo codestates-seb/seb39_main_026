@@ -7,8 +7,12 @@ import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.pet.mapper.PetMapper;
 import com.main026.walking.pet.repository.PetRepository;
+import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +20,7 @@ public class PetService {
 
     private final PetRepository petRepository;
     private final PetMapper petMapper;
+    private final FileStore fileStore;
 
     private final MemberRepository memberRepository;
 
@@ -28,7 +33,17 @@ public class PetService {
 
         //연관관계에 대한 고민 필요
         pet.setMember(testMember());
-        //Todo setImg
+
+        if(postDto.getProfileImg()!=null){
+            try {
+                MultipartFile profileImg = postDto.getProfileImg();
+                String storeFile = fileStore.storeFile(profileImg);
+                pet.setImgUrl(storeFile);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
         petRepository.save(pet);
 
         return petMapper.petToPetResponseDto(pet);
@@ -36,14 +51,13 @@ public class PetService {
 
     public PetDto.Response findPet(Long petId){
         Pet pet = petRepository.findById(petId).orElseThrow();
-        //Todo setImg
+
         return petMapper.petToPetResponseDto(pet);
     }
 
     public PetDto.Response editPet(Long petId, PetDto.Patch patchDto){
         Pet pet = petRepository.findById(petId).orElseThrow();
         pet.update(patchDto);
-        //Todo setImg
 
         Pet savedPet = petRepository.save(pet);
         return petMapper.petToPetResponseDto(savedPet);
