@@ -7,7 +7,6 @@ export default function SearchInput() {
   const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
     setSearchInput(event.currentTarget.value);
   };
-
   const searchContainer = css`
     display: flex;
     justify-content: center;
