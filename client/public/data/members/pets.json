@@ -1,0 +1,14 @@
+{
+  "pets": [
+    {
+      "id": 1,
+      "petName": "포도",
+      "imgUrl": "https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016__340.jpg"
+    },
+    {
+      "id": 2,
+      "petName": "토리",
+      "imgUrl": "https://cdn.pixabay.com/photo/2018/05/07/10/48/husky-3380548__340.jpg"
+    }
+  ]
+}
