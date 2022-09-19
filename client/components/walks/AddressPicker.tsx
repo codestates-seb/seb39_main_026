@@ -37,7 +37,9 @@ export default function AddressPicker() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_ADDRESS_API_URL}${selectedCity}*000000`)
+      .get(
+        `${process.env.NEXT_PUBLIC_ADDRESS_API_URL}${selectedCity}*000000*&is_ignore_zero=true`
+      )
       .then((res) => {
         if (selectedCity !== '') {
           setAllTowns(res.data.regcodes);
@@ -79,7 +81,7 @@ export default function AddressPicker() {
         {alltowns?.map((town: Address) => {
           return (
             <option key={town.code} value={town.code}>
-              {town.name}
+              {town.name.split(' ')[1]}
             </option>
           );
         })}
@@ -89,7 +91,7 @@ export default function AddressPicker() {
         {allVillages?.map((village: Address) => {
           return (
             <option key={village.code} value={village.name}>
-              {village.name}
+              {village.name.split(' ')[2]}
             </option>
           );
         })}
