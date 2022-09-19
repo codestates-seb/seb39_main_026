@@ -5,6 +5,7 @@ import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.entity.CommunityPet;
+import com.main026.walking.util.converter.StringArrayConverter;
 import com.main026.walking.util.embedded.Address;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class Community {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private String name;
 
   @Column(nullable = false)
@@ -36,11 +37,14 @@ public class Community {
   //Todo 이미지를 여러개 받을 수 있도록
   private String imgUrl;
 
-  @Column//(nullable = false)
-  /**Todo
-   * 요일 혹은 날짜로 받을 수 있어야한다 -> 객체
+  /**Todo 시간 정보 파싱
+   * 일단 따로 해보자.
+   * 요일의 경우 여러개가 선택될텐데 엔티티에는 리스트가 들어갈 수 없다.
   */
-  private LocalDateTime time;
+  @Convert(converter = StringArrayConverter.class)
+  private List<String> days;
+
+  private String timeInfo;
 
   @OneToOne(fetch = FetchType.LAZY)
   private Member representMember;
@@ -81,7 +85,7 @@ public class Community {
     this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
     this.body = patchDto.getBody();
     this.capacity = patchDto.getCapacity();
-    this.time = patchDto.getTime();
+    //this.weekInfo = patchDto.getTime();
     this.imgUrl = patchDto.getImgUrl();
   }
 

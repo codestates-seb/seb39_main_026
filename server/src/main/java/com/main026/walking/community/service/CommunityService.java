@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,6 +32,15 @@ public class CommunityService {
   public Community createCommunity(CommunityDto.Post postDto) {
     Community community = communityMapper.postDtoToEntity(postDto);
 
+    String[] dayInfo = postDto.getDayInfo();
+
+    List<String> dayList = new ArrayList<>();
+    for (String day : dayInfo) {
+      dayList.add(day);
+    }
+    //Todo 제대로된 요일데이터 파싱
+    community.setDays(dayList);
+
     //Todo 시큐리티 이후 유저 세팅
     community.setRepresentMember(testMember());
     community.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
@@ -45,7 +56,7 @@ public class CommunityService {
   }
 
   public Page<Community> findCommunities(int page, int size) {
-    return communityRepository.findAll(PageRequest.of( page, size, Sort.by("communityId").descending()));
+    return communityRepository.findAll(PageRequest.of( page, size, Sort.by("id").descending()));
   }
 
 //  Update

@@ -33,13 +33,15 @@ public interface CommunityMapper {
 
     MemberDto.Response responseMemberDto = new MemberDto.Response(entity.getRepresentMember());
 
+    response.communityId(entity.getId());
     response.name(entity.getName());
     //Todo 주소설정
     response.address(entity.getAddress());
     response.body(entity.getBody());
     response.member(responseMemberDto);
     response.capacity(entity.getCapacity());
-    response.time(entity.getTime());
+    response.time(entity.getTimeInfo());
+    response.weeks(entity.getDays());
     response.imgUrl(entity.getImgUrl());
     response.createdAt(entity.getCreatedAt());
     response.viewed(entity.getViewed());
@@ -90,5 +92,5 @@ public interface CommunityMapper {
     return response.build();
   }
 
-  //List<CommunityDto.Info> multiEntityToDtoInfo(List<Community> entities);
+  List<CommunityDto.Response> multiEntityToDtoInfo(List<Community> entities);
 }
