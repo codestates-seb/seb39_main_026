@@ -3,7 +3,7 @@ import { FieldErrorsImpl, UseFormRegister } from 'react-hook-form';
 import { WalksMoim } from '../../../models/WalksMoim';
 import { Theme } from '../../../styles/Theme';
 
-const PlaceInputContainer = css`
+const placeInputContainer = css`
   width: 100%;
   padding: 20px 10px;
   background-color: #f7f7f5;
@@ -32,7 +32,7 @@ export default function PlaceInput({
       <input
         type="text"
         id="moim-place"
-        css={PlaceInputContainer}
+        css={placeInputContainer}
         {...register('place', {
           validate: {
             empty: (v) =>
