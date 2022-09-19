@@ -14,6 +14,7 @@ export default function Navbar() {
       justify-content: space-around;
       align-items: center;
       height: 72px;
+      z-index: 1;
       a {
         opacity: 50%;
         color: #dc602a;
@@ -48,6 +49,10 @@ export default function Navbar() {
     height: 75px;
     width: 100%;
     background-color: #fff3e3;
+    position: fixed;
+    top: 0;
+    width: 100%;
+
     a {
       text-decoration: none;
       color: black;
