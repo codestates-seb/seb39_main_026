@@ -153,17 +153,20 @@ export default function DogChoiceModal({
       <section onClick={(e) => e.stopPropagation()} className="modal">
         <h1>어떤 강아지랑 산책할 건가요?</h1>
         <ul>
-          {petData === 'loading' ? <p>loading</p> : null}
-          {(petData.pets ?? []).map((pet: MyPets) => (
-            <li
-              key={pet.id}
-              onClick={() => handlePickPetClick(pet.petName)}
-              className={pickPets.includes(pet.petName) ? 'pick' : ''}
-            >
-              <img src={pet.imgUrl} alt={`${pet.petName} 사진`} />
-              <p>{pet.petName}</p>
-            </li>
-          ))}
+          {petData === 'loading' ? (
+            <p>loading</p>
+          ) : (
+            (petData.pets ?? []).map((pet: MyPets) => (
+              <li
+                key={pet.id}
+                onClick={() => handlePickPetClick(pet.petName)}
+                className={pickPets.includes(pet.petName) ? 'pick' : ''}
+              >
+                <img src={pet.imgUrl} alt={`${pet.petName} 사진`} />
+                <p>{pet.petName}</p>
+              </li>
+            ))
+          )}
         </ul>
         {pickPets.length > 0 ? (
           <Link href="/walks/write">
