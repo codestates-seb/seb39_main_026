@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import DogChoiceModal from '../../components/DogChoiceModal';
 import TabTitle from '../../components/TabTitle';
+import AddButton from '../../components/walks/AddButton';
+import AddressPicker from '../../components/walks/AddressPicker';
+import WalksList from '../../components/walks/WalksList';
 
 export default function Walks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,10 +21,12 @@ export default function Walks() {
       )}
       <section>
         <TabTitle prefix="모임 둘러보기" />
-        <h1>산책 공고 페이지 입니다!</h1>
-        <button type="button" onClick={handleModalClick}>
-          산책 모임 만들기
-        </button>
+        <div className=''>
+          <h1>모든 산책 보기</h1>
+          <AddressPicker />
+        </div>
+        <WalksList />
+        <AddButton onClick={handleModalClick} />
       </section>
     </>
   );
