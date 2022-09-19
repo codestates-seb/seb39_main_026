@@ -1,5 +1,5 @@
 export interface WalkDefault {
-  communityId: number;
+  communityId: string;
   title: string;
   time: string;
   address: string;
