@@ -175,6 +175,9 @@ export default function AddressModal({
       margin-bottom: 1rem;
       font-weight: 500;
       height: 3rem;
+      :focus {
+        outline: none;
+      }
     }
   `;
 
@@ -218,7 +221,7 @@ export default function AddressModal({
             })}
           </select>
           <select name="region2" onChange={handleRegion2Select}>
-            <option>동네를 선택하세요</option>
+            <option>구역을 선택하세요</option>
             {alltowns?.map((town: Address) => {
               return (
                 <option key={town.code} value={town.code}>
@@ -232,7 +235,7 @@ export default function AddressModal({
             {allVillages?.map((village: Address) => {
               return (
                 <option key={village.code} value={village.name}>
-                  {village.name.split(' ')[2]}
+                  {village.name.split(' ')[2]} {village.name.split(' ')[3]}
                 </option>
               );
             })}

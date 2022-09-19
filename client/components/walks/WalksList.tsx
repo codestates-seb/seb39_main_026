@@ -7,6 +7,12 @@ export default function WalksList() {
   const data = useGetWalksQuery();
   const walksList = css`
     display: flex;
+    justify-content: center;
+    @media screen and (max-width: 768px) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   `;
 
   return (
