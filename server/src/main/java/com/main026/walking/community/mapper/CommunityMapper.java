@@ -4,6 +4,7 @@ import com.main026.walking.comment.dto.CommentDto;
 import com.main026.walking.comment.entity.Comment;
 import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
+import com.main026.walking.image.entity.Image;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.notice.dto.NoticeDto;
 import com.main026.walking.notice.entity.Notice;
@@ -42,7 +43,6 @@ public interface CommunityMapper {
     response.capacity(entity.getCapacity());
     response.time(entity.getTimeInfo());
     response.weeks(entity.getDays());
-    response.imgUrl(entity.getImgUrl());
     response.createdAt(entity.getCreatedAt());
     response.viewed(entity.getViewed());
     response.liked(entity.getLiked());
@@ -74,9 +74,16 @@ public interface CommunityMapper {
               .createdAt(comment.getCreatedAt())
               .member(responseDto)
               .build());
-
     }
     response.comments(comments);
+
+    List<String> imageList = new ArrayList<>();
+    for (int i = 0; i < entity.getImages().size(); i++) {
+      Image image = entity.getImages().get(i);
+      String storeFilename = image.getStoreFilename();
+      imageList.add(storeFilename);
+    }
+    response.imgUrls(imageList);
 
     List<NoticeDto.Response> notices = new ArrayList<>();
     for (int i = 0; i < entity.getNotices().size(); i++) {
