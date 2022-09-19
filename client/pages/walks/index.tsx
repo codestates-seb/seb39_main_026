@@ -11,6 +11,7 @@ export default function Walks() {
   const handleModalClick = () => {
     setIsModalOpen(!isModalOpen);
   };
+
   return (
     <>
       {isModalOpen && (
@@ -21,10 +22,8 @@ export default function Walks() {
       )}
       <section>
         <TabTitle prefix="모임 둘러보기" />
-        <div className=''>
-          <h1>모든 산책 보기</h1>
-          <AddressPicker />
-        </div>
+        <AddressPicker />
+        <h1>모든 산책 보기</h1>
         <WalksList />
         <AddButton onClick={handleModalClick} />
       </section>

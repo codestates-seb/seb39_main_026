@@ -1,101 +1,58 @@
 import { css } from '@emotion/react';
-import axios from 'axios';
+import { Icon } from '@iconify/react';
 import React, { useEffect, useState } from 'react';
-
-interface Address {
-  code: string;
-  name: string;
-}
+import { Theme } from '../../styles/Theme';
+import AddressModal from './AddressModal';
 
 export default function AddressPicker() {
-  const [allcities, setAllCities] = useState([]);
-  const [selectedCity, setSelectedCity] = useState('');
-  const [alltowns, setAllTowns] = useState([]);
-  const [selectedTown, setSelectedTown] = useState('');
-  const [allVillages, setAllVillages] = useState([]);
-  const [selectedVillage, setSelectedVillage] = useState('');
-
-  const handleRegion1Select = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const region1Code = event.target.value.substring(0, 2);
-    setSelectedCity(region1Code);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [selectedVillage, setSelectedVillage] = useState<string | null>(
+    '산책할 동네를 골라주세요'
+  );
+  const handleAddressModalOpen = () => {
+    setIsAddressModalOpen(!isAddressModalOpen);
   };
-  const handleRegion2Select = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const region2Code = event.target.value.substring(0, 4);
-    setSelectedTown(region2Code);
-  };
-
-  const handleRegion3Select = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedVillage(event.target.value);
-    console.log(selectedVillage);
-  };
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_ADDRESS_API_URL}*00000000`)
-      .then((res) => setAllCities(res.data.regcodes));
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(
-        `${process.env.NEXT_PUBLIC_ADDRESS_API_URL}${selectedCity}*000000*&is_ignore_zero=true`
-      )
-      .then((res) => {
-        if (selectedCity !== '') {
-          setAllTowns(res.data.regcodes);
-        }
-      });
-  }, [selectedCity]);
-
-  useEffect(() => {
-    axios
-      .get(
-        `${process.env.NEXT_PUBLIC_ADDRESS_API_URL}${selectedTown}*&is_ignore_zero=true`
-      )
-      .then((res) => {
-        if (selectedTown !== '') {
-          setAllVillages(res.data.regcodes);
-        }
-      });
-  }, [selectedTown]);
 
   const AddressPickerContainer = css`
+    margin: 1rem 1rem 0 0;
     display: flex;
     justify-content: flex-end;
+    .currentAddress {
+      cursor: pointer;
+      font-weight: 500;
+      color: ${Theme.mainColor};
+    }
+    .icon {
+      margin-right: 1rem;
+    }
   `;
+
+  useEffect(() => {
+    if (!localStorage.getItem('currentAddress')) {
+      setSelectedVillage('동네를 선택하세요');
+    } else {
+      setSelectedVillage(localStorage.getItem('currentAddress'));
+    }
+  }, [isAddressModalOpen]);
 
   return (
     <div css={AddressPickerContainer}>
-      <select name="region1" onChange={handleRegion1Select}>
-        <option>지역을 선택하세요</option>
-        {allcities.map((city: Address) => {
-          return (
-            <option key={city.code} value={city.code}>
-              {city.name}
-            </option>
-          );
-        })}
-      </select>
-      <select name="region2" onChange={handleRegion2Select}>
-        <option>동네를 선택하세요</option>
-        {alltowns?.map((town: Address) => {
-          return (
-            <option key={town.code} value={town.code}>
-              {town.name.split(' ')[1]}
-            </option>
-          );
-        })}
-      </select>
-      <select name="region3" onChange={handleRegion3Select}>
-        <option>동네를 선택하세요</option>
-        {allVillages?.map((village: Address) => {
-          return (
-            <option key={village.code} value={village.name}>
-              {village.name.split(' ')[2]}
-            </option>
-          );
-        })}
-      </select>
+      <div className="currentAddress" onClick={handleAddressModalOpen}>
+        <Icon
+          icon="akar-icons:chevron-down"
+          color={Theme.mainColor}
+          className="icon"
+        />
+        {selectedVillage}
+      </div>
+      {isAddressModalOpen ? (
+        <AddressModal
+          isModalOpen={isAddressModalOpen}
+          setIsModalOpen={setIsAddressModalOpen}
+        />
+      ) : (
+        ''
+      )}
     </div>
   );
 }
