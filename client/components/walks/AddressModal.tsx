@@ -174,6 +174,7 @@ export default function AddressModal({
       padding: 1rem;
       margin-bottom: 1rem;
       font-weight: 500;
+      height: 3rem;
     }
   `;
 
