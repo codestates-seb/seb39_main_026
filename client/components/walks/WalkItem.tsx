@@ -76,6 +76,7 @@ export default function WalkItem({ walk }: EachWalk) {
         alt="산책 모임 대표 이미지"
         height="120px"
         width="321px"
+        priority={true}
       />
       <h1 className="walk_title">{walk.title}</h1>
       <h3 className="walk_des">{walk.time}</h3>
