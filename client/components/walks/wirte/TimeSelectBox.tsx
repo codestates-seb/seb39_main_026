@@ -14,14 +14,14 @@ const errormessageContainer = css`
 `;
 
 export default function TimeSelectBox() {
-  const { control } = useFormContext<WalksMoimOneDay>(); // retrieve all hook methods
+  const { control } = useFormContext<WalksMoimOneDay>();
 
   return (
     <>
       <Controller
         rules={{
           validate: {
-            required: (value) => value != null || '날짜를 선택해주세요.',
+            required: (value) => value != null || '시간을 선택해주세요.',
           },
         }}
         control={control}
@@ -33,12 +33,17 @@ export default function TimeSelectBox() {
                 locale="ko"
                 selected={value}
                 onChange={(time: Date) => onChange(time)}
-                timeIntervals={10}
                 showTimeSelect
                 showTimeSelectOnly
-                timeCaption="시간"
+                timeIntervals={10}
+                timeCaption="시간을 선택해주세요"
                 dateFormat="aa HH:mm"
-              />
+                withPortal
+                isClearable
+                placeholderText="여기를 눌러 시간을 선택해주세요."
+                className="time-picker"
+                // closeOnScroll={true}
+              ></DatePicker>
               <div css={errormessageContainer}>
                 {error && <p>{error.message}</p>}
               </div>

@@ -11,7 +11,7 @@ export enum YOIL {
 export type Yoil = `${YOIL}`;
 
 interface WalksMoimBase {
-  name: string;
+  title: string;
   place: string;
   description: string;
   personCount: number;

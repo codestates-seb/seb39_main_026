@@ -8,7 +8,7 @@ import {
 import { WalksMoim } from '../../../models/WalksMoim';
 import { Theme } from '../../../styles/Theme';
 
-const nameInputContainer = css`
+const titleInputContainer = css`
   width: 100%;
   padding: 20px 10px;
   background-color: ${Theme.inputBgColor};
@@ -25,7 +25,7 @@ const errormessageContainer = css`
   }
 `;
 
-export default function NameInput({
+export default function TitleInput({
   register,
   errors,
   setFocus,
@@ -35,16 +35,16 @@ export default function NameInput({
   setFocus: UseFormSetFocus<WalksMoim>;
 }) {
   useEffect(() => {
-    setFocus('name');
+    setFocus('title');
   }, [setFocus]);
 
   return (
     <>
       <input
         type="text"
-        id="moim-name"
-        css={nameInputContainer}
-        {...register('name', {
+        id="moim-title"
+        css={titleInputContainer}
+        {...register('title', {
           validate: {
             empty: (v) =>
               (v != null && v !== '') || '모임의 이름을 입력해주세요.',
@@ -52,7 +52,7 @@ export default function NameInput({
         })}
       />
       <div css={errormessageContainer}>
-        {errors.name && <p>{errors.name.message}</p>}
+        {errors.title && <p>{errors.title.message}</p>}
       </div>
     </>
   );
