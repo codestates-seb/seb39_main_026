@@ -2,6 +2,7 @@ package com.main026.walking.community.entity;
 
 import com.main026.walking.comment.entity.Comment;
 import com.main026.walking.community.dto.CommunityDto;
+import com.main026.walking.image.entity.Image;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.entity.CommunityPet;
@@ -34,8 +35,8 @@ public class Community {
   @Embedded
   private Address address;
 
-  //Todo 이미지를 여러개 받을 수 있도록
-  private String imgUrl;
+  @OneToMany(mappedBy = "community")
+  private List<Image> images;
 
   /**Todo 시간 정보 파싱
    * 일단 따로 해보자.
@@ -86,7 +87,7 @@ public class Community {
     this.body = patchDto.getBody();
     this.capacity = patchDto.getCapacity();
     //this.weekInfo = patchDto.getTime();
-    this.imgUrl = patchDto.getImgUrl();
+    //this.imgUrl = patchDto.getImgUrl();
   }
 
   public void setAddress(String si,String gu,String dong){

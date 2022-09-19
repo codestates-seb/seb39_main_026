@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +20,9 @@ public class CommunityDto {
   @AllArgsConstructor @NoArgsConstructor
   public static class Post{
     private String name;
+
+    private List<MultipartFile> Images;
+
     /**
      * Todo 주소를 받아야한다.
      * 시,구,동을 받아야하는데 나눠서 받는 방법 외에 또 있을까?
@@ -81,7 +85,7 @@ public class CommunityDto {
     private String time;
     private List<String> weeks;
     private MemberDto.Response member;
-    private String imgUrl;
+    private List<String> imgUrls;
     private List<PetDto.Response> pets;
     private List<CommentDto.Response> comments;
     private List<NoticeDto.Response> notices;
