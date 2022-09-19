@@ -26,6 +26,8 @@ public class MemberDto {
         private String gu;
         private String dong;
 
+        private MultipartFile profileImg;
+
         public void setPassword(String password){
             this.password = password;
         }

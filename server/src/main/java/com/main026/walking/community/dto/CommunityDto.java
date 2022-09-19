@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommunityDto {
@@ -21,7 +22,7 @@ public class CommunityDto {
   public static class Post{
     private String name;
 
-    private List<MultipartFile> Images;
+    private List<MultipartFile> Images = new ArrayList<>();
 
     /**
      * Todo 주소를 받아야한다.
@@ -44,7 +45,6 @@ public class CommunityDto {
     //요일로 받는 경우
     private String[] dayInfo;
 
-    private String imgUrl;
     private LocalDateTime createdAt = LocalDateTime.now();
   }
 

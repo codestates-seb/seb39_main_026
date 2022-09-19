@@ -2,6 +2,7 @@ package com.main026.walking.util.datainit;
 
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
+import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.embedded.Address;
 
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class InitData {
                 .nickName("김코딩")
                 .password("12345678")
                 .build();
-
         memberRepository.save(kimcoding);
+        
     }
 }
