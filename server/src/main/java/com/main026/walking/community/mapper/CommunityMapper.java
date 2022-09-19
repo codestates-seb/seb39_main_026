@@ -43,6 +43,7 @@ public interface CommunityMapper {
     response.capacity(entity.getCapacity());
     response.time(entity.getTimeInfo());
     response.weeks(entity.getDays());
+    response.participant(entity.getCommunityPets().size());
     response.createdAt(entity.getCreatedAt());
     response.viewed(entity.getViewed());
     response.liked(entity.getLiked());
