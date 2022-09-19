@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/members/pets")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class PetController {
 
     private final PetService petService;
@@ -16,6 +17,7 @@ public class PetController {
     public PetDto.Response postPet(@RequestBody PetDto.Post postDto){
         return petService.postPet(postDto);
     }
+
     //이름이 괴상한데 그냥하는 이유 : requestMapping 의 이름 통일성을 지키는게 더 낫다고 생각해서,
     //하지만 괴상하긴 해서 애초에 네이밍컨벤션에 대한 고민을 더 해야할것같다.
     @GetMapping("/{petId}")

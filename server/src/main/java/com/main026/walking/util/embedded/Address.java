@@ -1,4 +1,4 @@
-package com.main026.walking.util.dto;
+package com.main026.walking.util.embedded;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -5,7 +5,7 @@ import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.entity.CommunityPet;
-import com.main026.walking.util.dto.Address;
+import com.main026.walking.util.embedded.Address;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

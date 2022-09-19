@@ -4,7 +4,7 @@ import com.main026.walking.comment.dto.CommentDto;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.notice.dto.NoticeDto;
 import com.main026.walking.pet.dto.PetDto;
-import com.main026.walking.util.dto.Address;
+import com.main026.walking.util.embedded.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +30,11 @@ public class CommunityDto {
 
     private String body;
     private Long capacity;
+
+    /* TODO 시간을 요일(LIST), 혹은 날짜로 받기
+    요일은 정해져있으니 enum 으로 받아도 괜찮지않을까
+    날짜는 나눠받는지 한줄로 받는지 정해져야한다.
+     */
     private LocalDateTime time;
     private String imgUrl;
     private LocalDateTime createdAt = LocalDateTime.now();

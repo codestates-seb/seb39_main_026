@@ -3,7 +3,7 @@ package com.main026.walking.member.entity;
 import com.main026.walking.comment.entity.Comment;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.pet.entity.Pet;
-import com.main026.walking.util.dto.Address;
+import com.main026.walking.util.embedded.Address;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
