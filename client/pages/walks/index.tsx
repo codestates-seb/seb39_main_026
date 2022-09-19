@@ -1,7 +1,5 @@
-import { css } from '@emotion/react';
 import { useState } from 'react';
 import DogChoiceModal from '../../components/DogChoiceModal';
-import SearchInput from '../../components/SearchInput';
 import TabTitle from '../../components/TabTitle';
 import AddButton from '../../components/walks/AddButton';
 import AddressPicker from '../../components/walks/AddressPicker';
@@ -14,13 +12,6 @@ export default function Walks() {
     setIsModalOpen(!isModalOpen);
   };
 
-  const header = css`
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 2rem;
-  `;
-
   return (
     <>
       {isModalOpen && (
@@ -31,10 +22,7 @@ export default function Walks() {
       )}
       <section>
         <TabTitle prefix="모임 둘러보기" />
-        <div css={header}>
-          <SearchInput />
-          <AddressPicker />
-        </div>
+        <AddressPicker />
         <h1>모든 산책 보기</h1>
         <WalksList />
         <AddButton onClick={handleModalClick} />

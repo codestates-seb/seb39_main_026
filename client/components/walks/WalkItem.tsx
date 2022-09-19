@@ -1,10 +1,8 @@
 import { css } from '@emotion/react';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 
 interface EachWalk {
   walk: {
-    communityId: string;
     title: string;
     time: string;
     address: string;
@@ -15,12 +13,7 @@ interface EachWalk {
 }
 
 export default function WalkItem({ walk }: EachWalk) {
-  const router = useRouter();
-  const handleItemClick = () => {
-    router.push(`/walks/${walk.communityId}`);
-  };
   const walkitem = css`
-    cursor: pointer;
     width: 320px;
     height: 216px;
     box-shadow: 4px 4px 30px #00000020;
@@ -77,7 +70,7 @@ export default function WalkItem({ walk }: EachWalk) {
     }
   `;
   return (
-    <div css={walkitem} onClick={handleItemClick}>
+    <div css={walkitem}>
       <Image
         src={walk.imgUrl}
         alt="산책 모임 대표 이미지"
