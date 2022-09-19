@@ -26,6 +26,7 @@ export default function AddressPicker() {
 
   const handleRegion3Select = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedVillage(event.target.value);
+    console.log(selectedVillage);
   };
 
   useEffect(() => {
