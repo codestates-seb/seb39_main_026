@@ -51,8 +51,8 @@ public class CommunityController {
     List<Community> communities = communityPage.getContent();
 
     //Todo 정보를 보여주는 dto 에 대한 고민
-    return null;
-    //return new ResponseEntity(new MultiResponseDto<>(communityMapper.multiEntityToDtoInfo(communities), communityPage), HttpStatus.OK);
+    //return null;
+    return new ResponseEntity(new MultiResponseDto<>(communityMapper.multiEntityToDtoInfo(communities), communityPage), HttpStatus.OK);
   }
 
 //  Update
