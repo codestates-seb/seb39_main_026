@@ -3,6 +3,7 @@ package com.main026.walking.util.datainit;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.util.dto.Address;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;

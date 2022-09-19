@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
 import ko from 'date-fns/locale/ko';
 import DatePicker, { registerLocale } from 'react-datepicker';
-import { Controller, Control } from 'react-hook-form';
-import { WalksMoim } from '../../../models/WalksMoim';
+import { Controller, useFormContext } from 'react-hook-form';
+import { WalksMoimOneDay } from '../../../models/WalksMoim';
 import { Theme } from '../../../styles/Theme';
+import TimeSelectBox from './TimeSelectBox';
 
 registerLocale('ko', ko);
 
@@ -16,11 +17,9 @@ const errormessageContainer = css`
   }
 `;
 
-export default function DateSelectBox({
-  control,
-}: {
-  control: Control<WalksMoim>;
-}) {
+export default function DateSelectBox() {
+  const { control } = useFormContext<WalksMoimOneDay>(); // retrieve all hook methods
+
   return (
     <>
       <Controller
@@ -39,12 +38,9 @@ export default function DateSelectBox({
                 selected={value}
                 onChange={(date: Date) => onChange(date)}
                 minDate={new Date()}
-                showDisabledMonthNavigation
-                showTimeSelect
-                dateFormat="yyyy.MM.dd aa HH:mm"
-                timeIntervals={10}
-                open
-              ></DatePicker>
+                dateFormat="yyyy.MM.dd"
+              />
+              <TimeSelectBox />
               <div css={errormessageContainer}>
                 {error && <p>{error.message}</p>}
               </div>
