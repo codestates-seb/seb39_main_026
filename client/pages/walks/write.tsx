@@ -1,15 +1,17 @@
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
+import CommonButton from '../../components/CommonButton';
 import TabTitle from '../../components/TabTitle';
 import DescriptionInput from '../../components/walks/wirte/DescriptionInput';
 import EveryWeekPicker from '../../components/walks/wirte/EveryWeekPicker';
-import NameInput from '../../components/walks/wirte/NameInput';
 import OneDayPicker from '../../components/walks/wirte/OneDayPicker';
 import PersonCountInput from '../../components/walks/wirte/PersonCountInput';
 import PlaceInput from '../../components/walks/wirte/PlaceInput';
+import TitleInput from '../../components/walks/wirte/TitleInput';
 import { WalksMoim } from '../../models/WalksMoim';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Theme } from '../../styles/Theme';
 
 export default function Write() {
   const methods = useForm<WalksMoim>({
@@ -24,7 +26,7 @@ export default function Write() {
     handleSubmit,
     control,
     setFocus,
-    formState: { errors },
+    formState: { errors, isValid },
     resetField,
   } = methods;
 
@@ -32,6 +34,10 @@ export default function Write() {
 
   const handlePlanSelectButtonClick = (buttonType: string) => {
     setPlan(buttonType);
+  };
+
+  const onSubmit = (data: WalksMoim) => {
+    console.log(data);
   };
 
   useEffect(() => {
@@ -51,7 +57,7 @@ export default function Write() {
             <ul>
               <li>
                 <label htmlFor="moim-name">모임의 이름을 지어주세요.</label>
-                <NameInput
+                <TitleInput
                   register={register}
                   errors={errors}
                   setFocus={setFocus}
@@ -77,14 +83,22 @@ export default function Write() {
                 <label htmlFor="moim-plan">모임 날짜를 정해주세요.</label>
                 <button
                   type="button"
-                  className={plan === 'day' ? 'active' : ''}
+                  className={
+                    plan === 'day'
+                      ? 'date-select-button active'
+                      : 'date-select-button'
+                  }
                   onClick={() => handlePlanSelectButtonClick('day')}
                 >
                   요일로 선택하기
                 </button>
                 <button
                   type="button"
-                  className={plan === 'date' ? 'active' : ''}
+                  className={
+                    plan === 'date'
+                      ? 'date-select-button active'
+                      : 'date-select-button'
+                  }
                   onClick={() => handlePlanSelectButtonClick('date')}
                 >
                   날짜로 선택하기
@@ -92,14 +106,13 @@ export default function Write() {
               </li>
               <li>{plan === 'day' ? <EveryWeekPicker /> : <OneDayPicker />}</li>
               <li>
-                <button
+                <CommonButton
                   type="button"
-                  onClick={handleSubmit((e) => {
-                    console.log(e);
-                  })}
+                  onClick={handleSubmit(onSubmit)}
+                  disabled={!isValid}
                 >
                   등록
-                </button>
+                </CommonButton>
               </li>
             </ul>
           </form>
@@ -111,12 +124,12 @@ export default function Write() {
 
 const moimFormContainer = css`
   max-width: 800px;
-  border: 1px solid;
   margin: 0 auto;
+  padding: 35px;
 
   h1 {
-    margin: 38px;
     text-align: start;
+    color: ${Theme.mainColor};
   }
 
   form ul li {
@@ -124,7 +137,6 @@ const moimFormContainer = css`
   }
 
   form {
-    padding: 0 36px;
     width: 100%;
   }
 
@@ -139,5 +151,25 @@ const moimFormContainer = css`
       font-weight: 600;
       font-size: 1.1rem;
     }
+  }
+
+  button.date-select-button {
+    border: none;
+    padding: 13px 16px;
+    border-radius: 20px;
+    background-color: ${Theme.disableBgColor};
+    color: ${Theme.disableColor};
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  button.date-select-button.active {
+    background-color: ${Theme.mainColor};
+    color: #fff;
+  }
+
+  button.date-select-button + button.date-select-button {
+    margin-left: 10px;
   }
 `;

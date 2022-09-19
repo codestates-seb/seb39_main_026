@@ -18,7 +18,7 @@ const errormessageContainer = css`
 `;
 
 export default function DateSelectBox() {
-  const { control } = useFormContext<WalksMoimOneDay>(); // retrieve all hook methods
+  const { control } = useFormContext<WalksMoimOneDay>();
 
   return (
     <>
@@ -34,16 +34,31 @@ export default function DateSelectBox() {
           return (
             <>
               <DatePicker
+                autoFocus
                 locale="ko"
                 selected={value}
-                onChange={(date: Date) => onChange(date)}
                 minDate={new Date()}
-                dateFormat="yyyy.MM.dd"
-              />
-              <TimeSelectBox />
+                onChange={(date: Date) => onChange(date)}
+                dateFormat="yyyy년 MM월 dd일 E요일"
+                isClearable
+                withPortal
+                placeholderText="여기를 눌러 날짜를 선택해주세요."
+                // closeOnScroll={true}
+              >
+                <div
+                  css={css`
+                    color: ${Theme.errorMessagesColor};
+                    text-align: center;
+                    margin: 20px 0;
+                  `}
+                >
+                  날씨를 확인하는 것을 잊지 마세요!
+                </div>
+              </DatePicker>
               <div css={errormessageContainer}>
                 {error && <p>{error.message}</p>}
               </div>
+              <TimeSelectBox />
             </>
           );
         }}
