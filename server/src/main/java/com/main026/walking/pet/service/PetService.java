@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +55,14 @@ public class PetService {
         Pet pet = petRepository.findById(petId).orElseThrow();
 
         return petMapper.petToPetResponseDto(pet);
+    }
+    //Todo List 로 반환하면 다른 정보를 추가하기 어렵다.
+    public List<PetDto.Response> findAllByusername(String username){
+        List<PetDto.Response> allPets = petRepository.findAllByMember_username(username)
+                .stream()
+                .map(pet -> petMapper.petToPetResponseDto(pet))
+                .collect(Collectors.toList());
+        return allPets;
     }
 
     public PetDto.Response editPet(Long petId, PetDto.Patch patchDto){

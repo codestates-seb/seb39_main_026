@@ -20,7 +20,7 @@ public class MemberDto {
     public static class Post{
         private String email;
         private String password;
-        private String nickName;
+        private String username;
 
         private String si;
         private String gu;
@@ -37,22 +37,22 @@ public class MemberDto {
     @NoArgsConstructor
     public static class Patch{
         private String password;
-        private String nickName;
+        private String username;
 
         private String si;
         private String gu;
         private String dong;
 
-        private MultipartFile imgFile;
+        private MultipartFile profileImg;
 
         @Builder
-        public Patch(String password, String nickName, String si, String gu, String dong, MultipartFile imgFile) {
+        public Patch(String password, String username, String si, String gu, String dong, MultipartFile profileImg) {
             this.password = password;
-            this.nickName = nickName;
+            this.username = username;
             this.si = si;
             this.gu = gu;
             this.dong = dong;
-            this.imgFile = imgFile;
+            this.profileImg = profileImg;
         }
     }
     @Getter
@@ -60,15 +60,15 @@ public class MemberDto {
     public static class Response{
         private Long id;
         private String email;
-        private String nickName;
+        private String username;
         private List<PetDto.Response> petResponseDtoList = new ArrayList<>();
         private Address address;
 
         @Builder
-        public Response(Long id, String email, String nickName,Address address, List<PetDto.Response> petResponseDtoList) {
+        public Response(Long id, String email, String username,Address address, List<PetDto.Response> petResponseDtoList) {
             this.id = id;
             this.email = email;
-            this.nickName = nickName;
+            this.username = username;
             this.address = address;
             this.petResponseDtoList = petResponseDtoList;
         }
@@ -76,7 +76,7 @@ public class MemberDto {
         public Response(Member member){
             this.id = member.getId();
             this.email = member.getEmail();
-            this.nickName = member.getNickName();
+            this.username = member.getUsername();
             //this.petResponseDtoList = member.getPetList();
         }
     }

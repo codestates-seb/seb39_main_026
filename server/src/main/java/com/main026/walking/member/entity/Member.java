@@ -21,7 +21,7 @@ public class Member {
     private Long id;
     private String email;
     private String password;
-    private String nickName;
+    private String username;
     @Embedded
     private Address address;
     private String imgUrl;
@@ -34,11 +34,11 @@ public class Member {
     private List<Comment> commentList;
 
     @Builder
-    public Member(Long id, String email, String password, String nickName, Address address, String imgUrl, List<Pet> petList, List<Comment> commentList) {
+    public Member(Long id, String email, String password, String username, Address address, String imgUrl, List<Pet> petList, List<Comment> commentList) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.nickName = nickName;
+        this.username = username;
         this.address = address;
         this.imgUrl = imgUrl;
         this.petList = petList;
@@ -47,7 +47,7 @@ public class Member {
 
     public void update(MemberDto.Patch patchDto){
         this.password = patchDto.getPassword();
-        this.nickName = patchDto.getNickName();
+        this.username = patchDto.getUsername();
         this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
     }
 

@@ -1,4 +1,4 @@
-import { Global, css } from '@emotion/react';
+import { Global, css, keyframes } from '@emotion/react';
 import { Theme } from './Theme';
 
 const globalStyles = css`
@@ -163,6 +163,20 @@ const globalStyles = css`
   .react-datepicker__day--keyboard-selected {
     background-color: unset !important;
     color: ${Theme.mainColor} !important;
+  }
+`;
+
+export const skeletonGradient = keyframes`
+  0% {
+      background-color: rgba(165, 165, 165, 0.1);
+  }
+
+  50% {
+      background-color: rgba(165, 165, 165, 0.3);
+  }
+
+  100% {
+      background-color: rgba(165, 165, 165, 0.1);
   }
 `;
 

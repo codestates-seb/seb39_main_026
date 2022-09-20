@@ -38,14 +38,17 @@ public class Community {
   @OneToMany(mappedBy = "community")
   private List<Image> images;
 
-  /**Todo 시간 정보 파싱
+  /**Todo 저장되는 시간 정보가 너무 많다 줄일 수 없을까?
    * 일단 따로 해보자.
    * 요일의 경우 여러개가 선택될텐데 엔티티에는 리스트가 들어갈 수 없다.
   */
+  //요일로 받았을때
   @Convert(converter = StringArrayConverter.class)
-  private List<String> days;
-
-  private String timeInfo;
+  private List<String> dates;
+  //날짜로 받았을때
+  private String date;
+  //시간정보
+  private String time;
 
   @OneToOne(fetch = FetchType.LAZY)
   private Member representMember;
@@ -54,7 +57,7 @@ public class Community {
   private List<CommunityPet> communityPets = new ArrayList<>();
 
   @Column(nullable = false)
-  private Long capacity;
+  private Integer capacity;
 
   @Column//(columnDefinition = "long default 0L", nullable = true)
   private Long viewed = 0L;

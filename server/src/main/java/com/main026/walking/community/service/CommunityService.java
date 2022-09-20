@@ -8,6 +8,7 @@ import com.main026.walking.image.entity.Image;
 import com.main026.walking.image.repository.ImageRepository;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
+import com.main026.walking.util.enums.Weeks;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,14 +39,15 @@ public class CommunityService {
   public Community createCommunity(CommunityDto.Post postDto){
     Community community = communityMapper.postDtoToEntity(postDto);
 
-    String[] dayInfo = postDto.getDayInfo();
+    String[] dayInfo = postDto.getDates();
     List<String> dayList = new ArrayList<>();
-    for (String day : dayInfo) {
-      dayList.add(day);
+    if(dayInfo!=null) {
+      for (String day : dayInfo) {
+        dayList.add(day);
+      }
     }
 
-    //Todo 제대로된 요일데이터 파싱
-    community.setDays(dayList);
+    community.setDates(dayList);
 
     //Todo 시큐리티 이후 유저 세팅
     community.setRepresentMember(testMember());

@@ -15,7 +15,6 @@ export default function Index() {
     <>
       <TabTitle prefix={walkId} />
       <DetailLayout>
-        <h1>산책 개별페이지의 소개 부분입니다!</h1>
         <Introduce walksData={walksData} />
       </DetailLayout>
     </>

@@ -20,7 +20,7 @@ public class InitData {
         Member kimcoding = Member.builder()
                 .email("kimcoding@codestates.com")
                 .address(address)
-                .nickName("김코딩")
+                .username("김코딩")
                 .password("12345678")
                 .build();
         memberRepository.save(kimcoding);

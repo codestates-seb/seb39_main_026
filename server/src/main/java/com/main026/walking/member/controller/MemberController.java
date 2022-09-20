@@ -18,6 +18,7 @@ public class MemberController {
         return memberService.saveMember(memberPostDto);
     }
 
+    //TODO 토큰이 없으면 본인이 아니라는 정보를 포함시키기
     @GetMapping("/{memberId}")
     public MemberDto.Response getMember(@PathVariable Long memberId){
         return memberService.findMember(memberId);

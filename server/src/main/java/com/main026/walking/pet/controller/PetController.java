@@ -5,16 +5,20 @@ import com.main026.walking.pet.service.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/members/pets")
+@RequestMapping("/pets")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*",allowedHeaders = "*")
 public class PetController {
 
     private final PetService petService;
 
-    @PostMapping
-    public PetDto.Response postPet(@RequestBody PetDto.Post postDto){
+    @PostMapping("/{username}")
+    public PetDto.Response postPet(@RequestBody PetDto.Post postDto,@PathVariable String username){
+        //TODO 시큐리티
+        System.out.println("회원이름 " + username);
         return petService.postPet(postDto);
     }
 
@@ -23,6 +27,11 @@ public class PetController {
     @GetMapping("/{petId}")
     public PetDto.Response getPet(@PathVariable Long petId){
         return petService.findPet(petId);
+    }
+
+    @GetMapping
+    public List<PetDto.Response> getPets(@RequestParam("username") String username){
+        return petService.findAllByusername(username);
     }
 
     @PatchMapping("/{petId}")
