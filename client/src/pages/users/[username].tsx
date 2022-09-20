@@ -36,7 +36,7 @@ export default function User() {
     <section css={user}>
       <TabTitle prefix={username} />
       <UserInfo data={UserData} />
-      <PetInfo pets={UserData?.petResponseDtoList} />
+      <PetInfo pets={UserData.petResponseDtoList} />
       <div className="walks">
         <Icon icon="fluent-emoji-flat:paw-prints" className="icon" />
         <span>{username}</span>님의 산책 모임

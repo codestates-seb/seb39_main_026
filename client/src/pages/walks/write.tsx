@@ -18,7 +18,7 @@ import {
 } from '../../models/WalksMoim';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Theme } from '../../styles/Theme';
-import { dateToYYYYMMDD, dateToHMM } from '../../util/transformDate';
+import { dateToYYYYMMDD, dateToHMM } from '../../../util/transformDate';
 
 export default function Write() {
   const methods = useForm<WalksMoim>({
