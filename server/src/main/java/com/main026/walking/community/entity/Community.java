@@ -49,6 +49,7 @@ public class Community {
   //요일로 받았을때
   @Convert(converter = StringArrayConverter.class)
   private List<String> dates;
+
   //날짜로 받았을때
   private String date;
 
