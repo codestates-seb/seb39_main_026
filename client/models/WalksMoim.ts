@@ -18,11 +18,20 @@ interface WalksMoimBase {
   plannedTime: Date;
 }
 
+export const WalksMoimTypes = {
+  단기모임: 'oneDay',
+  매주모임: 'everyWeek',
+} as const;
+
+export type WalksMoimType = typeof WalksMoimTypes[keyof typeof WalksMoimTypes];
+
 export interface WalksMoimOneDay extends WalksMoimBase {
+  type: typeof WalksMoimTypes['단기모임'];
   plannedDate: Date;
 }
 
 export interface WalksMoimEveryWeek extends WalksMoimBase {
+  type: typeof WalksMoimTypes['매주모임'];
   plannedDates: Yoil[];
 }
 

@@ -13,7 +13,7 @@ const errormessageContainer = css`
   }
 `;
 
-export default function DaySelectBox() {
+export default function EveryWeekPicker() {
   const { control } = useFormContext<WalksMoimEveryWeek>(); // retrieve all hook methods
 
   return (
