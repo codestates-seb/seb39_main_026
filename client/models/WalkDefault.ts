@@ -23,11 +23,11 @@ interface WalkDetailPets {
   petName: string;
   petGender: string;
   imgUrl: string;
-  'user.name': string;
+  username: string;
 }
 
 interface WalkDetailCommnet {
   comment: string;
-  'user.name': string;
+  username: string;
   createdAt: string;
 }

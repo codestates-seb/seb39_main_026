@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
@@ -17,19 +18,21 @@ export default function DetailLayout({
   const walkId = router.query.walkId as string;
   const walksData: WalkDetail = useWalksDetailQuery(walkId);
   return (
-    <section>
-      {walksData == null ? (
-        <div>로딩중</div>
-      ) : (
-        <>
-          <Title walksData={walksData} />
-          <Information walksData={walksData} />
-          <PageNav />
-          {children}
-          <ParticipantsInfo walksData={walksData} />
-          <Comments walksData={walksData} />
-        </>
-      )}
+    <section
+      css={css`
+        padding: 80px 36px 50px;
+        ul {
+          list-style: none;
+        }
+        max-width: 800px;
+      `}
+    >
+      <Title walksData={walksData} />
+      <Information walksData={walksData} />
+      <PageNav />
+      {children}
+      <ParticipantsInfo walksData={walksData} />
+      <Comments walksData={walksData} />
     </section>
   );
 }
