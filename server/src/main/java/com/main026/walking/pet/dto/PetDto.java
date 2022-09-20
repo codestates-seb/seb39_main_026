@@ -2,6 +2,7 @@ package com.main026.walking.pet.dto;
 
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
+import com.main026.walking.pet.entity.Pet;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -74,5 +75,28 @@ public class PetDto {
             this.imgUrl = imgUrl;
             this.about = about;
         }
+
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class compactResponse{
+        private Long id;
+        private String petName;
+        private MemberDto.Response member;
+        private String petGender;
+        private Integer petAge;
+        private String imgUrl;
+
+        @Builder
+        public compactResponse(Pet pet) {
+            this.id = pet.getId();
+            this.petName = pet.getPetName();
+            this.member = new MemberDto.Response(pet.getMember());
+            this.petGender = pet.getPetGender();
+            this.petAge = pet.getPetAge();
+            this.imgUrl = pet.getImgUrl();
+        }
+    }
+
 }

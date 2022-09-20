@@ -8,6 +8,10 @@ import com.main026.walking.image.entity.Image;
 import com.main026.walking.image.repository.ImageRepository;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
+import com.main026.walking.pet.entity.CommunityPet;
+import com.main026.walking.pet.entity.Pet;
+import com.main026.walking.pet.repository.CommunityPetRepository;
+import com.main026.walking.pet.repository.PetRepository;
 import com.main026.walking.util.enums.Weeks;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
@@ -25,87 +29,102 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CommunityService {
-  private final CommunityRepository communityRepository;
-  private final MemberRepository memberRepository;
-  private final ImageRepository imageRepository;
-  private final CommunityMapper communityMapper;
-  private final FileStore fileStore;
+    private final CommunityRepository communityRepository;
+    private final MemberRepository memberRepository;
+    private final ImageRepository imageRepository;
+    private final PetRepository petRepository;
+    private final CommunityPetRepository communityPetRepository;
+    private final CommunityMapper communityMapper;
+    private final FileStore fileStore;
 
-  private Member testMember(){
-    return memberRepository.findById(1L).orElseThrow();
-  }
-
-//  Create
-  public Community createCommunity(CommunityDto.Post postDto){
-    Community community = communityMapper.postDtoToEntity(postDto);
-
-    String[] dayInfo = postDto.getDates();
-    List<String> dayList = new ArrayList<>();
-    if(dayInfo!=null) {
-      for (String day : dayInfo) {
-        dayList.add(day);
-      }
+    private Member testMember() {
+        return memberRepository.findById(1L).orElseThrow();
     }
 
-    community.setDates(dayList);
+    //  Create
+    public Community createCommunity(CommunityDto.Post postDto) {
+        Community community = communityMapper.postDtoToEntity(postDto);
 
-    //Todo 시큐리티 이후 유저 세팅
-    community.setRepresentMember(testMember());
-    community.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
+        String[] dayInfo = postDto.getDates();
+        List<String> dayList = new ArrayList<>();
+        if (dayInfo != null) {
+            for (String day : dayInfo) {
+                dayList.add(day);
+            }
+        }
 
-    //이미지 세팅
-    Community savedCommunity = communityRepository.save(community);
-    List<MultipartFile> attachFiles = postDto.getImages();
+        community.setDates(dayList);
 
-    try {
-      for (MultipartFile attachFile : attachFiles) {
-        String storeFile = fileStore.storeFile(attachFile);
-        Image image = Image.builder()
-                .storeFilename(storeFile)
-                .community(savedCommunity)
-                .build();
-        imageRepository.save(image);
-      }
-    }catch (IOException e){
-     e.printStackTrace();
+        //Todo 시큐리티 이후 유저 세팅
+        community.setRepresentMember(testMember());
+        community.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
+
+        //이미지 세팅
+        Community savedCommunity = communityRepository.save(community);
+        List<MultipartFile> attachFiles = postDto.getImages();
+
+        try {
+            for (MultipartFile attachFile : attachFiles) {
+                String storeFile = fileStore.storeFile(attachFile);
+                Image image = Image.builder()
+                        .storeFilename(storeFile)
+                        .community(savedCommunity)
+                        .build();
+                imageRepository.save(image);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return communityRepository.save(community);
     }
 
-    return communityRepository.save(community);
-  }
+    public Community joinPet(Long communityId, List<Long> petIdList) {
+        Community community = communityRepository.findById(communityId).orElseThrow();
 
-//  Read
-  public Community findCommunity(long communityId){
-    Community community = findVerifiedCommunity(communityId);
-    community.countView();
-    return communityRepository.save(community);
-  }
+        for (Long petId : petIdList) {
+            Pet pet = petRepository.findById(petId).orElseThrow();
+            CommunityPet communityPet = CommunityPet.builder()
+                    .pet(pet)
+                    .community(community)
+                    .build();
+            communityPetRepository.save(communityPet);
+        }
+        return community;
+    }
 
-  public Page<Community> findCommunities(int page, int size) {
-    return communityRepository.findAll(PageRequest.of( page, size, Sort.by("id").descending()));
-  }
+    //  Read
+    public Community findCommunity(long communityId) {
+        Community community = findVerifiedCommunity(communityId);
+        return communityRepository.save(community);
+    }
 
-//  Update
-  public Community updateCommunity(long communityId, CommunityDto.Patch patchDto) {
-    Community community = findVerifiedCommunity(communityId);
-    community.update(patchDto);
-    //communityMapper.updateEntityFromDto(dto, community);
+    public Page<Community> findCommunities(int page, int size) {
+        return communityRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
+    }
 
-    return communityRepository.save(community);
-  }
+    //  Update
+    public Community updateCommunity(long communityId, CommunityDto.Patch patchDto) {
+        Community community = findVerifiedCommunity(communityId);
+        community.update(patchDto);
+        //communityMapper.updateEntityFromDto(dto, community);
 
-//  Delete
-  public void deleteCommunity(long communityId) {
-    Community community = findVerifiedCommunity(communityId);
-    communityRepository.delete(community);
-  }
+        return communityRepository.save(community);
+    }
 
-//  Valid
-  public Community findVerifiedCommunity(long questionId) {
-    Optional<Community> optionalCommunity =
-      communityRepository.findById(questionId);
-    Community findCommunity =
-      optionalCommunity.orElseThrow(() -> new RuntimeException("COMMUNITY_NOT_FOUND"));
+    //  Delete
+    public void deleteCommunity(long communityId) {
+        Community community = findVerifiedCommunity(communityId);
+        communityRepository.delete(community);
+    }
 
-    return findCommunity;
-  }
+    //  Valid
+    public Community findVerifiedCommunity(long questionId) {
+        Optional<Community> optionalCommunity =
+                communityRepository.findById(questionId);
+        Community findCommunity =
+                optionalCommunity.orElseThrow(() -> new RuntimeException("COMMUNITY_NOT_FOUND"));
+
+        return findCommunity;
+    }
 }

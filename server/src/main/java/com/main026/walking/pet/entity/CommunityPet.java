@@ -1,6 +1,7 @@
 package com.main026.walking.pet.entity;
 
 import com.main026.walking.community.entity.Community;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,8 +24,8 @@ public class CommunityPet {
     @JoinColumn(name = "community_id")
     private Community community;
 
-
-    public CommunityPet(Pet petId, Community communityId) {
+    @Builder
+    public CommunityPet(Pet pet, Community community) {
         this.pet = pet;
         this.community = community;
     }
