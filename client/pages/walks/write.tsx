@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import CommonButton from '../../components/CommonButton';
 import TabTitle from '../../components/TabTitle';
@@ -9,14 +9,22 @@ import OneDayPicker from '../../components/walks/wirte/OneDayPicker';
 import PersonCountInput from '../../components/walks/wirte/PersonCountInput';
 import PlaceInput from '../../components/walks/wirte/PlaceInput';
 import TitleInput from '../../components/walks/wirte/TitleInput';
-import { WalksMoim } from '../../models/WalksMoim';
+import {
+  WalksMoim,
+  WalksMoimEveryWeek,
+  WalksMoimOneDay,
+  WalksMoimType,
+  WalksMoimTypes,
+} from '../../models/WalksMoim';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Theme } from '../../styles/Theme';
+import { dateToYYYYMMDD, dateToHMM } from '../../util/transformDate';
 
 export default function Write() {
   const methods = useForm<WalksMoim>({
     mode: 'onChange',
     defaultValues: {
+      type: 'everyWeek',
       personCount: 2,
     },
   });
@@ -28,23 +36,66 @@ export default function Write() {
     setFocus,
     formState: { errors, isValid },
     resetField,
+    setValue,
+    watch,
   } = methods;
 
-  const [plan, setPlan] = useState('day');
+  const [moimType, setMoimType] = [
+    watch('type'),
+    (v: WalksMoimType) => setValue('type', v),
+  ];
 
-  const handlePlanSelectButtonClick = (buttonType: string) => {
-    setPlan(buttonType);
+  const onSubmitOneDay = (data: WalksMoimOneDay) => {
+    const { title, place, description, personCount, plannedDate, plannedTime } =
+      data;
+
+    const oneDayMoim = {
+      title,
+      place,
+      description,
+      personCount,
+      plannedDate: dateToYYYYMMDD(plannedDate),
+      plannedTime: dateToHMM(plannedTime),
+    };
+
+    console.log(oneDayMoim, 'oneDayMoim');
+  };
+
+  const onSubmitEveryWeek = (data: WalksMoimEveryWeek) => {
+    const {
+      title,
+      place,
+      description,
+      personCount,
+      plannedDates,
+      plannedTime,
+    } = data;
+
+    const everyWeekMoim = {
+      title,
+      place,
+      description,
+      personCount,
+      plannedDates,
+      plannedTime: dateToHMM(plannedTime),
+    };
+
+    console.log(everyWeekMoim, 'everyWeekMoim');
   };
 
   const onSubmit = (data: WalksMoim) => {
-    console.log(data);
+    if (data.type === WalksMoimTypes.매주모임) {
+      onSubmitEveryWeek(data);
+    } else {
+      onSubmitOneDay(data);
+    }
   };
 
   useEffect(() => {
     resetField('plannedDate');
     resetField('plannedDates');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plan]);
+  }, [moimType]);
 
   return (
     <>
@@ -84,27 +135,33 @@ export default function Write() {
                 <button
                   type="button"
                   className={
-                    plan === 'day'
+                    moimType === WalksMoimTypes.매주모임
                       ? 'date-select-button active'
                       : 'date-select-button'
                   }
-                  onClick={() => handlePlanSelectButtonClick('day')}
+                  onClick={() => setMoimType(WalksMoimTypes.매주모임)}
                 >
                   요일로 선택하기
                 </button>
                 <button
                   type="button"
                   className={
-                    plan === 'date'
+                    moimType === WalksMoimTypes.단기모임
                       ? 'date-select-button active'
                       : 'date-select-button'
                   }
-                  onClick={() => handlePlanSelectButtonClick('date')}
+                  onClick={() => setMoimType(WalksMoimTypes.단기모임)}
                 >
                   날짜로 선택하기
                 </button>
               </li>
-              <li>{plan === 'day' ? <EveryWeekPicker /> : <OneDayPicker />}</li>
+              <li>
+                {moimType === WalksMoimTypes.매주모임 ? (
+                  <EveryWeekPicker />
+                ) : (
+                  <OneDayPicker />
+                )}
+              </li>
               <li>
                 <CommonButton
                   type="button"
