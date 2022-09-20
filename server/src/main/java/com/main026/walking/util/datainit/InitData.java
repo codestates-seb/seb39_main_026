@@ -14,6 +14,7 @@ import com.main026.walking.pet.repository.CommunityPetRepository;
 import com.main026.walking.pet.repository.PetRepository;
 import com.main026.walking.util.embedded.Address;
 
+import com.main026.walking.util.embedded.PetAge;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -70,7 +71,7 @@ public class InitData {
                 //.imgUrl()
                 .neuter("O")
                 .breed("세퍼트")
-                .petAge(1)
+                .petAges(new PetAge(3,8))
                 .petGender("여")
                 .personality("발랄함")
                 .build();
@@ -83,7 +84,7 @@ public class InitData {
                 //.imgUrl()
                 .neuter("O")
                 .breed("믹스견")
-                .petAge(7)
+                .petAges(new PetAge(2,4))
                 .petGender("남")
                 .personality("똑똑함")
                 .build();
@@ -96,7 +97,7 @@ public class InitData {
                 //.imgUrl()
                 .neuter("X")
                 .breed("푸들")
-                .petAge(0)
+                .petAges(new PetAge(0,3))
                 .petGender("남")
                 .personality("침착함")
                 .build();
@@ -109,7 +110,7 @@ public class InitData {
                 //.imgUrl()
                 .neuter("X")
                 .breed("삽살개")
-                .petAge(3)
+                .petAges(new PetAge(7,7))
                 .petGender("남")
                 .personality("활발함")
                 .build();

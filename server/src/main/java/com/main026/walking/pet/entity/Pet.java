@@ -2,6 +2,7 @@ package com.main026.walking.pet.entity;
 
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
+import com.main026.walking.util.embedded.PetAge;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,8 @@ public class Pet {
     private Member member;
     private String neuter;
     //날짜 데이터를 받아서 동적으로 처리
-    private Integer petAge;
+    @Embedded
+    private PetAge petAges;
     private String personality;
     private String breed;
     private String about;
@@ -33,13 +35,13 @@ public class Pet {
     private List<CommunityPet> communityPets = new ArrayList<>();
 
     @Builder
-    public Pet(Long id, String petName, String petGender, Member member, String neuter, Integer petAge, String personality, String breed, String about, String imgUrl) {
+    public Pet(Long id, String petName, String petGender, Member member,PetAge petAges, String neuter, String personality, String breed, String about, String imgUrl) {
         this.id = id;
         this.petName = petName;
         this.petGender = petGender;
         this.member = member;
         this.neuter = neuter;
-        this.petAge = petAge;
+        this.petAges = petAges;
         this.personality = personality;
         this.breed = breed;
         this.about = about;
@@ -54,12 +56,17 @@ public class Pet {
         this.imgUrl = imgUrl;
     }
 
+    public void setPetAges(PetAge petAges){
+        this.petAges = petAges;
+    }
+
 
     public void update(PetDto.Patch patchDto) {
         this.petName = patchDto.getPerName();
         this.petGender = patchDto.getPetGender();
         this.neuter = patchDto.getNeuter();
-        this.petAge = patchDto.getPetAge();
+        //TODO 강아지 생일 수정 로직
+        //this.petAges = patchDto.getBirthDay();
         this.personality = patchDto.getPersonality();
         this.breed = patchDto.getBreed();
         this.about = patchDto.getAbout();

@@ -2,6 +2,7 @@ package com.main026.walking.pet.dto;
 
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.pet.entity.Pet;
+import com.main026.walking.util.embedded.PetAge;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,9 +16,8 @@ public class PetDto {
         private String petGender;
         private MultipartFile profileImg;
         private String neuter;
-        //TODO 강아지 나이 생일로 받기
-        //private String birthDay;(2020-02-00생략가능)
-        private Integer petAge;
+        //TODO 날짜를 모를경우 01을 받게
+        private String birthDay;
         private String personality;
         private String breed;
         private String about;
@@ -29,18 +29,18 @@ public class PetDto {
         private String perName;
         private String petGender;
         private String neuter;
-        private Integer petAge;
+        private String birthDay;
         private String personality;
         private String breed;
         private MultipartFile profileImg;
         private String about;
 
         @Builder
-        public Patch(String perName, String petGender, String neuter, Integer petAge, String personality, String breed, MultipartFile profileImg, String about) {
+        public Patch(String perName, String petGender, String neuter,String birthDay, Integer petAge, String personality, String breed, MultipartFile profileImg, String about) {
             this.perName = perName;
             this.petGender = petGender;
             this.neuter = neuter;
-            this.petAge = petAge;
+            this.birthDay = birthDay;
             this.personality = personality;
             this.breed = breed;
             this.profileImg = profileImg;
@@ -57,20 +57,20 @@ public class PetDto {
         private MemberDto.Response member;
         private String petGender;
         private String neuter;
-        private Integer petAge;
+        private PetAge petAges;
         private String personality;
         private String breed;
         private String imgUrl;
         private String about;
 
         @Builder
-        public Response(Long id, String petName, MemberDto.Response member, String petGender, String neuter, Integer petAge, String personality, String breed, String imgUrl, String about) {
+        public Response(Long id, String petName, MemberDto.Response member, String petGender, String neuter,PetAge petAges, String personality, String breed, String imgUrl, String about) {
             this.id = id;
             this.petName = petName;
             this.member = member;
             this.petGender = petGender;
             this.neuter = neuter;
-            this.petAge = petAge;
+            this.petAges = petAges;
             this.personality = personality;
             this.breed = breed;
             this.imgUrl = imgUrl;
@@ -86,7 +86,7 @@ public class PetDto {
         private String petName;
         private MemberDto.Response member;
         private String petGender;
-        private Integer petAge;
+        private PetAge petAges;
         private String imgUrl;
 
         @Builder
@@ -95,7 +95,7 @@ public class PetDto {
             this.petName = pet.getPetName();
             this.member = new MemberDto.Response(pet.getMember());
             this.petGender = pet.getPetGender();
-            this.petAge = pet.getPetAge();
+            this.petAges = pet.getPetAges();
             this.imgUrl = pet.getImgUrl();
         }
     }

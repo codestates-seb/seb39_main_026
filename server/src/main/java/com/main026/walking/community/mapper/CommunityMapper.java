@@ -6,6 +6,7 @@ import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.image.entity.Image;
 import com.main026.walking.member.dto.MemberDto;
+import com.main026.walking.member.entity.Member;
 import com.main026.walking.notice.dto.NoticeDto;
 import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.dto.PetDto;
@@ -32,7 +33,7 @@ public interface CommunityMapper {
             return null;
         }
         CommunityDto.Response.ResponseBuilder response = CommunityDto.Response.builder();
-
+        Member representMember = entity.getRepresentMember();
         MemberDto.Response responseMemberDto = new MemberDto.Response(entity.getRepresentMember());
 
         response.communityId(entity.getId());
