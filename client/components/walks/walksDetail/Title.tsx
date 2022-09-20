@@ -58,7 +58,7 @@ export default function Title({ walksData }: { walksData: WalkDetail }) {
     }
     return '모집마감';
   }
-  console.log(walksData);
+
   return (
     <article css={titleContainer}>
       {walksData == null ? (
