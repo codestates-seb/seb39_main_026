@@ -21,9 +21,10 @@ export default function AddressPicker() {
       cursor: pointer;
       font-weight: 500;
       color: ${Theme.mainColor};
+      font-size: 1rem;
     }
     .icon {
-      margin-right: 1rem;
+      margin-right: 0.5rem;
     }
   `;
 
