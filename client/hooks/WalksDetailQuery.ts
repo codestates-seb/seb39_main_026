@@ -9,11 +9,13 @@ export function useWalksDetailQuery(communityId: string) {
   });
 
   if (status === 'loading') {
-    return 'loading';
+    return data;
   }
+
   if (status === 'error') {
     return error;
   }
+
   if (status === 'success') {
     return data;
   }
