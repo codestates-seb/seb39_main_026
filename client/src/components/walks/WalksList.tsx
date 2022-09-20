@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { WalkDefault } from '../../models/WalkDefault';
 import WalkItem from './WalkItem';
 import { useGetWalksQuery } from './WalksListQuery';
+import LoadingWalkItem from './skeleton/LoadingWalkItem';
 
 export default function WalksList() {
   const data = useGetWalksQuery();
@@ -17,11 +18,13 @@ export default function WalksList() {
 
   return (
     <section css={walksList}>
-      {data.communities
-        ? data.communities.map((walk: WalkDefault) => {
-            return <WalkItem key={walk.communityId} walk={walk} />;
-          })
-        : ''}
+      {data.communities ? (
+        data.communities.map((walk: WalkDefault) => {
+          return <WalkItem key={walk.communityId} walk={walk} />;
+        })
+      ) : (
+        <LoadingWalkItem />
+      )}
     </section>
   );
 }
