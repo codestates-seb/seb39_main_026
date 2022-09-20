@@ -5,24 +5,32 @@ import com.main026.walking.pet.service.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/members/pets")
+@RequestMapping("/pets")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*",allowedHeaders = "*")
 public class PetController {
 
     private final PetService petService;
 
-    @PostMapping
-    public PetDto.Response postPet(@RequestBody PetDto.Post postDto){
+    @PostMapping("/{nickname}")
+    public PetDto.Response postPet(@RequestBody PetDto.Post postDto,@PathVariable String nickname){
+        //TODO 시큐리티
+        System.out.println("회원이름 " + nickname);
         return petService.postPet(postDto);
     }
-
     //이름이 괴상한데 그냥하는 이유 : requestMapping 의 이름 통일성을 지키는게 더 낫다고 생각해서,
     //하지만 괴상하긴 해서 애초에 네이밍컨벤션에 대한 고민을 더 해야할것같다.
     @GetMapping("/{petId}")
     public PetDto.Response getPet(@PathVariable Long petId){
         return petService.findPet(petId);
+    }
+
+    @GetMapping
+    public List<PetDto.Response> getPets(@RequestParam("nickname") String nickName){
+        return petService.findAllByNickName(nickName);
     }
 
     @PatchMapping("/{petId}")

@@ -43,16 +43,16 @@ public class MemberDto {
         private String gu;
         private String dong;
 
-        private MultipartFile imgFile;
+        private MultipartFile profileImg;
 
         @Builder
-        public Patch(String password, String nickName, String si, String gu, String dong, MultipartFile imgFile) {
+        public Patch(String password, String nickName, String si, String gu, String dong, MultipartFile profileImg) {
             this.password = password;
             this.nickName = nickName;
             this.si = si;
             this.gu = gu;
             this.dong = dong;
-            this.imgFile = imgFile;
+            this.profileImg = profileImg;
         }
     }
     @Getter

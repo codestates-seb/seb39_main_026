@@ -45,12 +45,19 @@ public class MemberService {
     }
 
     //U
-    public MemberDto.Response updateMember(Long memberId,MemberDto.Patch patchMemberDto){
+    public MemberDto.Response updateMember(Long memberId,MemberDto.Patch patchDto){
         Member member = memberRepository.findById(memberId).orElseThrow();
-        member.update(patchMemberDto);
+        member.update(patchDto);
 
-        //TODO
-        //member.setImgUrl()
+        if(patchDto.getProfileImg()!=null){
+            try {
+                MultipartFile profileImg = patchDto.getProfileImg();
+                String storeFile = fileStore.storeFile(profileImg);
+                member.setImgUrl(storeFile);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
 
         memberRepository.save(member);
         return memberMapper.memberToMemberResponseDto(member);

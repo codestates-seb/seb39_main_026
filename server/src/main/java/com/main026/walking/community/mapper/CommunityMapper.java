@@ -10,6 +10,7 @@ import com.main026.walking.notice.dto.NoticeDto;
 import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.Pet;
+import com.main026.walking.util.enums.Weeks;
 import org.mapstruct.*;
 
 import java.util.ArrayList;
@@ -36,13 +37,22 @@ public interface CommunityMapper {
 
     response.communityId(entity.getId());
     response.name(entity.getName());
-    //Todo 주소설정
     response.address(entity.getAddress());
     response.body(entity.getBody());
     response.member(responseMemberDto);
     response.capacity(entity.getCapacity());
-    response.time(entity.getTimeInfo());
-    response.weeks(entity.getDays());
+    response.time(entity.getTime());
+    response.dateInfo(entity.getDate());
+
+    List<String> dayInfo = new ArrayList<>();
+    if (entity.getDates().size()!=0) {
+      for (String date : entity.getDates()) {
+        String korean = Weeks.valueOf(date).getKorean();
+        dayInfo.add(korean);
+      }
+    }
+    response.dayInfo(dayInfo);
+
     response.participant(entity.getCommunityPets().size());
     response.createdAt(entity.getCreatedAt());
     response.viewed(entity.getViewed());
