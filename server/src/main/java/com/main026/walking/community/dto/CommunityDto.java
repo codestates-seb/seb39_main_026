@@ -25,25 +25,22 @@ public class CommunityDto {
     private List<MultipartFile> Images = new ArrayList<>();
 
     /**
-     * Todo 주소를 받아야한다.
      * 시,구,동을 받아야하는데 나눠서 받는 방법 외에 또 있을까?
-     * 정규표현식을 이용해서 나누는 것은 정말 비효율적인 코드라고한다.
+     * 영어명보다 좀 더 직관적이려고 한글발음을 썼는데 좀 아닌것같기도하다.
      */
     private String si;
     private String gu;
     private String dong;
 
     private String body;
-    private Long capacity;
-
-    /* TODO 시간을 요일(LIST), 혹은 날짜로 받기
-    요일은 정해져있으니 enum 으로 받아도 괜찮지않을까
-     */
+    private Integer capacity;
 
     //날짜로 받는 경우
-    private String timeInfo;
+    private String date;
     //요일로 받는 경우
-    private String[] dayInfo;
+    private String[] dates;
+
+    private String time;
 
     private LocalDateTime createdAt = LocalDateTime.now();
   }
@@ -53,23 +50,19 @@ public class CommunityDto {
   public static class Patch{
     private String name;
 
-    //Todo 주소를 받는 방법을 더 좋게 할 수 있을까?
     private String si;
     private String gu;
     private String dong;
 
-    /* TODO 시간을 요일(LIST), 혹은 날짜로 받기
-    요일은 정해져있으니 enum 으로 받아도 괜찮지않을까
-     */
-
     //날짜로 받는 경우
-    private String timeInfo;
+    private String date;
     //요일로 받는 경우
-    private String[] dayInfo;
+    private String[] dates;
+
+    private String time;
 
     private String body;
-    private Long capacity;
-    private LocalDateTime time;
+    private Integer capacity;
     private String imgUrl;
   }
 
@@ -81,29 +74,21 @@ public class CommunityDto {
     private String name;
     private Address address;
     private String body;
-    private Long capacity;
+    private Integer capacity;
+
+    private List<String> dayInfo;
+    private String dateInfo;
     private String time;
-    private List<String> weeks;
+
+    //private List<String> weeks;
     private MemberDto.Response member;
     private List<String> imgUrls;
     private List<PetDto.Response> pets;
     private List<CommentDto.Response> comments;
     private List<NoticeDto.Response> notices;
-    private int participant;
+    private Integer participant;
     private LocalDateTime createdAt;
     private Long viewed;
     private Long liked;
   }
-
-  //Todo 정보를 따로 보여주는 dto가 필요한가? 에 대한고민
-//  @Getter
-//  @AllArgsConstructor
-//  public static class Info{
-//    private String name;
-//    private String address;
-//    private String body;
-//    private Long capacity;
-//    private LocalDateTime time;
-//    private String imgUrl;
-//  }
 }

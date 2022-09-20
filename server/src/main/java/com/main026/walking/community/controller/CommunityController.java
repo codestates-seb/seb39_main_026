@@ -22,7 +22,7 @@ public class CommunityController {
   private final CommunityMapper communityMapper;
 
 //  Create
-  @PostMapping("/post")
+  @PostMapping
   public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto){
 
     //TODO 유저 수정 필요
