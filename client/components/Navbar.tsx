@@ -1,8 +1,13 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { LoginState } from '../states/LoginState';
 
 export default function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
+
   const mobile_navbar = css`
     @media screen and (max-width: 768px) {
       position: fixed;
@@ -78,6 +83,10 @@ export default function Navbar() {
     }
   `;
 
+  useEffect(() => {
+    if (localStorage.getItem('accessToken')) setIsLoggedIn(true);
+  }, []);
+
   return (
     <>
       <nav css={mobile_navbar}>
@@ -93,15 +102,27 @@ export default function Navbar() {
             <p className="nav_text">산책 찾기</p>
           </a>
         </Link>
-        <Link href="/login">
-          <a>
-            <Icon
-              icon="fluent-emoji-high-contrast:paw-prints"
-              className="icon"
-            />
-            <p className="nav_text">마이페이지</p>
-          </a>
-        </Link>
+        {isLoggedIn ? (
+          <Link href={`/users/${localStorage.getItem('username')}`}>
+            <a>
+              <Icon
+                icon="fluent-emoji-high-contrast:paw-prints"
+                className="icon"
+              />
+              <p className="nav_text">마이페이지</p>
+            </a>
+          </Link>
+        ) : (
+          <Link href="/login">
+            <a>
+              <Icon
+                icon="fluent-emoji-high-contrast:paw-prints"
+                className="icon"
+              />
+              <p className="nav_text">마이페이지</p>
+            </a>
+          </Link>
+        )}
       </nav>
       <nav css={desktop_navbar}>
         <div className="menus">
@@ -112,7 +133,13 @@ export default function Navbar() {
             <Link href="/">메인</Link>
             <Link href="/walks">산책 찾기</Link>
           </div>
-          <Link href="/login">로그인/회원가입</Link>
+          {isLoggedIn ? (
+            <Link href={`/users/${localStorage.getItem('username')}`}>
+              마이페이지
+            </Link>
+          ) : (
+            <Link href="/login">로그인/회원가입</Link>
+          )}
         </div>
       </nav>
     </>

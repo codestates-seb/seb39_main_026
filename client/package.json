@@ -21,7 +21,8 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.35.0",
     "react-query": "^3.39.2",
-    "recoil": "^0.7.5"
+    "recoil": "^0.7.5",
+    "recoil-persist": "^4.2.0"
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.10.2",
