@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MemberDto {
 
@@ -61,23 +62,22 @@ public class MemberDto {
         private Long id;
         private String email;
         private String username;
-        private List<PetDto.Response> petResponseDtoList = new ArrayList<>();
+        private List<PetDto.compactResponse> petList = new ArrayList<>();
         private Address address;
 
         @Builder
-        public Response(Long id, String email, String username,Address address, List<PetDto.Response> petResponseDtoList) {
+        public Response(Long id, String email, String username,Address address, List<PetDto.compactResponse> petList) {
             this.id = id;
             this.email = email;
             this.username = username;
             this.address = address;
-            this.petResponseDtoList = petResponseDtoList;
+            this.petList = petList;
         }
 
         public Response(Member member){
             this.id = member.getId();
             this.email = member.getEmail();
             this.username = member.getUsername();
-            //this.petResponseDtoList = member.getPetList();
         }
     }
 }

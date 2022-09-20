@@ -28,7 +28,7 @@
 //        Member findMember = memberRepository.findById(1L).orElseThrow();
 //
 //        //then
-//        assertThat(memberPost.getNickName()).isEqualTo(findMember.getNickName());
+//        assertThat(memberPost.getusername()).isEqualTo(findMember.getusername());
 //
 //    }
 //
@@ -41,7 +41,7 @@
 //
 //        MemberDto.Patch memberPatch = MemberDto.Patch
 //                .builder()
-//                .nickName("코뿔소")
+//                .username("코뿔소")
 //                .password("87654321")
 //                .build();
 //        MemberDto.Response updateMember = memberService.updateMember(1L, memberPatch);
@@ -49,7 +49,7 @@
 //        Member member = memberRepository.findById(1L).orElseThrow();
 //
 //        //then
-//        assertThat(member.getNickName()).isEqualTo("코뿔소");
+//        assertThat(member.getusername()).isEqualTo("코뿔소");
 //        assertThat(member.getPassword()).isEqualTo("87654321");
 //
 //    }

@@ -8,7 +8,6 @@ import org.mapstruct.Mapper;
 public interface PetMapper {
 
     Pet petPostDtoToPet(PetDto.Post postDto);
-    //TODO id 포함이 안되는 중
     PetDto.Response petToPetResponseDto(Pet pet);
 
 }

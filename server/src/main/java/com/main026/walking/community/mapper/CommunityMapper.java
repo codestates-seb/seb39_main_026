@@ -6,6 +6,7 @@ import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.image.entity.Image;
 import com.main026.walking.member.dto.MemberDto;
+import com.main026.walking.member.entity.Member;
 import com.main026.walking.notice.dto.NoticeDto;
 import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.dto.PetDto;
@@ -32,13 +33,12 @@ public interface CommunityMapper {
             return null;
         }
         CommunityDto.Response.ResponseBuilder response = CommunityDto.Response.builder();
-
+        Member representMember = entity.getRepresentMember();
         MemberDto.Response responseMemberDto = new MemberDto.Response(entity.getRepresentMember());
 
         response.communityId(entity.getId());
         response.name(entity.getName());
         response.address(entity.getAddress());
-        response.place(entity.getPlace());
         response.body(entity.getBody());
         response.member(responseMemberDto);
         response.capacity(entity.getCapacity());
@@ -46,8 +46,7 @@ public interface CommunityMapper {
         response.dateInfo(entity.getDate());
 
         List<String> dayInfo = new ArrayList<>();
-        //TODO 아무것도 없는데 사이즈가 왜 1이지
-        if (entity.getDates().size() != 1) {
+        if (entity.getDates().size() != 0) {
             for (String date : entity.getDates()) {
                 String korean = Weeks.valueOf(date).getKorean();
                 dayInfo.add(korean);
