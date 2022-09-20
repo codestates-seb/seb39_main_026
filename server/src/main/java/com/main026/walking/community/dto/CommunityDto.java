@@ -33,6 +33,9 @@ public class CommunityDto {
         private String gu;
         private String dong;
 
+        // TODO 추가!!, 검색조건 : 제목과 place sigudong 은 다른이야기
+        private String place;
+
         private String body;
         private Integer capacity;
 
@@ -56,6 +59,8 @@ public class CommunityDto {
         private String gu;
         private String dong;
 
+        private String place;
+
         //날짜로 받는 경우
         private String date;
         //요일로 받는 경우
@@ -76,6 +81,7 @@ public class CommunityDto {
         private Long communityId;
         private String name;
         private Address address;
+        private String place;
         private String body;
         private Integer capacity;
 
@@ -103,5 +109,19 @@ public class CommunityDto {
         public void setPetList(List<PetDto.compactResponse> petList){
             this.memberPetList = petList;
         }
+    }
+
+    @Getter
+    public static class compactResponse{
+        private Long communityId;
+        private String name;
+        private Address address;
+        private String place;
+
+        private List<String> dayInfo;
+        private String dateInfo;
+        private String time;
+
+        private List<String> imgUrls;
     }
 }
