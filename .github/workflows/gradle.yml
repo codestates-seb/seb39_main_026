@@ -3,8 +3,6 @@ name: Deploy - Server with Gradle on Aws
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 permissions:
   contents: read
