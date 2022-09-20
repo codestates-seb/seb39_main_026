@@ -17,7 +17,7 @@ const errormessageContainer = css`
   }
 `;
 
-export default function DateSelectBox() {
+export default function OneDayPicker() {
   const { control } = useFormContext<WalksMoimOneDay>();
 
   return (

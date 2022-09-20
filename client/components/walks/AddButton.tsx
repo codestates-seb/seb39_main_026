@@ -8,7 +8,7 @@ export default function AddButton({
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }) {
   const iconContainer = css`
-    position: absolute;
+    position: fixed;
     bottom: 15%;
     right: 10%;
     border: 0;
