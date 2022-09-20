@@ -39,6 +39,7 @@ public interface CommunityMapper {
         response.communityId(entity.getId());
         response.name(entity.getName());
         response.address(entity.getAddress());
+        response.place(entity.getPlace());
         response.body(entity.getBody());
         response.member(responseMemberDto);
         response.capacity(entity.getCapacity());
@@ -46,7 +47,8 @@ public interface CommunityMapper {
         response.dateInfo(entity.getDate());
 
         List<String> dayInfo = new ArrayList<>();
-        if (entity.getDates().size() != 0) {
+        //TODO 아무것도 없는데 사이즈가 왜 1이지
+        if (entity.getDates().size() != 1) {
             for (String date : entity.getDates()) {
                 String korean = Weeks.valueOf(date).getKorean();
                 dayInfo.add(korean);
