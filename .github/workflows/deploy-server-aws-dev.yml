@@ -1,4 +1,4 @@
-name: Deploy - Server with Gradle on Aws
+name: Deploy-Server on Aws [dev]
 
 on:
   push:
