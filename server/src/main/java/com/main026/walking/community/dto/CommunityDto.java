@@ -86,7 +86,7 @@ public class CommunityDto {
         //private List<String> weeks;
         private MemberDto.Response member;
         private List<String> imgUrls;
-        private List<PetDto.Response> pets;
+        private List<PetDto.compactResponse> memberPetList;
         private List<CommentDto.Response> comments;
         private List<NoticeDto.Response> notices;
         private Integer participant;
@@ -99,8 +99,6 @@ public class CommunityDto {
          * 응답에 로그인된 회원의 정보가 담기는게 맞을까?
          * 로그인하지 않은 상태에서도 null 값이지만 정보가 들어가는 불필요함이 생긴다.
          */
-
-        private List<PetDto.compactResponse> memberPetList;
 
         public void setPetList(List<PetDto.compactResponse> petList){
             this.memberPetList = petList;

@@ -6,6 +6,7 @@ import com.main026.walking.image.entity.Image;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.entity.CommunityPet;
+import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.converter.StringArrayConverter;
 import com.main026.walking.util.embedded.Address;
 import lombok.Getter;
@@ -95,5 +96,9 @@ public class Community {
 
   public void setAddress(String si,String gu,String dong){
     this.address = new Address(si,gu,dong);
+  }
+
+  public void addPet(CommunityPet communityPet){
+    this.communityPets.add(communityPet);
   }
 }

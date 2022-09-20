@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class CommunityController {
         Community community = communityService.findCommunity(communityId);
         community.countView();
 
-        //임시 - 현재로그인한 회원의 정보
+        //임시 - 현재로그인한 회원의 정보에서 강아지 리스트를 응답데이터에 저장하는 코드
         Member kimcoding = memberRepository.findById(1L).orElseThrow();
         List<PetDto.compactResponse> petList = kimcoding.getPetList().stream().map(pet -> new PetDto.compactResponse(pet)).collect(Collectors.toList());
 
@@ -58,11 +59,12 @@ public class CommunityController {
 
     // TODO 커뮤니티 참여에서 회원 데이터(PrincipalDetails) 필요
     @PostMapping("/{community-id}")
-    public ResponseEntity joinCommunity(@PathVariable("community-id") long communityId) {
-        //찾은 멤버 데이터 - 현재 김코딩
-        Member kimcoding = memberRepository.findById(1L).orElseThrow();
+    public ResponseEntity joinCommunity(@PathVariable("community-id") long communityId,
+                                        @RequestBody List<Long> petIdList
+    ) {
+        Community community = communityService.joinPet(communityId, petIdList);
 
-        return null;
+        return new ResponseEntity<>(communityMapper.entityToDtoResponse(community),HttpStatus.OK);
     }
 
 
