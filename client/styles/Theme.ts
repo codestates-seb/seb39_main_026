@@ -4,4 +4,6 @@ export const Theme = {
   errorMessagesColor: '#b90000',
   disableColor: '#9b9b9b',
   disableBgColor: '#DFDFDF',
+  moimCloseBgColor: '#545454',
+  divisionLineColor: '#E3E3E3',
 };
