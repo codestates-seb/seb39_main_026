@@ -1,7 +1,6 @@
 package com.main026.walking.pet.dto;
 
 import com.main026.walking.member.dto.MemberDto;
-import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.entity.Pet;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +15,8 @@ public class PetDto {
         private String petGender;
         private MultipartFile profileImg;
         private String neuter;
+        //TODO 강아지 나이 생일로 받기
+        //private String birthDay;(2020-02-00생략가능)
         private Integer petAge;
         private String personality;
         private String breed;

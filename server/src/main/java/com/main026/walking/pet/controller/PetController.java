@@ -31,7 +31,7 @@ public class PetController {
 
     @GetMapping
     public List<PetDto.Response> getPets(@RequestParam("username") String username){
-        return petService.findAllByusername(username);
+        return petService.findAllByUsername(username);
     }
 
     @PatchMapping("/{petId}")

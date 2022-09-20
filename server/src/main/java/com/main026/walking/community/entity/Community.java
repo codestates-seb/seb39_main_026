@@ -9,6 +9,7 @@ import com.main026.walking.pet.entity.CommunityPet;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.converter.StringArrayConverter;
 import com.main026.walking.util.embedded.Address;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,6 +37,8 @@ public class Community {
   @Embedded
   private Address address;
 
+  private String place;
+
   @OneToMany(mappedBy = "community")
   private List<Image> images;
 
@@ -48,6 +51,7 @@ public class Community {
   private List<String> dates;
   //날짜로 받았을때
   private String date;
+
   //시간정보
   private String time;
 
@@ -90,6 +94,7 @@ public class Community {
     this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
     this.body = patchDto.getBody();
     this.capacity = patchDto.getCapacity();
+    this.place = patchDto.getPlace();
     //this.weekInfo = patchDto.getTime();
     //this.imgUrl = patchDto.getImgUrl();
   }
@@ -101,4 +106,26 @@ public class Community {
   public void addPet(CommunityPet communityPet){
     this.communityPets.add(communityPet);
   }
+
+  @Builder
+  public Community(Long id, String name, String body, Address address, String place, List<Image> images, List<String> dates, String date, String time, Member representMember, List<CommunityPet> communityPets, Integer capacity, Long viewed, Long liked, LocalDateTime createdAt, List<Notice> notices, List<Comment> comments) {
+    this.id = id;
+    this.name = name;
+    this.body = body;
+    this.address = address;
+    this.place = place;
+    this.images = images;
+    this.dates = dates;
+    this.date = date;
+    this.time = time;
+    this.representMember = representMember;
+    this.communityPets = communityPets;
+    this.capacity = capacity;
+    this.viewed = viewed;
+    this.liked = liked;
+    this.createdAt = createdAt;
+    this.notices = notices;
+    this.comments = comments;
+  }
 }
+
