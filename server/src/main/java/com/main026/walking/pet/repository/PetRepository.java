@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PetRepository extends JpaRepository<Pet,Long> {
-    List<Pet> findAllByMember_NickName(String nickname);
+    List<Pet> findAllByMember_username(String username);
 }

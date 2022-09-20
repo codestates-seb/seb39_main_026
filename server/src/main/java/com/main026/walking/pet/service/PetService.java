@@ -57,8 +57,8 @@ public class PetService {
         return petMapper.petToPetResponseDto(pet);
     }
     //Todo List 로 반환하면 다른 정보를 추가하기 어렵다.
-    public List<PetDto.Response> findAllByNickName(String nickname){
-        List<PetDto.Response> allPets = petRepository.findAllByMember_NickName(nickname)
+    public List<PetDto.Response> findAllByusername(String username){
+        List<PetDto.Response> allPets = petRepository.findAllByMember_username(username)
                 .stream()
                 .map(pet -> petMapper.petToPetResponseDto(pet))
                 .collect(Collectors.toList());

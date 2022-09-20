@@ -15,10 +15,10 @@ public class PetController {
 
     private final PetService petService;
 
-    @PostMapping("/{nickname}")
-    public PetDto.Response postPet(@RequestBody PetDto.Post postDto,@PathVariable String nickname){
+    @PostMapping("/{username}")
+    public PetDto.Response postPet(@RequestBody PetDto.Post postDto,@PathVariable String username){
         //TODO 시큐리티
-        System.out.println("회원이름 " + nickname);
+        System.out.println("회원이름 " + username);
         return petService.postPet(postDto);
     }
     //이름이 괴상한데 그냥하는 이유 : requestMapping 의 이름 통일성을 지키는게 더 낫다고 생각해서,
@@ -29,8 +29,8 @@ public class PetController {
     }
 
     @GetMapping
-    public List<PetDto.Response> getPets(@RequestParam("nickname") String nickName){
-        return petService.findAllByNickName(nickName);
+    public List<PetDto.Response> getPets(@RequestParam("username") String username){
+        return petService.findAllByusername(username);
     }
 
     @PatchMapping("/{petId}")
