@@ -40,7 +40,7 @@ public class Community {
   private String place;
 
   @OneToMany(mappedBy = "community")
-  private List<Image> images;
+  private List<Image> images = new ArrayList<>();
 
   /**Todo 저장되는 시간 정보가 너무 많다 줄일 수 없을까?
    * 일단 따로 해보자.
@@ -109,24 +109,20 @@ public class Community {
   }
 
   @Builder
-  public Community(Long id, String name, String body, Address address, String place, List<Image> images, List<String> dates, String date, String time, Member representMember, List<CommunityPet> communityPets, Integer capacity, Long viewed, Long liked, LocalDateTime createdAt, List<Notice> notices, List<Comment> comments) {
+  public Community(Long id, String name, String body, Address address, String place, List<String> dates, String date, String time, Member representMember, Integer capacity, Long viewed, Long liked, LocalDateTime createdAt) {
     this.id = id;
     this.name = name;
     this.body = body;
     this.address = address;
     this.place = place;
-    this.images = images;
     this.dates = dates;
     this.date = date;
     this.time = time;
     this.representMember = representMember;
-    this.communityPets = communityPets;
     this.capacity = capacity;
     this.viewed = viewed;
     this.liked = liked;
     this.createdAt = createdAt;
-    this.notices = notices;
-    this.comments = comments;
   }
 }
 

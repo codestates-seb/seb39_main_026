@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -25,8 +27,9 @@ public class Member {
     @Embedded
     private Address address;
     private String imgUrl;
+    private String roles;
     @OneToMany(mappedBy = "member")
-    private List<Pet> petList;
+    private List<Pet> petList = new ArrayList<>();
 
     //모임 목록은 펫리스트로 조회가능
 
@@ -34,15 +37,13 @@ public class Member {
     private List<Comment> commentList;
 
     @Builder
-    public Member(Long id, String email, String password, String username, Address address, String imgUrl, List<Pet> petList, List<Comment> commentList) {
+    public Member(Long id, String email, String password, String username, Address address, String imgUrl) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.username = username;
         this.address = address;
         this.imgUrl = imgUrl;
-        this.petList = petList;
-        this.commentList = commentList;
     }
 
     public void update(MemberDto.Patch patchDto){
@@ -51,11 +52,26 @@ public class Member {
         this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
     }
 
+    public void setRole(String role){
+        this.roles = role;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
     public void setImgUrl(String imgUrl){
         this.imgUrl = imgUrl;
     }
 
     public void setAddress(String si,String gu,String dong){
         this.address = new Address(si,gu,dong);
+    }
+    //TODO ENUM 으로 교체
+    public List<String> getRoleList() {
+        if(this.roles.length() > 0) {
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
     }
 }

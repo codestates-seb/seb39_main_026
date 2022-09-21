@@ -1,5 +1,6 @@
 package com.main026.walking.community.controller;
 
+import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.community.mapper.CommunityMapper;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -31,11 +33,15 @@ public class CommunityController {
     private final MemberRepository memberRepository;
 
     //  Create
+    //TODO POST요청 금지 필요
     @PostMapping
-    public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto) {
+    public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        System.out.println(principalDetails.getMember().getUsername());
+        Member loginMember = principalDetails.getMember();
 
         //TODO 유저 수정 필요
-        Community createdCommunity = communityService.createCommunity(postDto);
+        Community createdCommunity = communityService.createCommunity(postDto,loginMember);
 
         return new ResponseEntity(communityMapper.entityToDtoResponse(createdCommunity), HttpStatus.CREATED);
     }
