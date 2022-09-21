@@ -47,8 +47,8 @@ public interface CommunityMapper {
         response.dateInfo(entity.getDate());
 
         List<String> dayInfo = new ArrayList<>();
-        //TODO 아무것도 없는데 사이즈가 왜 1이지
-        if (entity.getDates().size() != 1) {
+
+        if (entity.getDates().size() != 0) {
             for (String date : entity.getDates()) {
                 String korean = Weeks.valueOf(date).getKorean();
                 dayInfo.add(korean);

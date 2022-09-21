@@ -5,6 +5,7 @@ import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import org.mapstruct.Mapper;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")

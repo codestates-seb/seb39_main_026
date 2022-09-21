@@ -15,7 +15,7 @@ public class StringArrayConverter implements AttributeConverter<List<String>, St
     @Override
     public String convertToDatabaseColumn(List<String> attribute) {
         if(attribute==null){
-            return "";
+            return null;
         }
 
         return attribute.stream().map(String::valueOf).collect(Collectors.joining(SPLIT_CHAR));

@@ -6,6 +6,7 @@ import com.main026.walking.member.mapper.MemberMapper;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,12 +19,16 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final FileStore fileStore;
 
     //C
     public MemberDto.Response saveMember(MemberDto.Post postDto){
         Member member = memberMapper.memberPostDtoToMember(postDto);
         member.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
+        member.setRole("ROLE_USER");
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+
         if(postDto.getProfileImg()!=null){
             try {
                 MultipartFile profileImg = postDto.getProfileImg();

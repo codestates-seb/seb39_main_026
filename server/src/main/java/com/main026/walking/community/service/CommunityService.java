@@ -30,19 +30,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommunityService {
     private final CommunityRepository communityRepository;
-    private final MemberRepository memberRepository;
     private final ImageRepository imageRepository;
     private final PetRepository petRepository;
     private final CommunityPetRepository communityPetRepository;
     private final CommunityMapper communityMapper;
     private final FileStore fileStore;
 
-    private Member testMember() {
-        return memberRepository.findById(1L).orElseThrow();
-    }
 
     //  Create
-    public Community createCommunity(CommunityDto.Post postDto) {
+    public Community createCommunity(CommunityDto.Post postDto,Member member) {
         Community community = communityMapper.postDtoToEntity(postDto);
 
         String[] dayInfo = postDto.getDates();
@@ -55,8 +51,7 @@ public class CommunityService {
 
         community.setDates(dayList);
 
-        //Todo 시큐리티 이후 유저 세팅
-        community.setRepresentMember(testMember());
+        community.setRepresentMember(member);
         community.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
 
         //이미지 세팅

@@ -58,6 +58,8 @@ public class PetDto {
         private String petGender;
         private String neuter;
         private PetAge petAges;
+        //TODO 참여 모임 목록 필요
+        //private List<communityDto.compactResponse> joinCommunityList;
         private String personality;
         private String breed;
         private String imgUrl;
