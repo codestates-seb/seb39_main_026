@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
-import { Dispatch, SetStateAction } from 'react';
 import { WalkDetail } from '../../../models/WalkDefault';
 import { Theme } from '../../../styles/Theme';
 import LoadingComment from '../skeleton/walksDetail/LoadingComment';
@@ -45,77 +44,64 @@ const commentContainer = css`
   }
 `;
 
-export default function Comments({
-  walksData,
-  setIsDogInfoModalOpen,
-  getPetId,
-}: {
-  walksData: WalkDetail;
-  setIsDogInfoModalOpen: Dispatch<SetStateAction<boolean>>;
-  getPetId: (petId: string) => void;
-}) {
+export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
+  if (walkDetail == null) {
+    return (
+      <article css={commentContainer}>
+        <LoadingComment />
+      </article>
+    );
+  }
+
   return (
     <>
       <article css={commentContainer}>
-        {walksData == null ? (
-          <LoadingComment />
-        ) : (
-          <>
-            <h2>
-              댓글
-              <span
-                css={css`
-                  color: ${walksData?.comments?.length > 0
-                    ? Theme.mainColor
-                    : '#000'};
-                  margin-left: 4px;
-                `}
-              >
-                {walksData?.comments?.length}
-              </span>
-            </h2>
-            <ul>
-              {walksData?.comments == null ? (
-                <span>로딩</span>
-              ) : (
-                walksData?.comments?.map((item) => (
-                  <li key={item.body}>
-                    <div>
-                      <img
-                        src="/main_image.jpg"
-                        css={css`
-                          width: 40px;
-                          height: 40px;
-                          object-fit: cover;
-                          border-radius: 50%;
-                        `}
-                        alt={item.member.username}
-                        onClick={() => {
-                          getPetId('1');
-                          setIsDogInfoModalOpen(true);
-                        }}
-                      />
-                      <div>
-                        <p
-                          css={css`
-                            font-weight: 600;
-                          `}
-                        >
-                          {item.member.username}
-                        </p>
-                        <p>{item.body}</p>
-                        <div>
-                          <button>수정</button>
-                          <button>삭제</button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ))
-              )}
-            </ul>
-          </>
-        )}
+        <h2>
+          댓글
+          <span
+            css={css`
+              color: ${walkDetail.comments?.length > 0
+                ? Theme.mainColor
+                : '#000'};
+              margin-left: 4px;
+            `}
+          >
+            {walkDetail?.comments?.length}
+          </span>
+        </h2>
+        <ul>
+          {walkDetail.comments?.map((item) => (
+            <li key={item.body}>
+              <div>
+                <img
+                  src={item.member.imgUrl}
+                  css={css`
+                    width: 40px;
+                    height: 40px;
+                    object-fit: cover;
+                    border-radius: 50%;
+                    cursor: pointer;
+                  `}
+                  alt={`${item.member.username}의 사진`}
+                />
+                <div>
+                  <p
+                    css={css`
+                      font-weight: 600;
+                    `}
+                  >
+                    {item.member.username}
+                  </p>
+                  <p>{item.body}</p>
+                  <div>
+                    <button>수정</button>
+                    <button>삭제</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
       </article>
       <CommentInput />
     </>
