@@ -35,7 +35,6 @@ public class CommunityDto {
         private String gu;
         private String dong;
 
-        // TODO 추가!!, 검색조건 : 제목과 place sigudong 은 다른이야기
         private String place;
 
         private String body;
@@ -94,7 +93,8 @@ public class CommunityDto {
         //private List<String> weeks;
         private MemberDto.Response member;
         private List<String> imgUrls;
-        private List<PetDto.compactResponse> memberPetList;
+        private List<PetDto.compactResponse> communityPetList;
+        private List<PetDto.compactResponse> sessionMemberPetList;
         private List<CommentDto.Response> comments;
         private List<NoticeDto.Response> notices;
         private Integer participant;
@@ -109,7 +109,7 @@ public class CommunityDto {
          */
 
         public void setPetList(List<PetDto.compactResponse> petList){
-            this.memberPetList = petList;
+            this.sessionMemberPetList = petList;
         }
     }
 

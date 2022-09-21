@@ -1,6 +1,5 @@
 package com.main026.walking.auth.principal;
 
-import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
 package com.main026.walking.community.service;
 
+import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.community.mapper.CommunityMapper;
@@ -8,6 +9,7 @@ import com.main026.walking.image.entity.Image;
 import com.main026.walking.image.repository.ImageRepository;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
+import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.CommunityPet;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.pet.repository.CommunityPetRepository;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -40,6 +43,8 @@ public class CommunityService {
     //  Create
     public Community createCommunity(CommunityDto.Post postDto,Member member) {
         Community community = communityMapper.postDtoToEntity(postDto);
+        //TODO 임시방편 : 매핑과정에서 조회수와 좋아요의 기본값이 설정되지않고있다.
+        community.setViewAndLike();
 
         String[] dayInfo = postDto.getDates();
         List<String> dayList = new ArrayList<>();
@@ -70,7 +75,7 @@ public class CommunityService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        System.out.println(community.getViewed());
         return communityRepository.save(community);
     }
 
@@ -85,12 +90,17 @@ public class CommunityService {
                     .build();
             communityPetRepository.save(communityPet);
         }
+
         return community;
     }
 
-    //  Read
+    //TODO 단순조회가 인증데이터를 받아서는 안된다! 오류를 고치고 즉시 수정하자
+    //Read
+    //@Transactional
     public Community findCommunity(long communityId) {
+
         Community community = findVerifiedCommunity(communityId);
+
         return communityRepository.save(community);
     }
 

@@ -28,41 +28,37 @@ public class CommunityController {
     private final CommunityService communityService;
     private final CommunityMapper communityMapper;
 
-    //시큐리티 도입하면 삭제
-    private final MemberRepository memberRepository;
-
     //  Create
     //TODO POST요청 금지 필요
     @PostMapping
     public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        System.out.println(principalDetails.getMember().getUsername());
         Member loginMember = principalDetails.getMember();
 
-        //TODO 유저 수정 필요
         Community createdCommunity = communityService.createCommunity(postDto,loginMember);
 
         return new ResponseEntity(communityMapper.entityToDtoResponse(createdCommunity), HttpStatus.CREATED);
     }
 
     //  Read
-    // 현재 로그인한 회원의 정보(강아지정보)를 전달해줘야한다.
+    // TODO 커뮤니티 요청시 회원의 강아지를 응답해주고있는데 이것이 최선일까?
     @GetMapping("/{community-id}")
-    public ResponseEntity getCommunity(@PathVariable("community-id") long communityId) {
+    public ResponseEntity getCommunity(@PathVariable("community-id") long communityId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+
         Community community = communityService.findCommunity(communityId);
         community.countView();
 
-        //임시 - 현재로그인한 회원의 정보에서 강아지 리스트를 응답데이터에 저장하는 코드
-        Member kimcoding = memberRepository.findById(1L).orElseThrow();
-        List<PetDto.compactResponse> petList = kimcoding.getPetList().stream().map(pet -> new PetDto.compactResponse(pet)).collect(Collectors.toList());
-
+        List<PetDto.compactResponse> petList = new ArrayList<>();
+        if(principalDetails!=null) {
+            Member member = principalDetails.getMember();
+            petList = member.getPetList().stream().map(pet -> new PetDto.compactResponse(pet)).collect(Collectors.toList());
+        }
         CommunityDto.Response response = communityMapper.entityToDtoResponse(community);
         response.setPetList(petList);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    // TODO 커뮤니티 참여에서 회원 데이터(PrincipalDetails) 필요
     @PostMapping("/{community-id}")
     public ResponseEntity joinCommunity(@PathVariable("community-id") long communityId,
                                         @RequestBody List<Long> petIdList

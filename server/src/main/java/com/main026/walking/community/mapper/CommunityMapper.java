@@ -24,17 +24,13 @@ public interface CommunityMapper {
     //  Post
     Community postDtoToEntity(CommunityDto.Post dto);
 
-//  Patch
-//  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-//  void updateEntityFromDto(CommunityDto.Patch dto, @MappingTarget Community entity);
-
     // TODO 매퍼 최적화 필요
     default CommunityDto.Response entityToDtoResponse(Community entity) {
         if (entity == null) {
             return null;
         }
         CommunityDto.Response.ResponseBuilder response = CommunityDto.Response.builder();
-        Member representMember = entity.getRepresentMember();
+
         MemberDto.Response responseMemberDto = new MemberDto.Response(entity.getRepresentMember());
 
         response.communityId(entity.getId());
@@ -70,7 +66,7 @@ public interface CommunityMapper {
             pets.add(compactResponse);
         }
 
-        response.memberPetList(pets);
+        response.communityPetList(pets);
 
         List<CommentDto.Response> comments = new ArrayList<>();
         for (int i = 0; i < entity.getComments().size(); i++) {

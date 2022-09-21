@@ -20,109 +20,111 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 public class Community {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(nullable = false)
-  private String name;
+    @Column(nullable = false)
+    private String name;
 
-  @Column(nullable = false)
-  private String body;
+    @Column(nullable = false)
+    private String body;
 
-  @Column(nullable = false)
-  @Embedded
-  private Address address;
+    @Column(nullable = false)
+    @Embedded
+    private Address address;
 
-  private String place;
+    private String place;
 
-  @OneToMany(mappedBy = "community")
-  private List<Image> images = new ArrayList<>();
+    @OneToMany(mappedBy = "community")
+    private List<Image> images = new ArrayList<>();
 
-  /**Todo 저장되는 시간 정보가 너무 많다 줄일 수 없을까?
-   * 일단 따로 해보자.
-   * 요일의 경우 여러개가 선택될텐데 엔티티에는 리스트가 들어갈 수 없다.
-  */
-  //요일로 받았을때
-  @Convert(converter = StringArrayConverter.class)
-  private List<String> dates;
+    //요일로 받았을때
+    @Convert(converter = StringArrayConverter.class)
+    private List<String> dates;
 
-  //날짜로 받았을때
-  private String date;
+    //날짜로 받았을때
+    private String date;
 
-  //시간정보
-  private String time;
+    //시간정보
+    private String time;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  private Member representMember;
+    @OneToOne
+    private Member representMember;
 
-  @OneToMany(mappedBy = "community")
-  private List<CommunityPet> communityPets = new ArrayList<>();
+    @OneToMany(mappedBy = "community")
+    private List<CommunityPet> communityPets = new ArrayList<>();
 
-  @Column(nullable = false)
-  private Integer capacity;
+    @Column(nullable = false)
+    private Integer capacity;
 
-  @Column//(columnDefinition = "long default 0L", nullable = true)
-  private Long viewed = 0L;
+    @Column//(columnDefinition = "long default 0L", nullable = true)
+    private Long viewed = 0L;
 
-  @Column//(columnDefinition = "long default 0L", nullable = true)
-  private Long liked;
+    @Column//(columnDefinition = "long default 0L", nullable = true)
+    private Long liked = 0L;
 
-  private LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
-  @OneToMany(mappedBy = "community")
-  private List<Notice> notices = new ArrayList<>();
+    @OneToMany(mappedBy = "community")
+    private List<Notice> notices = new ArrayList<>();
 
-  @OneToMany(mappedBy = "community")
-  private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "community")
+    private List<Comment> comments = new ArrayList<>();
 
-  public void setComment(Comment comment){
-    comments.add(comment);
-    if(comment.getCommunity() != this){
-      comment.setCommunity(this);
+    public void setComment(Comment comment) {
+        comments.add(comment);
+        if (comment.getCommunity() != this) {
+            comment.setCommunity(this);
+        }
     }
-  }
 
-  public void countView(){
-    viewed++;
-  }
+    public void countView() {
+        this.viewed++;
+    }
 
-  public void update(CommunityDto.Patch patchDto){
-    this.name = patchDto.getName();
-    this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
-    this.body = patchDto.getBody();
-    this.capacity = patchDto.getCapacity();
-    this.place = patchDto.getPlace();
-    //this.weekInfo = patchDto.getTime();
-    //this.imgUrl = patchDto.getImgUrl();
-  }
+    public void update(CommunityDto.Patch patchDto) {
+        this.name = patchDto.getName();
+        this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
+        this.body = patchDto.getBody();
+        this.capacity = patchDto.getCapacity();
+        this.place = patchDto.getPlace();
+        //this.weekInfo = patchDto.getTime();
+        //this.imgUrl = patchDto.getImgUrl();
+    }
 
-  public void setAddress(String si,String gu,String dong){
-    this.address = new Address(si,gu,dong);
-  }
+    public void setAddress(String si, String gu, String dong) {
+        this.address = new Address(si, gu, dong);
+    }
 
-  public void addPet(CommunityPet communityPet){
-    this.communityPets.add(communityPet);
-  }
+    public void addPet(CommunityPet communityPet) {
+        this.communityPets.add(communityPet);
+    }
 
-  @Builder
-  public Community(Long id, String name, String body, Address address, String place, List<String> dates, String date, String time, Member representMember, Integer capacity, Long viewed, Long liked, LocalDateTime createdAt) {
-    this.id = id;
-    this.name = name;
-    this.body = body;
-    this.address = address;
-    this.place = place;
-    this.dates = dates;
-    this.date = date;
-    this.time = time;
-    this.representMember = representMember;
-    this.capacity = capacity;
-    this.viewed = viewed;
-    this.liked = liked;
-    this.createdAt = createdAt;
-  }
+    @Builder
+    public Community(Long id, String name, String body, Address address, String place, List<String> dates, String date, String time, Member representMember, Integer capacity, Long viewed, Long liked, LocalDateTime createdAt) {
+        this.id = id;
+        this.name = name;
+        this.body = body;
+        this.address = address;
+        this.place = place;
+        this.dates = dates;
+        this.date = date;
+        this.time = time;
+        this.representMember = representMember;
+        this.capacity = capacity;
+        this.viewed = viewed;
+        this.liked = liked;
+        this.createdAt = createdAt;
+    }
+
+    public void setViewAndLike(){
+        this.viewed = 0L;
+        this.liked = 0L;
+    }
 }
 
