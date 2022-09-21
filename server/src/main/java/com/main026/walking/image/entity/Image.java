@@ -1,5 +1,6 @@
 package com.main026.walking.image.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
 import lombok.AccessLevel;
@@ -19,7 +20,7 @@ public class Image {
     private String storeFilename;
     //    private Long fileSize;
     @ManyToOne
-    @JoinColumn(name = "posts_id")
+    @JoinColumn(name = "community_id")
     private Community community;
 
     @Builder

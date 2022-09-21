@@ -3,6 +3,9 @@ package com.main026.walking.member.controller;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +19,11 @@ public class MemberController {
     public MemberDto.Response signUp(@RequestBody MemberDto.Post memberPostDto){
         return memberService.saveMember(memberPostDto);
     }
+
+//    @PostMapping("/login")
+//    public ResponseEntity loginMember(Authentication authentication){
+//        return new ResponseEntity<>(memberService.loginMember(authentication), HttpStatus.OK);
+//    }
 
     //TODO 토큰이 없으면 본인이 아니라는 정보를 포함시키기
     @GetMapping("/{memberId}")

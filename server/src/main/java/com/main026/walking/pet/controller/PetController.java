@@ -17,9 +17,8 @@ public class PetController {
 
     private final PetService petService;
 
-    @PostMapping("/{username}")
-    public PetDto.Response postPet(@RequestBody PetDto.Post postDto, @PathVariable String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        //TODO 시큐리티
+    @PostMapping
+    public PetDto.Response postPet(@RequestBody PetDto.Post postDto, @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
         System.out.println("회원이름 " + username);
         Member member = principalDetails.getMember();
         return petService.postPet(postDto,member);

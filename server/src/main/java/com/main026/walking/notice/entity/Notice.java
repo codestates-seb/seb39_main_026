@@ -26,7 +26,7 @@ public class Notice {
 
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "community_id")
     private Community community;
 

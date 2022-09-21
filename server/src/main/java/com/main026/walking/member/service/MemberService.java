@@ -1,11 +1,13 @@
 package com.main026.walking.member.service;
 
+import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.mapper.MemberMapper;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,12 @@ public class MemberService {
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder passwordEncoder;
     private final FileStore fileStore;
+
+    public MemberDto.Response loginMember(Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Member loginMember = memberRepository.findByEmail(principalDetails.getMember().getEmail()).orElseThrow();
+        return memberMapper.memberToMemberResponseDto(loginMember);
+    }
 
     //C
     public MemberDto.Response saveMember(MemberDto.Post postDto){

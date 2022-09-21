@@ -20,7 +20,7 @@ public class Pet {
     private String petName;
     private String petGender;
     @ManyToOne
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "member_id")
     private Member member;
     private String neuter;
     //날짜 데이터를 받아서 동적으로 처리

@@ -28,7 +28,7 @@ public class Member {
     private Address address;
     private String imgUrl;
     private String roles;
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
     private List<Pet> petList = new ArrayList<>();
 
     //모임 목록은 펫리스트로 조회가능
