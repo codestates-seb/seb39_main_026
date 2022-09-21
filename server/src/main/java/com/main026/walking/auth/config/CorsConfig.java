@@ -19,7 +19,7 @@ public class CorsConfig {
         config.addAllowedMethod("*");
         config.addExposedHeader("Authorization");
         config.addExposedHeader("Email");
-        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 }

@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/community")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CommunityController {
     private final CommunityService communityService;
     private final CommunityMapper communityMapper;
