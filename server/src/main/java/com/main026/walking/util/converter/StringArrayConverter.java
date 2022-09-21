@@ -24,7 +24,7 @@ public class StringArrayConverter implements AttributeConverter<List<String>, St
     @Override
     public List<String> convertToEntityAttribute(String dbData) {
         if(dbData==null){
-            return new ArrayList<>();
+            return null;
         }
         return Arrays.stream(dbData.split(SPLIT_CHAR))
                 .collect(Collectors.toList());
