@@ -39,6 +39,7 @@ public interface CommunityMapper {
         response.communityId(entity.getId());
         response.name(entity.getName());
         response.address(entity.getAddress());
+        response.place(entity.getPlace());
         response.body(entity.getBody());
         response.member(responseMemberDto);
         response.capacity(entity.getCapacity());
