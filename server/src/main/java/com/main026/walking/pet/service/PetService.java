@@ -31,13 +31,7 @@ public class PetService {
     private final PetMapper petMapper;
     private final FileStore fileStore;
 
-    private final MemberRepository memberRepository;
-
-    private Member testMember(){
-        return memberRepository.findById(1L).orElseThrow();
-    }
-
-    public PetDto.Response postPet(PetDto.Post postDto){
+    public PetDto.Response postPet(PetDto.Post postDto,Member member){
         Pet pet = petMapper.petPostDtoToPet(postDto);
 
         //나이 파싱 로직
@@ -47,9 +41,8 @@ public class PetService {
             throw new RuntimeException(e);
         }
 
-
         //연관관계에 대한 고민 필요
-        pet.setMember(testMember());
+        pet.setMember(member);
 
         if(postDto.getProfileImg()!=null){
             try {

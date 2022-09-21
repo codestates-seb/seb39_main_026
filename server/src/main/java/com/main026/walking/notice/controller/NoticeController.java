@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/community/notice")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class NoticeController {
   private final NoticeMapper noticeMapper;
   private final NoticeService noticeService;

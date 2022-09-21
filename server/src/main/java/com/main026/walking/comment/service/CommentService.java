@@ -23,16 +23,11 @@ public class CommentService {
   private final CommentRepository commentRepository;
   private final CommunityRepository communityRepository;
 
-  private final MemberRepository memberRepository;
-  private Member testMember(){
-    return memberRepository.findById(1L).orElseThrow();
-  }
-
 //  Create
-  public Comment createComment(Long communityId,Comment comment) {
+  public Comment createComment(Long communityId,Comment comment,Member member) {
     Community community = communityRepository.findById(communityId).orElseThrow();
     comment.setCommunity(community);
-    comment.setMember(testMember());
+    comment.setMember(member);
     return commentRepository.save(comment);
   }
 

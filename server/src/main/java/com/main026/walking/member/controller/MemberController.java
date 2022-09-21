@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members")
-@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class MemberController {
 
     private final MemberService memberService;

@@ -1,8 +1,11 @@
 package com.main026.walking.pet.controller;
 
+import com.main026.walking.auth.principal.PrincipalDetails;
+import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.service.PetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,16 +13,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/pets")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class PetController {
 
     private final PetService petService;
 
     @PostMapping("/{username}")
-    public PetDto.Response postPet(@RequestBody PetDto.Post postDto,@PathVariable String username){
+    public PetDto.Response postPet(@RequestBody PetDto.Post postDto, @PathVariable String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
         //TODO 시큐리티
         System.out.println("회원이름 " + username);
-        return petService.postPet(postDto);
+        Member member = principalDetails.getMember();
+        return petService.postPet(postDto,member);
     }
 
     //이름이 괴상한데 그냥하는 이유 : requestMapping 의 이름 통일성을 지키는게 더 낫다고 생각해서,
