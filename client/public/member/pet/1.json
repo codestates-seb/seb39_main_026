@@ -1,0 +1,16 @@
+{
+  "petName": "포도",
+  "member": [
+    {
+      "memberName": "홍길동",
+      "address": "한양시 서대문구 동작대로"
+    }
+  ],
+  "petGender": "여",
+  "neuter": "중성화완료",
+  "petAge": "19",
+  "personality": "섬세함",
+  "breed": "말푸",
+  "imgUrl": "/server/storage/img/jowjeidncl2j.jpg",
+  "about": "회색 말푸(말티즈+푸들)입니다! 친구가 없어서 좋은 친구를 만들어주고싶어요"
+}
