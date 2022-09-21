@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { Theme } from '../styles/Theme';
 
 const commonbuttonContainer = (buttonColor: string, disabled: boolean) => css`
-  padding: 27px;
+  padding: 24px;
   width: 100%;
   border: none;
   border-radius: 20px;
@@ -13,6 +13,11 @@ const commonbuttonContainer = (buttonColor: string, disabled: boolean) => css`
   font-size: 1rem;
   word-break: keep-all;
   letter-spacing: 0.02rem;
+  box-shadow: rgb(127 135 144 / 28%) 1px 1px 2px 0px,
+    rgb(0 0 0 / 20%) 1px 1px 2px 1px;
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 
 export default function CommonButton({

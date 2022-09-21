@@ -12,7 +12,7 @@ const modalContainer = (isModalOpen: boolean) => css`
     display: flex;
     align-items: end;
     justify-content: center;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
