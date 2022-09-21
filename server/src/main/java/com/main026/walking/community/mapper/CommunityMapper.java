@@ -10,6 +10,7 @@ import com.main026.walking.member.entity.Member;
 import com.main026.walking.notice.dto.NoticeDto;
 import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.dto.PetDto;
+import com.main026.walking.pet.entity.CommunityPet;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.enums.Weeks;
 import org.mapstruct.*;
@@ -99,7 +100,6 @@ public interface CommunityMapper {
                     .build());
         }
         response.notices(notices);
-
 
         return response.build();
     }

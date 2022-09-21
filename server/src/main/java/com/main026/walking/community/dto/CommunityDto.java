@@ -1,6 +1,7 @@
 package com.main026.walking.community.dto;
 
 import com.main026.walking.comment.dto.CommentDto;
+import com.main026.walking.community.entity.Community;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.notice.dto.NoticeDto;
 import com.main026.walking.pet.dto.PetDto;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CommunityDto {
 
@@ -112,16 +114,29 @@ public class CommunityDto {
     }
 
     @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class compactResponse{
         private Long communityId;
         private String name;
-        private Address address;
         private String place;
 
-        private List<String> dayInfo;
-        private String dateInfo;
         private String time;
 
-        private List<String> imgUrls;
+        private String representImgUrls;
+
+
+        public compactResponse(Community community) {
+            this.communityId = community.getId();
+            this.name = community.getName();
+            this.place = community.getPlace();
+            this.time = community.getTime();
+            if(community.getImages().size()!=0) {
+                this.representImgUrls = community.getImages().get(0).getStoreFilename();
+            }
+        }
     }
+
+
 }

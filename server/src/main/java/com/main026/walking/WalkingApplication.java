@@ -2,6 +2,7 @@ package com.main026.walking;
 
 import com.main026.walking.comment.repository.CommentRepository;
 import com.main026.walking.community.repository.CommunityRepository;
+import com.main026.walking.image.repository.ImageRepository;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.notice.repository.NoticeRepository;
 import com.main026.walking.pet.repository.CommunityPetRepository;
@@ -30,14 +31,16 @@ public class WalkingApplication {
 							 CommunityRepository communityRepository,
 							 CommunityPetRepository communityPetRepository,
 							 NoticeRepository noticeRepository,
-							 CommentRepository commentRepository){
+							 CommentRepository commentRepository,
+							 ImageRepository imageRepository){
 		return new InitData(
 				memberRepository,
 				petRepository,
 				communityRepository,
 				communityPetRepository,
 				noticeRepository,
-				commentRepository
+				commentRepository,
+				imageRepository
 		);
 	}
 

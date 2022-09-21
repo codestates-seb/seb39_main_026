@@ -1,5 +1,6 @@
 package com.main026.walking.member.dto;
 
+import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.util.embedded.Address;
@@ -62,16 +63,20 @@ public class MemberDto {
         private Long id;
         private String email;
         private String username;
+        private String imgUrl;
         private List<PetDto.compactResponse> petList = new ArrayList<>();
         private Address address;
+        private List<CommunityDto.compactResponse> memberCommunityList = new ArrayList<>();
 
         @Builder
-        public Response(Long id, String email, String username,Address address, List<PetDto.compactResponse> petList) {
+        public Response(Long id, String email, String username,String imgUrl,Address address, List<PetDto.compactResponse> petList,List<CommunityDto.compactResponse> memberCommunityList) {
             this.id = id;
             this.email = email;
             this.username = username;
+            this.imgUrl = imgUrl;
             this.address = address;
             this.petList = petList;
+            this.memberCommunityList = memberCommunityList;
         }
 
         public Response(Member member){
