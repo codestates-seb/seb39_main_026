@@ -2,9 +2,9 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 import { API } from '../../apis/api';
 
-export function useGetUsersQuery() {
+export function useGetUsersQuery(userId: string) {
   const { status, data, error } = useQuery('users', async () => {
-    const { data } = await axios.get(`${API.USERS}`);
+    const { data } = await axios.get(`${API.USERS}/${userId}`);
     return data;
   });
   if (status === 'loading') {

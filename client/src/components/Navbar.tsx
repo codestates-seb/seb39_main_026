@@ -134,7 +134,7 @@ export default function Navbar() {
             <Link href="/walks">산책 찾기</Link>
           </div>
           {isLoggedIn ? (
-            <Link href={`/users/${localStorage.getItem('username')}`}>
+            <Link href={`/users/${localStorage.getItem('userId')}`}>
               마이페이지
             </Link>
           ) : (

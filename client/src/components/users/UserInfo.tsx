@@ -55,8 +55,6 @@ export default function UserInfo({ data }: UserDefault) {
               width="75px"
               height="75px"
               className="img"
-              placeholder="blur"
-              blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
             />
           </div>
           <p className="username">{data.username}</p>

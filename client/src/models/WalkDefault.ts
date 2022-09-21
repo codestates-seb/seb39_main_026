@@ -1,9 +1,9 @@
 export interface WalkDefault {
   communityId: string;
-  title: string;
-  time: string;
-  address: string;
-  imgUrl: string;
+  name: string;
+  dateInfo: string;
+  place: string;
+  imgUrls: [string];
   capacity: number;
   participant: number;
 }
