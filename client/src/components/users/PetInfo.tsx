@@ -62,7 +62,7 @@ export default function PetInfo({ pets }: { pets: MyPets[] }) {
                   // 서버에서 imgUrl 보내주면 교체할 것
                   height="50px"
                   width="50px"
-                  alt={`${pet.petName}'s picture`}
+                  alt={`${pet.petName}`}
                   className="petImg"
                 />
                 <p className="petName">{pet.petName}</p>

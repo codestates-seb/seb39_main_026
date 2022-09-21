@@ -1,10 +1,17 @@
 import { css } from '@emotion/react';
+import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import { UserDefault } from '../../models/UserDefault';
 import { skeletonGradient } from '../../styles/GlobalStyle';
 import { Theme } from '../../styles/Theme';
 
-export default function UserInfo({ data }: UserDefault) {
+export default function UserInfo({
+  data,
+  isValidated,
+}: {
+  data: UserDefault;
+  isValidated: boolean;
+}) {
   const userInfo = css`
     display: flex;
     margin-bottom: 1.5rem;
@@ -20,6 +27,15 @@ export default function UserInfo({ data }: UserDefault) {
       font-size: 22px;
       font-weight: 400;
       margin-left: 1rem;
+    }
+    .icon {
+      cursor: pointer;
+      margin: 0.5rem 0 0 0.2rem;
+      font-size: 1.3rem;
+      color: ${Theme.disableColor};
+      :hover {
+        color: inherit;
+      }
     }
   `;
 
@@ -58,6 +74,9 @@ export default function UserInfo({ data }: UserDefault) {
             />
           </div>
           <p className="username">{data.username}</p>
+          {isValidated && (
+            <Icon icon="ant-design:edit-outlined" className="icon" />
+          )}
         </div>
       ) : (
         <div css={LoadingUserInfo}>
