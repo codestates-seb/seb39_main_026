@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import { GetServerSideProps } from 'next';
+import { useEffect, useState } from 'react';
 import TabTitle from '../../components/TabTitle';
 import PetInfo from '../../components/users/PetInfo';
 import UserInfo from '../../components/users/UserInfo';
@@ -9,6 +10,7 @@ import WalksInfo from '../../components/users/WalksInfo';
 import { Theme } from '../../styles/Theme';
 
 export default function User({ userId }: { userId: string }) {
+  const [isValidated, setIsValidated] = useState(false);
   const UserData = useGetUsersQuery(userId);
   const user = css`
     margin: 15vw 20vw;
@@ -29,15 +31,28 @@ export default function User({ userId }: { userId: string }) {
       }
     }
   `;
+  useEffect(() => {
+    if (userId === localStorage.getItem('userId')) {
+      setIsValidated(true);
+    } else {
+      setIsValidated(false);
+    }
+  }, [userId]);
 
   return (
     <section css={user}>
       <TabTitle prefix={userId} />
-      <UserInfo data={UserData} />
+      <UserInfo data={UserData} isValidated={isValidated} />
       <PetInfo pets={UserData.petList} />
       <div className="walks">
         <Icon icon="fluent-emoji-flat:paw-prints" className="icon" />
-        <span>{UserData.username}</span>님의 산책 모임
+        {isValidated ? (
+          <p>내 산책 모임</p>
+        ) : (
+          <p>
+            <span>{UserData.username}</span>님의 산책 모임
+          </p>
+        )}
       </div>
       <WalksInfo walks={UserData?.community} />
     </section>

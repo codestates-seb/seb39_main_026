@@ -103,7 +103,7 @@ export default function Navbar() {
           </a>
         </Link>
         {isLoggedIn ? (
-          <Link href={`/users/${localStorage.getItem('username')}`}>
+          <Link href={`/users/${localStorage.getItem('userId')}`}>
             <a>
               <Icon
                 icon="fluent-emoji-high-contrast:paw-prints"
