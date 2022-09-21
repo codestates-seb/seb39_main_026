@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
 import { WalkDetail } from '../../../models/WalkDefault';
@@ -14,12 +13,12 @@ import StickyInfo from './StickyInfo';
 import Title from './Title';
 
 export default function DetailLayout({
+  walkId,
   children,
 }: {
+  walkId: string;
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-  const walkId = router.query.walkId as string;
   const walksData: WalkDetail = useWalksDetailQuery(walkId);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDogInfoModalOpen, setIsDogInfoModalOpen] = useState(false);

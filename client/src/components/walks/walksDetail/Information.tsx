@@ -42,8 +42,8 @@ const informationContainer = css`
 `;
 
 export default function Information({ walksData }: { walksData: WalkDetail }) {
-  const moimDate = walksData?.dateInfo?.split(' ')[0];
-  const moimTime = walksData?.dateInfo?.split(' ')[1];
+  const moimDate = walksData?.dayInfo;
+  const moimTime = walksData?.time;
   return (
     <ul css={informationContainer}>
       {walksData == null ? (

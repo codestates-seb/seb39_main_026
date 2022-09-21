@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import { GetServerSideProps } from 'next';
-import { useEffect } from 'react';
 import TabTitle from '../../components/TabTitle';
 import PetInfo from '../../components/users/PetInfo';
 import UserInfo from '../../components/users/UserInfo';
@@ -30,10 +29,6 @@ export default function User({ userId }: { userId: string }) {
       }
     }
   `;
-
-  useEffect(() => {
-    console.log(UserData);
-  }, []);
 
   return (
     <section css={user}>

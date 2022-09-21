@@ -69,7 +69,7 @@ export default function StickyInfo({
             ></div>
             <div className="info-content">
               <h2>{walksData?.name}</h2>
-              <p>{walksData?.dateInfo}</p>
+              <p>{walksData?.dayInfo}</p>
               <p>{walksData?.place}</p>
               <p>
                 {walksData?.capacity - walksData?.participant}자리 남았어요!

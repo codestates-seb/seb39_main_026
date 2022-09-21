@@ -79,7 +79,7 @@ export default function Comments({
                 <span>로딩</span>
               ) : (
                 walksData?.comments?.map((item) => (
-                  <li key={item.username}>
+                  <li key={item.body}>
                     <div>
                       <img
                         src="/main_image.jpg"
@@ -89,7 +89,7 @@ export default function Comments({
                           object-fit: cover;
                           border-radius: 50%;
                         `}
-                        alt={item.username}
+                        alt={item.member.username}
                         onClick={() => {
                           getPetId('1');
                           setIsDogInfoModalOpen(true);
@@ -101,9 +101,9 @@ export default function Comments({
                             font-weight: 600;
                           `}
                         >
-                          {item.username}
+                          {item.member.username}
                         </p>
-                        <p>{item.comment}</p>
+                        <p>{item.body}</p>
                         <div>
                           <button>수정</button>
                           <button>삭제</button>

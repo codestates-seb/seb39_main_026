@@ -93,18 +93,18 @@ export default function Title({
           <div css={postOwnerContainer}>
             <img
               src="/main_image.jpg"
-              alt={`작성자 ${walksData.representMember}사진`}
+              alt={`작성자 ${walksData.member.username}사진`}
               onClick={() => {
                 setIsDogInfoModalOpen(true);
                 getPetId('1');
               }}
             />
-            {walksData.pets?.map((pet) =>
-              pet.username === walksData.representMember ? (
+            {walksData.member.petList?.map((pet) =>
+              pet.member.username === walksData.member.username ? (
                 <p key={pet.petName}>{pet.petName}</p>
               ) : null
             )}
-            <p>{walksData.representMember}</p>
+            <p>{walksData.member.username}</p>
           </div>
         </>
       )}
