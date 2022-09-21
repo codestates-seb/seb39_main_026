@@ -54,7 +54,7 @@ export default function User({ userId }: { userId: string }) {
           </p>
         )}
       </div>
-      <WalksInfo walks={UserData?.community} />
+      <WalksInfo walks={UserData?.memberCommunityList} />
     </section>
   );
 }
