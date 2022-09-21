@@ -19,7 +19,7 @@ export default function WalksInfo({ walks }: { walks: [WalkDefault] }) {
       {walks?.map((walk) => {
         return (
           <Link href={`/walks/${walk.communityId}`} key={walk.communityId}>
-            <p>{walk.title}</p>
+            <p>{walk.name}</p>
           </Link>
         );
       })}

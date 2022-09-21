@@ -46,14 +46,14 @@ export default function ParticipantsInfo({
               참여 중인 강아지
               <span
                 css={css`
-                  color: ${walksData?.pets?.length > 0
+                  color: ${walksData?.memberPetList?.length > 0
                     ? Theme.mainColor
                     : '#000'};
                   margin-left: 4px;
                   letter-spacing: 2px;
                 `}
               >
-                {walksData?.pets?.length}
+                {walksData?.memberPetList?.length}
               </span>
               <span
                 css={css`
@@ -64,7 +64,7 @@ export default function ParticipantsInfo({
               </span>
             </h2>
             <ul>
-              {walksData?.pets?.map((pet) => (
+              {walksData?.memberPetList?.map((pet) => (
                 <li
                   key={pet.petName}
                   onClick={() => {

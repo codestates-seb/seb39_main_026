@@ -1,20 +1,9 @@
 import { css } from '@emotion/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { WalkDefault } from '../../models/WalkDefault';
 
-interface EachWalk {
-  walk: {
-    communityId: string;
-    title: string;
-    time: string;
-    address: string;
-    imgUrl: string;
-    capacity: number;
-    participant: number;
-  };
-}
-
-export default function WalkItem({ walk }: EachWalk) {
+export default function WalkItem({ walk }: { walk: WalkDefault }) {
   const router = useRouter();
   const handleItemClick = () => {
     router.push(`/walks/${walk.communityId}`);
@@ -32,7 +21,6 @@ export default function WalkItem({ walk }: EachWalk) {
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: space-around;
       padding: 1rem;
     }
     .walk_info {
@@ -41,15 +29,12 @@ export default function WalkItem({ walk }: EachWalk) {
         font-weight: 500;
         font-size: 14px;
         margin-bottom: 0.5rem;
+        text-align: left;
       }
       .walk_des {
         font-weight: 300;
         font-size: 10px;
       }
-    }
-    span {
-      padding: 0rem 0.2rem;
-      font-size: 10px;
     }
     .status {
       display: flex;
@@ -75,18 +60,16 @@ export default function WalkItem({ walk }: EachWalk) {
     <div css={walkitem} onClick={handleItemClick}>
       <Image
         className="img"
-        src={walk.imgUrl}
+        src={walk.imgUrls[0]}
         alt="산책 모임 대표 이미지"
         height="120px"
         width="321px"
-        placeholder="blur"
-        blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
       />
       <div className="walk_wrapper">
         <div className="walk_info">
-          <h1 className="walk_title">{walk.title}</h1>
-          <h3 className="walk_des">{walk.time}</h3>
-          <h3 className="walk_des">{walk.address}</h3>
+          <h1 className="walk_title">{walk.name}</h1>
+          <h3 className="walk_des">{walk.dateInfo}</h3>
+          <h3 className="walk_des">{walk.place}</h3>
         </div>
         <div className="status">
           <p>
