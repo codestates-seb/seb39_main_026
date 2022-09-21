@@ -42,8 +42,8 @@ const informationContainer = css`
 `;
 
 export default function Information({ walksData }: { walksData: WalkDetail }) {
-  const moimDate = walksData?.time?.split(' ')[0];
-  const moimTime = walksData?.time?.split(' ')[1];
+  const moimDate = walksData?.dateInfo?.split(' ')[0];
+  const moimTime = walksData?.dateInfo?.split(' ')[1];
   return (
     <ul css={informationContainer}>
       {walksData == null ? (
@@ -70,7 +70,7 @@ export default function Information({ walksData }: { walksData: WalkDetail }) {
             </span>
             장소
           </li>
-          <li>{walksData.address}</li>
+          <li>{walksData.place}</li>
         </>
       )}
     </ul>
