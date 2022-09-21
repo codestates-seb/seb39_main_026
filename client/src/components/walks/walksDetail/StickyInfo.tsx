@@ -68,9 +68,9 @@ export default function StickyInfo({
               `}
             ></div>
             <div className="info-content">
-              <h2>{walksData?.title}</h2>
-              <p>{walksData?.time}</p>
-              <p>{walksData?.address}</p>
+              <h2>{walksData?.name}</h2>
+              <p>{walksData?.dateInfo}</p>
+              <p>{walksData?.place}</p>
               <p>
                 {walksData?.capacity - walksData?.participant}자리 남았어요!
               </p>

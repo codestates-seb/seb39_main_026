@@ -67,7 +67,7 @@ export default function Title({
     // 참여자 < 모집인원 && 시간이 지나지 않음 -> 모집중
     if (
       walksData.participant < walksData.capacity &&
-      new Date(walksData.time) > new Date()
+      new Date(walksData.dateInfo) > new Date()
     ) {
       return '모집중';
     }
@@ -88,7 +88,7 @@ export default function Title({
             `}
           >
             <MoimState status={getMoimState()}>{getMoimState()}</MoimState>
-            <h1>{walksData.title}</h1>
+            <h1>{walksData.name}</h1>
           </div>
           <div css={postOwnerContainer}>
             <img
