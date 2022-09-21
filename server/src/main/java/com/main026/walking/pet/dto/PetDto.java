@@ -1,10 +1,13 @@
 package com.main026.walking.pet.dto;
 
+import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.embedded.PetAge;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public class PetDto {
 
@@ -51,6 +54,8 @@ public class PetDto {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class Response{
         private Long id;
         private String petName;
@@ -58,26 +63,11 @@ public class PetDto {
         private String petGender;
         private String neuter;
         private PetAge petAges;
-        //TODO 참여 모임 목록 필요
-        //private List<communityDto.compactResponse> joinCommunityList;
+        private List<CommunityDto.compactResponse> petCommunityList;
         private String personality;
         private String breed;
         private String imgUrl;
         private String about;
-
-        @Builder
-        public Response(Long id, String petName, MemberDto.Response member, String petGender, String neuter,PetAge petAges, String personality, String breed, String imgUrl, String about) {
-            this.id = id;
-            this.petName = petName;
-            this.member = member;
-            this.petGender = petGender;
-            this.neuter = neuter;
-            this.petAges = petAges;
-            this.personality = personality;
-            this.breed = breed;
-            this.imgUrl = imgUrl;
-            this.about = about;
-        }
 
     }
 
