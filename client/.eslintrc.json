@@ -7,7 +7,7 @@
   ],
   "rules": {
     // 안 쓰는 변수는 에러 처리
-    "no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": ["error"],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": [
       "warn",

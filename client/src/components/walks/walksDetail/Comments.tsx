@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
+import { Dispatch, SetStateAction } from 'react';
 import { WalkDetail } from '../../../models/WalkDefault';
 import { Theme } from '../../../styles/Theme';
 import LoadingComment from '../skeleton/walksDetail/LoadingComment';
@@ -44,7 +45,15 @@ const commentContainer = css`
   }
 `;
 
-export default function Comments({ walksData }: { walksData: WalkDetail }) {
+export default function Comments({
+  walksData,
+  setIsDogInfoModalOpen,
+  getPetId,
+}: {
+  walksData: WalkDetail;
+  setIsDogInfoModalOpen: Dispatch<SetStateAction<boolean>>;
+  getPetId: (petId: string) => void;
+}) {
   return (
     <>
       <article css={commentContainer}>
@@ -81,6 +90,10 @@ export default function Comments({ walksData }: { walksData: WalkDetail }) {
                           border-radius: 50%;
                         `}
                         alt={item.username}
+                        onClick={() => {
+                          getPetId('1');
+                          setIsDogInfoModalOpen(true);
+                        }}
                       />
                       <div>
                         <p
