@@ -9,14 +9,18 @@ import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.Pet;
+import com.main026.walking.util.file.FileStore;
 import com.main026.walking.util.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +31,7 @@ import java.util.stream.Collectors;
 public class CommunityController {
     private final CommunityService communityService;
     private final CommunityMapper communityMapper;
+    private final FileStore fileStore;
 
     //  Create
     //TODO POST요청 금지 필요
@@ -100,5 +105,11 @@ public class CommunityController {
             @PathVariable("community-id") long communityId) {
         communityService.deleteCommunity(communityId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @ResponseBody
+    @GetMapping("/img/{filename}")
+    public Resource showImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 }
