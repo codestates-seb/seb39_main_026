@@ -45,7 +45,10 @@ public interface CommunityMapper {
 
         List<String> dayInfo = new ArrayList<>();
 
-        if (entity.getDates().size() != 0) {
+        //System.out.println(entity.getDates().size());
+        //System.out.println("넌 나를 해결하지못했다~ 내가 누구냐면"+ entity.getDates().get(0));
+
+        if (entity.getDates() != null) {
             for (String date : entity.getDates()) {
                 String korean = Weeks.valueOf(date).getKorean();
                 dayInfo.add(korean);
