@@ -9,7 +9,7 @@ export default function Notice() {
   return (
     <>
       <TabTitle prefix={walkId} />
-      <DetailLayout>
+      <DetailLayout walkId={walkId}>
         <MoimNotice />
       </DetailLayout>
     </>
