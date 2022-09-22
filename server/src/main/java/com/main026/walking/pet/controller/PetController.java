@@ -4,10 +4,14 @@ import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.service.PetService;
+import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 @RestController
@@ -16,6 +20,7 @@ import java.util.List;
 public class PetController {
 
     private final PetService petService;
+    private final FileStore fileStore;
 
     @PostMapping
     public PetDto.Response postPet(@RequestBody PetDto.Post postDto, @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
@@ -46,5 +51,11 @@ public class PetController {
     public String deletePet(@PathVariable Long petId){
         petService.deletePet(petId);
         return "삭제완료";
+    }
+
+    @ResponseBody
+    @GetMapping("/img/{filename}")
+    public Resource showImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 }
