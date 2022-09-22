@@ -1,6 +1,8 @@
 package com.main026.walking.member.service;
 
 import com.main026.walking.auth.principal.PrincipalDetails;
+import com.main026.walking.exception.BusinessLogicException;
+import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.mapper.MemberMapper;
@@ -32,9 +34,12 @@ public class MemberService {
 
     //C
     public MemberDto.Response saveMember(MemberDto.Post postDto){
+
+        verifyExistMemberWithEmail(postDto.getEmail());
+        verifyExistMemberWithUsername(postDto.getUsername());
+
         Member member = memberMapper.memberPostDtoToMember(postDto);
         member.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
-        member.setRole("ROLE_USER");
         member.setPassword(passwordEncoder.encode(member.getPassword()));
 
         if(postDto.getProfileImg()!=null){
@@ -54,8 +59,8 @@ public class MemberService {
     //R
     public MemberDto.Response findMember(Long memberId,Boolean isOwner){
 
-        Member member = memberRepository.findById(memberId).orElseThrow();
-        MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
+        MemberDto.Response response =
+                memberMapper.memberToMemberResponseDto(verifyExistMemberWithId(memberId));
         response.setIsOwner(isOwner);
 
         return response;
@@ -63,7 +68,8 @@ public class MemberService {
 
     //U
     public MemberDto.Response updateMember(Long memberId,MemberDto.Patch patchDto){
-        Member member = memberRepository.findById(memberId).orElseThrow();
+        Member member = verifyExistMemberWithId(memberId);
+
         member.update(patchDto);
 
         if(patchDto.getProfileImg()!=null){
@@ -77,11 +83,27 @@ public class MemberService {
         }
 
         memberRepository.save(member);
+
         return memberMapper.memberToMemberResponseDto(member);
     }
 
     //D
     public void deleteMember(Long memberId){
         memberRepository.deleteById(memberId);
+    }
+
+    private void verifyExistMemberWithEmail(String email){
+        Optional<Member> checkMember =  memberRepository.findByEmail(email);
+        if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
+
+    private void verifyExistMemberWithUsername(String username){
+        Optional<Member> checkMember =  memberRepository.findByUsername(username);
+        if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
+
+    private Member verifyExistMemberWithId(Long memberId){
+        Optional<Member> checkMember = memberRepository.findById(memberId);
+        return checkMember.orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 }

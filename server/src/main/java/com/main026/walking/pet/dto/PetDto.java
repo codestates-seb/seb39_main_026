@@ -19,7 +19,6 @@ public class PetDto {
         private String petGender;
         private MultipartFile profileImg;
         private String neuter;
-        //TODO 날짜를 모를경우 01을 받게
         private String birthDay;
         private String personality;
         private String breed;

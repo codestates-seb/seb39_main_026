@@ -2,10 +2,12 @@ package com.main026.walking.auth.config;
 
 import com.main026.walking.auth.filter.JwtAuthenticationFilter;
 import com.main026.walking.auth.filter.JwtAuthorizationFilter;
+import com.main026.walking.auth.jwt.JwtUtils;
 import com.main026.walking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,16 +19,19 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Order(3)
 public class SecurityConfig {
 
-    private final CorsFilter corsFilter;
     private final MemberRepository memberRepository;
+    private final JwtUtils jwtUtils;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -39,13 +44,14 @@ public class SecurityConfig {
                 .apply(new CustomDsl())
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/community/**","/comment/**","/notice/**").access("hasRole('ROLE_USER')")
-                .antMatchers(HttpMethod.PATCH,"/members/**","/community/**","/comment/**","/notice/**").access("hasRole('ROLE_USER')")
+                .antMatchers(HttpMethod.POST,"/community/**","/comment/**","/pets/**","/notice/**").access("hasRole('ROLE_USER')")
+                .antMatchers(HttpMethod.PATCH,"/members/**","/community/**","/pets/**","/comment/**","/notice/**").access("hasRole('ROLE_USER')")
+                .antMatchers(HttpMethod.DELETE,"/members/**","/community/**","/pets/**","/comment/**","/notice/**").access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll()
                 .and()
-                .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(unauthorizedEntryPoint);
+                .exceptionHandling();
+                //.accessDeniedHandler(accessDeniedHandler)
+                //.authenticationEntryPoint(unauthorizedEntryPoint);
 
         return http.build();
     }
@@ -56,25 +62,38 @@ public class SecurityConfig {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-            final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager);
+            final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager,jwtUtils);
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
             builder
-                    .addFilter(corsFilter)
+                    .addFilter(corsFilter())
                     .addFilter(jwtAuthenticationFilter)
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager,memberRepository));
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager,memberRepository,jwtUtils));
         }
     }
 
+    public CorsFilter corsFilter(){
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        config.addExposedHeader("Authorization");
+        config.addExposedHeader("Email");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 
-    private final AuthenticationEntryPoint unauthorizedEntryPoint =
-            (request, response, authException) -> {
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            };
 
-    private final AccessDeniedHandler accessDeniedHandler =
-            (request, response, accessDeniedException) -> {
-                response.setStatus(HttpStatus.FORBIDDEN.value());
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            };
+//    private final AuthenticationEntryPoint unauthorizedEntryPoint =
+//            (request, response, authException) -> {
+//                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//            };
+//
+//    private final AccessDeniedHandler accessDeniedHandler =
+//            (request, response, accessDeniedException) -> {
+//                response.setStatus(HttpStatus.FORBIDDEN.value());
+//                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//            };
 }
