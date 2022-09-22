@@ -1,8 +1,8 @@
-name: Deploy-Server on AWS [dev]
+name: Deploy-Server on Test-Server [dev]
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "test" ]  # SSH 접속 문제 해결후  dev로 변경
 
 permissions:
   contents: read
