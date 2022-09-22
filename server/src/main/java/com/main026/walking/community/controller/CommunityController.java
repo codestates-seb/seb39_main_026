@@ -102,8 +102,9 @@ public class CommunityController {
     //  Delete
     @DeleteMapping("{community-id}")
     public ResponseEntity deleteCommunity(
-            @PathVariable("community-id") long communityId) {
-        communityService.deleteCommunity(communityId);
+            @PathVariable("community-id") long communityId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        communityService.deleteCommunity(communityId,principalDetails);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

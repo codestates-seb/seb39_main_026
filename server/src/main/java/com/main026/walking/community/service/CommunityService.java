@@ -5,6 +5,8 @@ import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.community.mapper.CommunityMapper;
 import com.main026.walking.community.repository.CommunityRepository;
+import com.main026.walking.exception.BusinessLogicException;
+import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.image.entity.Image;
 import com.main026.walking.image.repository.ImageRepository;
 import com.main026.walking.member.entity.Member;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -113,7 +116,12 @@ public class CommunityService {
     }
 
     //  Delete
-    public void deleteCommunity(long communityId) {
+    public void deleteCommunity(long communityId, PrincipalDetails principalDetails) {
+        Long authId = principalDetails.getMember().getId();
+        Long representId = communityRepository.findById(communityId).orElseThrow().getRepresentMember().getId();
+        if (authId!=representId){
+            throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
+        }
         Community community = findVerifiedCommunity(communityId);
         communityRepository.delete(community);
     }

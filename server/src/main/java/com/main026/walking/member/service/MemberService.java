@@ -36,6 +36,7 @@ public class MemberService {
     public MemberDto.Response saveMember(MemberDto.Post postDto){
 
         verifyExistMemberWithEmail(postDto.getEmail());
+        verifyExistMemberWithUsername(postDto.getUsername());
 
         Member member = memberMapper.memberPostDtoToMember(postDto);
         member.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
@@ -82,6 +83,7 @@ public class MemberService {
         }
 
         memberRepository.save(member);
+
         return memberMapper.memberToMemberResponseDto(member);
     }
 
@@ -92,6 +94,11 @@ public class MemberService {
 
     private void verifyExistMemberWithEmail(String email){
         Optional<Member> checkMember =  memberRepository.findByEmail(email);
+        if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
+
+    private void verifyExistMemberWithUsername(String username){
+        Optional<Member> checkMember =  memberRepository.findByUsername(username);
         if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
     }
 

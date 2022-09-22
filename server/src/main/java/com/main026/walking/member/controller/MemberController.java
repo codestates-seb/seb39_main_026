@@ -47,7 +47,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{memberId}")
-    public MemberDto.Response patchMember(@PathVariable Long memberId,MemberDto.Patch patchDto){
+    public MemberDto.Response patchMember(@PathVariable Long memberId,@RequestBody MemberDto.Patch patchDto){
         return memberService.updateMember(memberId,patchDto);
     }
 

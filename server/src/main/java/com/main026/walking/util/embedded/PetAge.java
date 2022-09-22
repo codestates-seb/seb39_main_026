@@ -13,9 +13,11 @@ import javax.persistence.Embeddable;
 public class PetAge {
     private Integer years;
     private Integer months;
+    private String birthDay;
 
-    public PetAge(Integer years, Integer months) {
+    public PetAge(Integer years, Integer months,String birthDay) {
         this.years = years;
         this.months = months;
+        this.birthDay = birthDay;
     }
 }

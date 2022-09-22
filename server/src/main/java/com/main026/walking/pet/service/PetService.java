@@ -61,6 +61,7 @@ public class PetService {
     //TODO 메소드 재사용성을 높히자.
     private void parseAge(PetDto.Post postDto, Pet pet) {
         String birthDay = postDto.getBirthDay();
+
         LocalDate parsedDate = LocalDate.parse(birthDay);
         LocalDateTime now = LocalDateTime.now();
         Integer year,month;
@@ -71,7 +72,7 @@ public class PetService {
             year = now.getYear()-parsedDate.getYear();
             month = now.getMonthValue() - parsedDate.getMonthValue();
         }
-        PetAge petAge = new PetAge(year,month);
+        PetAge petAge = new PetAge(year,month,birthDay);
         pet.setPetAges(petAge);
     }
 
@@ -87,7 +88,7 @@ public class PetService {
             year = now.getYear()-parsedDate.getYear();
             month = now.getMonthValue() - parsedDate.getMonthValue();
         }
-        PetAge petAge = new PetAge(year,month);
+        PetAge petAge = new PetAge(year,month,birthDay);
         pet.setPetAges(petAge);
     }
 

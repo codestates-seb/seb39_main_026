@@ -54,6 +54,4 @@ public interface MemberMapper {
         return response.build();
     }
 
-    Member memberPatchDtoToMember(MemberDto.Patch patchDto);
-
 }

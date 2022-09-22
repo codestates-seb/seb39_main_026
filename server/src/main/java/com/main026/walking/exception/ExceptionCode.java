@@ -3,9 +3,10 @@ package com.main026.walking.exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
-    MEMBER_EXISTS(409, "Email already exists"),
+    MEMBER_EXISTS(409, "Email or Username already exists"),
     MEMBER_NOT_FOUND(404, "Member not found"),
-    TOKEN_EXPIRED(401, "token is expired");
+    NO_AUTHORIZATION(401,"You don't have authority"),
+    TOKEN_EXPIRED(401, "Token is expired");
 
 
     @Getter
