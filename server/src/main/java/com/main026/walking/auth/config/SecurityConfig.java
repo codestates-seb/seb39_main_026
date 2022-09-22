@@ -6,6 +6,7 @@ import com.main026.walking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,12 +33,15 @@ public class SecurityConfig {
         http.csrf().disable();
         http.headers().frameOptions().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests()
-                .anyRequest().permitAll()
-                .and()
+        http
                 .formLogin().disable()
                 .httpBasic().disable()
                 .apply(new CustomDsl())
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST,"/members/**","/community/**","/comment/**","/notice/**").access("hasRole('ROLE_USER')")
+                .antMatchers(HttpMethod.PATCH,"/members/**","/community/**","/comment/**","/notice/**").access("hasRole('ROLE_USER')")
+                .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler)

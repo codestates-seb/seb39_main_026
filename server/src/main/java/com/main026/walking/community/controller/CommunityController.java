@@ -37,7 +37,9 @@ public class CommunityController {
     //TODO POST요청 금지 필요
     @PostMapping
     public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
+        if(principalDetails==null){
+            throw new RuntimeException("로그인하지않은 사용자 입니다.");
+        }
         Member loginMember = principalDetails.getMember();
 
         Community createdCommunity = communityService.createCommunity(postDto,loginMember);
