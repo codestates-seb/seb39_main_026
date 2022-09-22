@@ -1,4 +1,4 @@
-export interface UserPetInfo {
+export interface UserDogInfo {
   petName: string;
   member: Array<petOwner>;
   petGender: string;
