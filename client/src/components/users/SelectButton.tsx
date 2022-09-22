@@ -4,19 +4,22 @@ export default function SelectButton({
   left,
   right,
   select,
+  onClick,
 }: {
   left: string;
   right: string;
   select: string;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 }) {
   const selectBtn = css`
     button {
       cursor: pointer;
       border: 0;
-      width: 100px;
+      width: 50%;
       height: 50px;
       font-size: 16px;
       font-weight: 500;
+      background-color: #f7f7f5;
     }
     .left {
       border-radius: 20px 0 0 20px;
@@ -31,10 +34,16 @@ export default function SelectButton({
   `;
   return (
     <div css={selectBtn}>
-      <button className={`left ${left === select && 'selected'}`}>
+      <button
+        className={`left ${left === select && 'selected'}`}
+        onClick={onClick}
+      >
         {left}
       </button>
-      <button className={`right ${right === select && 'selected'}`}>
+      <button
+        className={`right ${right === select && 'selected'}`}
+        onClick={onClick}
+      >
         {right}
       </button>
     </div>

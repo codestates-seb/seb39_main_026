@@ -7,9 +7,9 @@ export interface MyPets {
     months: number;
     days: number;
   };
-  petGender: '여' | '남';
+  petGender: string;
   personality: string;
-  neuter: 'O' | 'X';
+  neuter: string;
   breed: string;
   about: string;
 }

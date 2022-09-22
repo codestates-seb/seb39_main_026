@@ -24,12 +24,11 @@ export default function PetEditOverlay({
     min-height: calc(100vh - 75px);
     top: 0;
     left: 0;
-    bottom: 0;
     height: 100%;
     width: 100%;
     background-color: white;
     padding-top: 1rem;
-    .closeButton {
+    .closeBtn {
       cursor: pointer;
       margin: 1rem;
       border: 0;
@@ -48,9 +47,7 @@ export default function PetEditOverlay({
   const getDogInfo = async (id: number) => {
     const response = await axios.get(`${API.PETS}/${id}`);
     setDogInfoData(response.data);
-    console.log(response.data);
   };
-
   useEffect(() => {
     getDogInfo(id);
   }, [id]);
@@ -59,10 +56,10 @@ export default function PetEditOverlay({
     <>
       {dogInfoData && (
         <section css={overlay}>
-          <button onClick={handleCloseClick} className="closeButton">
+          <button onClick={handleCloseClick} className="closeBtn">
             <Icon icon="ci:close-big" className="closeIcon" />
           </button>
-          <PetEditInfo pet={dogInfoData} />
+          <PetEditInfo pet={dogInfoData} setIsPetEditMode={setIsPetEditMode} />
         </section>
       )}
     </>
