@@ -24,6 +24,4 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> /home/ubuntu/action/deploy.log
-cd $DEPLOY_PATH
-nohup java -jar $JAR_NAME  --logging.file.path=$DEPLOY_PATH --logging.level.org.hibernate.SQL=DEBUG
->> $DEPLOY_PATH/deploy.log 2>$DEPLOY_PATH/deploy_err.log &
+nohup java -jar $DEPLOY_JAR --logging.level.org.hibernate.SQL=DEBUG >> $DEPLOY_PATH/spring.log 2>$DEPLOY_PATH/deploy_err.log &
