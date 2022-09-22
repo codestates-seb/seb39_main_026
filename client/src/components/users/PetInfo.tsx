@@ -21,6 +21,7 @@ export default function PetInfo({
     margin-bottom: 1.2rem;
     display: flex;
     .petInfo {
+      cursor: pointer;
       margin-right: 0.5rem;
       background-color: transparent;
       border: 0;
@@ -43,7 +44,7 @@ export default function PetInfo({
       border-radius: 50%;
       height: 50px;
       width: 50px;
-      background-color: ${Theme.disableBgColor};
+      background-color: #efefef;
       .icon {
         font-size: 1.5rem;
         color: ${Theme.disableColor};
