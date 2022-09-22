@@ -10,7 +10,7 @@ const signupButtonContainer = css`
   grid-template-columns: 1fr 1fr 1fr;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 16px 0;
   max-width: 400px;
   padding: 0 20px;
   width: 100%;
@@ -31,6 +31,11 @@ const signupButtonContainer = css`
 
   button {
     cursor: pointer;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
   }
 `;
 
@@ -39,11 +44,7 @@ const loginButton = (gridColumn: string) => css`
   background-color: transparent;
   border: none;
   margin-top: 30px;
-
-  a {
-    color: #686868;
-    text-decoration: none;
-  }
+  color: #686868;
 `;
 
 export default function Login() {
@@ -82,28 +83,34 @@ export default function Login() {
             </span>
             구글로 계속하기
           </LoginButton>
-          <LoginButton onClick={handleLoginButtonClick} buttonColor="#ECECEC">
-            <span>
-              <Icon icon="ci:mail" />
-            </span>
-            이메일로 회원가입
-          </LoginButton>
+          <Link href="/signup">
+            <a
+              css={css`
+                grid-column: 1/4;
+              `}
+            >
+              <LoginButton buttonColor="#ECECEC">
+                <span>
+                  <Icon icon="ci:mail" />
+                </span>
+                이메일로 회원가입
+              </LoginButton>
+            </a>
+          </Link>
+
           <button
             type="submit"
             onClick={handleLoginButtonClick}
             css={loginButton('1/2')}
           >
-            <Link href="/signup">이메일로 로그인</Link>
+            이메일로 로그인
           </button>
-
           <button
             type="submit"
             onClick={handleLoginButtonClick}
             css={loginButton('3/4')}
           >
-            <Link href="/signup">
-              <a>비밀번호 찾기</a>
-            </Link>
+            비밀번호 찾기
           </button>
         </form>
       </section>
