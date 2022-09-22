@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { css, keyframes } from '@emotion/react';
-import { Dispatch, SetStateAction, useEffect } from 'react';
-import { usePetInfoQuery } from '../../../hooks/PetInfoQuery';
+import axios from 'axios';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { API } from '../../../apis/api';
+import { UserDogInfo } from '../../../models/UserDogInfo';
 import { Theme } from '../../../styles/Theme';
 
 const modalContainer = (isModalOpen: boolean) => css`
@@ -84,9 +86,18 @@ export default function DogChoiceModal({
 }: {
   isDogInfoModalOpen: boolean;
   setIsDogInfoModalOpen: Dispatch<SetStateAction<boolean>>;
-  petId: string;
+  petId: number;
 }) {
-  const data = usePetInfoQuery(petId);
+  const [dogInfoData, setDogInfoData] = useState<UserDogInfo>();
+
+  const getDogInfo = async (petId: number) => {
+    const response = await axios.get(`${API.PETS}/${petId}`);
+    setDogInfoData(response.data);
+  };
+
+  useEffect(() => {
+    getDogInfo(petId);
+  }, [petId]);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -95,6 +106,10 @@ export default function DogChoiceModal({
     };
   }, []);
 
+  if (dogInfoData == null) {
+    return <p>loading... </p>;
+  }
+
   return (
     <div
       className="modal-wrapper"
@@ -102,103 +117,96 @@ export default function DogChoiceModal({
       onClick={() => setIsDogInfoModalOpen(false)}
     >
       <section onClick={(e) => e.stopPropagation()} className="modal">
-        {data == null ? (
-          <p>loading... </p>
-        ) : (
-          <>
-            <h1>🐕 반려 동물 정보</h1>
-            <ul
+        <h1>🐕 반려 동물 정보</h1>
+        <ul
+          css={css`
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            font-size: 1.1rem;
+            font-weight: 600;
+            gap: 20px;
+
+            @media screen and (max-width: 525px) {
+              gap: 10px;
+            }
+
+            li {
+              border-bottom: 1px solid ${Theme.divisionLineColor};
+              padding: 10px 6px;
+            }
+
+            li:nth-of-type(2n) {
+              text-align: center;
+              color: ${Theme.mainColor};
+            }
+
+            @media screen and (max-width: 525px) {
+              font-size: 1rem;
+            }
+          `}
+        >
+          <li
+            css={css`
+              grid-column: 1 / 3;
+              padding: 0;
+              border-bottom: none !important;
+            `}
+          >
+            <img
+              src={dogInfoData.imgUrl}
+              alt={`${dogInfoData.petName}의 사진`}
               css={css`
-                display: grid;
-                grid-template-columns: 80px 1fr;
-                font-size: 1.1rem;
-                font-weight: 600;
-                gap: 20px;
-
-                @media screen and (max-width: 525px) {
-                  gap: 10px;
-                }
-
-                li {
-                  border-bottom: 1px solid ${Theme.divisionLineColor};
-                  padding: 10px 6px;
-                }
-
-                li:nth-of-type(2n) {
-                  text-align: center;
-                  color: ${Theme.mainColor};
-                }
-
-                @media screen and (max-width: 525px) {
-                  font-size: 1rem;
-                }
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                border-radius: 50%;
               `}
-            >
-              <li
-                css={css`
-                  grid-column: 1 / 3;
-                  padding: 0;
-                  border-bottom: none !important;
-                `}
-              >
-                <img
-                  src="/main_image.jpg"
-                  alt={data.petName}
-                  css={css`
-                    width: 100px;
-                    height: 100px;
-                    object-fit: cover;
-                    border-radius: 50%;
-                  `}
-                />
-              </li>
-              <li>이름</li>
-              <li>{data.petName}</li>
-              <li>나이</li>
-              <li>{data.petAge}</li>
-            </ul>
-            <ul
-              css={css`
-                li:nth-of-type(2n - 1) {
-                  border-bottom: 1px solid ${Theme.divisionLineColor};
-                  padding: 10px 6px;
-                  margin-top: 20px;
-                  color: ${Theme.mainColor};
-                  text-align: center;
-                  font-size: 1.1rem;
-                  font-weight: 600;
+            />
+          </li>
+          <li>이름</li>
+          <li>{dogInfoData.petName}</li>
+          <li>나이</li>
+          <li>{dogInfoData.petAge}</li>
+        </ul>
+        <ul
+          css={css`
+            li:nth-of-type(2n - 1) {
+              border-bottom: 1px solid ${Theme.divisionLineColor};
+              padding: 10px 6px;
+              margin-top: 20px;
+              color: ${Theme.mainColor};
+              text-align: center;
+              font-size: 1.1rem;
+              font-weight: 600;
 
-                  @media screen and (max-width: 525px) {
-                    margin-top: 10px;
-                    font-size: 1rem;
-                  }
-                }
+              @media screen and (max-width: 525px) {
+                margin-top: 10px;
+                font-size: 1rem;
+              }
+            }
 
-                li:nth-of-type(2n) {
-                  /* border: 1px solid ${Theme.divisionLineColor}; */
-                  border-radius: 20px;
-                  padding: 10px 6px;
-                  text-align: center;
-                  font-size: 1.1rem;
-                  font-weight: 600;
-                }
+            li:nth-of-type(2n) {
+              border-radius: 20px;
+              padding: 10px 6px;
+              text-align: center;
+              font-size: 1.1rem;
+              font-weight: 600;
+            }
 
-                li:last-of-type {
-                  word-break: keep-all;
-                }
-              `}
-            >
-              <li>성별</li>
-              <li>{data.petGender}</li>
-              <li>중성화</li>
-              <li>{data.neuter}</li>
-              <li>우리 강아지는 어떤 성향인가요?</li>
-              <li>{data.personality}</li>
-              <li>우리 강아지를 소개해주세요!</li>
-              <li>{data.about}</li>
-            </ul>
-          </>
-        )}
+            li:last-of-type {
+              word-break: keep-all;
+            }
+          `}
+        >
+          <li>성별</li>
+          <li>{dogInfoData.petGender}</li>
+          <li>중성화</li>
+          <li>{dogInfoData.neuter}</li>
+          <li>우리 강아지는 어떤 성향인가요?</li>
+          <li>{dogInfoData.personality}</li>
+          <li>우리 강아지를 소개해주세요!</li>
+          <li>{dogInfoData.about}</li>
+        </ul>
       </section>
     </div>
   );

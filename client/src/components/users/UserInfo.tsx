@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
+import { useEffect } from 'react';
 import { UserDefault } from '../../models/UserDefault';
 import { skeletonGradient } from '../../styles/GlobalStyle';
 import { Theme } from '../../styles/Theme';
@@ -60,6 +61,9 @@ export default function UserInfo({
       color: transparent;
     }
   `;
+  useEffect(() => {
+    console.log(data);
+  }, []);
   return (
     <>
       {typeof data !== 'string' ? (
@@ -67,7 +71,8 @@ export default function UserInfo({
           <div className="img">
             <Image
               alt={`${data.username}'s profile`}
-              src={data.imgUrl}
+              src="/main_image"
+              // src={`${process.env.NEXT_PUBLIC_BASE_URL}/${data.imgUrl}`}
               width="75px"
               height="75px"
               className="img"

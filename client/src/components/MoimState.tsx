@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Theme } from '../styles/Theme';
 
-const moimStateContainer = (status: string) => css`
+const moimStateContainer = (status: string | undefined) => css`
   display: inline-block;
   border-radius: 5px;
   background-color: ${status === '모집마감'
@@ -20,7 +20,7 @@ export default function MoimState({
   children,
 }: {
   children: React.ReactNode;
-  status: string;
+  status: string | undefined;
 }) {
   return <div css={moimStateContainer(status)}>{children}</div>;
 }
