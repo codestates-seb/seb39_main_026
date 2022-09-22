@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { UserDefault } from '../../models/UserDefault';
 import { skeletonGradient } from '../../styles/GlobalStyle';
 import { Theme } from '../../styles/Theme';
@@ -28,6 +28,17 @@ export default function UserInfo({
       font-size: 22px;
       font-weight: 400;
       margin-left: 1rem;
+    }
+    input {
+      margin-top: 0.4rem;
+      font-size: 22px;
+      font-weight: 400;
+      margin-left: 1rem;
+      border: 0;
+      border-bottom: 1px solid ${Theme.divisionLineColor};
+      padding: 0.4rem 0;
+      height: 27px;
+      width: 10rem;
     }
     .icon {
       cursor: pointer;
@@ -61,9 +72,18 @@ export default function UserInfo({
       color: transparent;
     }
   `;
-  useEffect(() => {
-    console.log(data);
-  }, []);
+  const [isNameEditMode, setIsNameEditMode] = useState(false);
+  const [name, setName] = useState('');
+  const handleNameEdit = () => {
+    if (isNameEditMode === true) {
+      // 프로필 이름 수정 api 요청하는 부분
+    }
+    setIsNameEditMode(!isNameEditMode);
+  };
+  const handleNameChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setName(event.currentTarget.value);
+  };
+
   return (
     <>
       {typeof data !== 'string' ? (
@@ -71,16 +91,28 @@ export default function UserInfo({
           <div className="img">
             <Image
               alt={`${data.username}'s profile`}
-              src="/main_image"
-              // src={`${process.env.NEXT_PUBLIC_BASE_URL}/${data.imgUrl}`}
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.imgUrl}`}
               width="75px"
               height="75px"
               className="img"
             />
           </div>
-          <p className="username">{data.username}</p>
+          {isNameEditMode ? (
+            <input
+              type="text"
+              placeholder={data.username}
+              onChange={handleNameChange}
+              value={name}
+            />
+          ) : (
+            <p className="username">{data.username}</p>
+          )}
           {isValidated && (
-            <Icon icon="ant-design:edit-outlined" className="icon" />
+            <Icon
+              icon="ant-design:edit-outlined"
+              className="icon"
+              onClick={handleNameEdit}
+            />
           )}
         </div>
       ) : (
