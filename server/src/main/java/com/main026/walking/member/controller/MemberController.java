@@ -28,10 +28,10 @@ public class MemberController {
         return memberService.saveMember(memberPostDto);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity loginMember(Authentication authentication){
-//        return new ResponseEntity<>(memberService.loginMember(authentication), HttpStatus.OK);
-//    }
+    @PostMapping("/login")
+    public ResponseEntity loginMember(Authentication authentication){
+        return new ResponseEntity<>(memberService.loginMember(authentication), HttpStatus.OK);
+    }
 
     @GetMapping("/{memberId}")
     public MemberDto.Response getMember(@PathVariable Long memberId, @AuthenticationPrincipal PrincipalDetails principalDetails){
@@ -41,6 +41,7 @@ public class MemberController {
         if(principalDetails==null||principalDetails.getMember().getId()!=memberId){
             authorization = false;
         }
+
         return memberService.findMember(memberId,authorization);
 
     }

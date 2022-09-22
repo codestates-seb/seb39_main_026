@@ -65,8 +65,6 @@ public class Pet {
         this.petName = patchDto.getPerName();
         this.petGender = patchDto.getPetGender();
         this.neuter = patchDto.getNeuter();
-        //TODO 강아지 생일 수정 로직
-        //this.petAges = patchDto.getBirthDay();
         this.personality = patchDto.getPersonality();
         this.breed = patchDto.getBreed();
         this.about = patchDto.getAbout();

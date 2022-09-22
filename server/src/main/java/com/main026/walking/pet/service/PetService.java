@@ -58,9 +58,25 @@ public class PetService {
 
         return petMapper.petToPetResponseDto(pet);
     }
-
+    //TODO 메소드 재사용성을 높히자.
     private void parseAge(PetDto.Post postDto, Pet pet) {
         String birthDay = postDto.getBirthDay();
+        LocalDate parsedDate = LocalDate.parse(birthDay);
+        LocalDateTime now = LocalDateTime.now();
+        Integer year,month;
+        if(now.getMonthValue() - parsedDate.getMonthValue()<0){
+            year = now.getYear()-parsedDate.getYear()-1;
+            month = now.getMonthValue() + 12 - parsedDate.getMonthValue();
+        }else{
+            year = now.getYear()-parsedDate.getYear();
+            month = now.getMonthValue() - parsedDate.getMonthValue();
+        }
+        PetAge petAge = new PetAge(year,month);
+        pet.setPetAges(petAge);
+    }
+
+    private void parseAge(PetDto.Patch patchDto, Pet pet) {
+        String birthDay = patchDto.getBirthDay();
         LocalDate parsedDate = LocalDate.parse(birthDay);
         LocalDateTime now = LocalDateTime.now();
         Integer year,month;
@@ -92,10 +108,14 @@ public class PetService {
     public PetDto.Response editPet(Long petId, PetDto.Patch patchDto){
         Pet pet = petRepository.findById(petId).orElseThrow();
         pet.update(patchDto);
+        parseAge(patchDto,pet);
 
         Pet savedPet = petRepository.save(pet);
         return petMapper.petToPetResponseDto(savedPet);
     }
+
+
+
 
     public void deletePet(Long petId){
         petRepository.deleteById(petId);

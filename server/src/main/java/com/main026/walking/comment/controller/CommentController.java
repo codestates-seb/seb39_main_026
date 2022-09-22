@@ -20,59 +20,59 @@ import java.util.List;
 @RequestMapping("/comment")
 @RequiredArgsConstructor
 public class CommentController {
-  private final CommentMapper commentMapper;
-  private final CommentService commentService;
-  
-//  Create
-  @PostMapping("/post/{communityId}")
-  public ResponseEntity postComment(@PathVariable Long communityId, @RequestBody CommentDto.Post dto,@AuthenticationPrincipal PrincipalDetails principalDetails){
+    private final CommentMapper commentMapper;
+    private final CommentService commentService;
 
-    Member member = principalDetails.getMember();
-    Comment comment = commentMapper.postDtoToEntity(dto);
+    //  Create
+    @PostMapping("/post/{communityId}")
+    public ResponseEntity postComment(@PathVariable Long communityId, @RequestBody CommentDto.Post dto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-    Comment createdComment = commentService.createComment(communityId,comment,member);
+        Member member = principalDetails.getMember();
+        Comment comment = commentMapper.postDtoToEntity(dto);
 
-    return new ResponseEntity(commentMapper.entityToDtoResponse(createdComment), HttpStatus.CREATED);
-  }
+        Comment createdComment = commentService.createComment(communityId, comment, member);
 
-//  Read
-  @GetMapping("/{comment-id}")
-  public ResponseEntity getComment(
-    @PathVariable("comment-id") long commentId){
-    Comment comment = commentService.findComment(commentId);
+        return new ResponseEntity(commentMapper.entityToDtoResponse(createdComment), HttpStatus.CREATED);
+    }
 
-    return new ResponseEntity(commentMapper.entityToDtoResponse(comment), HttpStatus.OK);
-  }
+    //  Read
+    @GetMapping("/{comment-id}")
+    public ResponseEntity getComment(
+            @PathVariable("comment-id") long commentId) {
+        Comment comment = commentService.findComment(commentId);
 
-  @GetMapping
-  public ResponseEntity getComments(
-    @RequestParam(value = "page", defaultValue = "1") int page,
-    @RequestParam(value = "size", defaultValue = "10") int size ) {
+        return new ResponseEntity(commentMapper.entityToDtoResponse(comment), HttpStatus.OK);
+    }
 
-    Page<Comment> commentPage = commentService.findComments(page - 1, size);
+//    @GetMapping
+//    public ResponseEntity getComments(
+//            @RequestParam(value = "page", defaultValue = "1") int page,
+//            @RequestParam(value = "size", defaultValue = "10") int size) {
+//
+//        Page<Comment> commentPage = commentService.findComments(page - 1, size);
+//
+//        List<Comment> comments = commentPage.getContent();
+//
+//        return new ResponseEntity(new MultiResponseDto<>(commentMapper.multiEntityToDtoResponse(comments), commentPage), HttpStatus.OK);
+//    }
 
-    List<Comment> comments = commentPage.getContent();
+    //  Update
+    @PatchMapping("{comment-id}")
+    public ResponseEntity patchComment(
+            @PathVariable("comment-id") long commentId,
+            @RequestBody CommentDto.Patch dto) {
 
-    return new ResponseEntity(new MultiResponseDto<>(commentMapper.multiEntityToDtoResponse(comments), commentPage), HttpStatus.OK);
-  }
+        commentService.updateComment(commentId, dto);
+        Comment comment = commentService.findComment(commentId);
 
-//  Update
-  @PatchMapping("{comment-id}")
-  public ResponseEntity patchComment(
-    @PathVariable("comment-id") long commentId,
-    @RequestBody CommentDto.Patch dto ){
+        return new ResponseEntity<>(commentMapper.entityToDtoResponse(comment), HttpStatus.OK);
+    }
 
-    commentService.updateComment(commentId, dto);
-    Comment comment = commentService.findComment(commentId);
-
-    return new ResponseEntity<>(commentMapper.entityToDtoResponse(comment), HttpStatus.OK);
-  }
-
-//  Delete
-  @DeleteMapping("{comment-id}")
-  public ResponseEntity deleteComment(
-    @PathVariable("comment-id") long commentId){
-    commentService.deleteComment(commentId);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
+    //  Delete
+    @DeleteMapping("{comment-id}")
+    public ResponseEntity deleteComment(
+            @PathVariable("comment-id") long commentId) {
+        commentService.deleteComment(commentId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

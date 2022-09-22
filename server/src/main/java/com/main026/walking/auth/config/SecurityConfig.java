@@ -2,6 +2,7 @@ package com.main026.walking.auth.config;
 
 import com.main026.walking.auth.filter.JwtAuthenticationFilter;
 import com.main026.walking.auth.filter.JwtAuthorizationFilter;
+import com.main026.walking.auth.jwt.JwtUtils;
 import com.main026.walking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,7 @@ public class SecurityConfig {
 
     private final CorsFilter corsFilter;
     private final MemberRepository memberRepository;
+    private final JwtUtils jwtUtils;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -56,7 +58,7 @@ public class SecurityConfig {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-            final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager);
+            final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager,jwtUtils);
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
             builder
                     .addFilter(corsFilter)

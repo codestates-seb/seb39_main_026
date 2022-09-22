@@ -43,8 +43,6 @@ public class CommunityService {
     //  Create
     public Community createCommunity(CommunityDto.Post postDto,Member member) {
         Community community = communityMapper.postDtoToEntity(postDto);
-        //TODO 임시방편 : 매핑과정에서 조회수와 좋아요의 기본값이 설정되지않고있다.
-        community.setViewAndLike();
 
         String[] dayInfo = postDto.getDates();
         List<String> dayList = new ArrayList<>();
