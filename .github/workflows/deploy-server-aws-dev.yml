@@ -25,7 +25,6 @@ jobs:
 
       - name: Server Build
         run: |                          # 개별 실행 옵션, 없으면 28 ~ 33줄까지 모두 한줄에 실행됨
-          git checkout dev              # branch 변경
           mkdir -p deploy-server/       # 압축할 임시 폴더 생성 (deploy-server)
           cd server/                    # 리포지토리에서 server 폴더로 이동
           chmod +x ./gradlew            # GitHub Action 에서 gradle build를 위한 권한설정
