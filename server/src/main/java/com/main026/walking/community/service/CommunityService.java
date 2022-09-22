@@ -73,7 +73,6 @@ public class CommunityService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(community.getViewed());
         return communityRepository.save(community);
     }
 
@@ -121,10 +120,9 @@ public class CommunityService {
 
     //  Valid
     public Community findVerifiedCommunity(long questionId) {
-        Optional<Community> optionalCommunity =
-                communityRepository.findById(questionId);
+        Optional<Community> checkCommunity = communityRepository.findById(questionId);
         Community findCommunity =
-                optionalCommunity.orElseThrow(() -> new RuntimeException("COMMUNITY_NOT_FOUND"));
+                checkCommunity.orElseThrow(() -> new RuntimeException("COMMUNITY_NOT_FOUND"));
 
         return findCommunity;
     }

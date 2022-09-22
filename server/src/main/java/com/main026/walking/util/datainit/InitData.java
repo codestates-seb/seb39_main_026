@@ -49,7 +49,6 @@ public class InitData {
                 .password("12345678")
                 .imgUrl("memberImg.jpeg")
                 .build();
-        kimcoding.setRole("ROLE_USER");
         memberRepository.save(kimcoding);
 
         Member parkhacker = Member.builder()
@@ -59,7 +58,6 @@ public class InitData {
                 .password("12345678")
                 .imgUrl("memberImg.jpeg")
                 .build();
-        parkhacker.setRole("ROLE_USER");
         memberRepository.save(parkhacker);
 
         Member steven = Member.builder()
@@ -69,7 +67,6 @@ public class InitData {
                 .password("12345678")
                 .imgUrl("memberImg.jpeg")
                 .build();
-        steven.setRole("ROLE_USER");
         memberRepository.save(steven);
 
         log.info("김코딩 강아지 등록");

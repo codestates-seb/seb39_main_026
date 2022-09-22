@@ -24,7 +24,6 @@ public class PetController {
 
     @PostMapping
     public PetDto.Response postPet(@RequestBody PetDto.Post postDto, @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        System.out.println("회원이름 " + username);
         Member member = principalDetails.getMember();
         return petService.postPet(postDto,member);
     }
