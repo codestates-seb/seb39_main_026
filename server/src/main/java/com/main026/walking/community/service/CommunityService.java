@@ -94,9 +94,7 @@ public class CommunityService {
         return community;
     }
 
-    //TODO 단순조회가 인증데이터를 받아서는 안된다! 오류를 고치고 즉시 수정하자
     //Read
-    //@Transactional
     public Community findCommunity(long communityId) {
 
         Community community = findVerifiedCommunity(communityId);

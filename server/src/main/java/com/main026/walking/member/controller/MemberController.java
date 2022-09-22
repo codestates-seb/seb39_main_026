@@ -1,5 +1,6 @@
 package com.main026.walking.member.controller;
 
+import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.service.MemberService;
 import com.main026.walking.util.file.FileStore;
@@ -9,6 +10,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
@@ -31,10 +33,16 @@ public class MemberController {
 //        return new ResponseEntity<>(memberService.loginMember(authentication), HttpStatus.OK);
 //    }
 
-    //TODO 토큰이 없으면 본인이 아니라는 정보를 포함시키기
     @GetMapping("/{memberId}")
-    public MemberDto.Response getMember(@PathVariable Long memberId){
-        return memberService.findMember(memberId);
+    public MemberDto.Response getMember(@PathVariable Long memberId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        //TODO 개선 필요 : 로그인하지않았거나, 본인이 아님
+        Boolean authorization = true;
+        if(principalDetails==null||principalDetails.getMember().getId()!=memberId){
+            authorization = false;
+        }
+        return memberService.findMember(memberId,authorization);
+
     }
 
     @PatchMapping("/{memberId}")

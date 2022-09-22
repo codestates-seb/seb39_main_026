@@ -34,7 +34,6 @@ public class CommunityController {
     private final FileStore fileStore;
 
     //  Create
-    //TODO POST요청 금지 필요
     @PostMapping
     public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         if(principalDetails==null){
@@ -85,7 +84,6 @@ public class CommunityController {
 
         List<Community> communities = communityPage.getContent();
 
-        //Todo 정보를 보여주는 dto 에 대한 고민
         return new ResponseEntity(new MultiResponseDto<>(communityMapper.multiEntityToDtoInfo(communities), communityPage), HttpStatus.OK);
     }
 

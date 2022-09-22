@@ -67,6 +67,7 @@ public class MemberDto {
         private List<PetDto.compactResponse> petList = new ArrayList<>();
         private Address address;
         private List<CommunityDto.compactResponse> memberCommunityList = new ArrayList<>();
+        private Boolean isOwner;
 
         @Builder
         public Response(Long id, String email, String username,String imgUrl,Address address, List<PetDto.compactResponse> petList,List<CommunityDto.compactResponse> memberCommunityList) {
@@ -84,6 +85,10 @@ public class MemberDto {
             this.email = member.getEmail();
             this.username = member.getUsername();
             this.imgUrl = member.getImgUrl();
+        }
+
+        public void setIsOwner(Boolean isOwner){
+            this.isOwner = isOwner;
         }
     }
 }
