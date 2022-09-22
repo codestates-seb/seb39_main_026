@@ -2,7 +2,7 @@ name: Deploy-Server on AWS [dev]
 
 on:
   push:
-    branches: [ "BE/feat/CI-CD" ]
+    branches: [ "dev" ]
 
 permissions:
   contents: read
