@@ -2,7 +2,7 @@
 import { css, keyframes } from '@emotion/react';
 import Link from 'next/link';
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
-import { useMyPetsListQuery } from '../hooks/MyPetsListQuery';
+import { useMyDogsListQuery } from '../hooks/MyDogsListQuery';
 import { MyPets } from '../models/MyPets';
 import { Theme } from '../styles/Theme';
 import CommonButton from './CommonButton';
@@ -126,7 +126,7 @@ export default function DogChoiceModal({
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const petData = useMyPetsListQuery();
+  const petData = useMyDogsListQuery();
 
   const [pickPets, setPickPets] = useState<string[]>([]);
 
@@ -145,6 +145,10 @@ export default function DogChoiceModal({
     };
   }, []);
 
+  if (petData == null) {
+    return <p>loading</p>;
+  }
+
   return (
     <div
       css={modalContainer(isModalOpen)}
@@ -154,20 +158,16 @@ export default function DogChoiceModal({
       <section onClick={(e) => e.stopPropagation()} className="modal">
         <h1>어떤 강아지랑 산책할 건가요?</h1>
         <ul>
-          {petData === 'loading' ? (
-            <p>loading</p>
-          ) : (
-            (petData.pets ?? []).map((pet: MyPets) => (
-              <li
-                key={pet.id}
-                onClick={() => handlePickPetClick(pet.petName)}
-                className={pickPets.includes(pet.petName) ? 'pick' : ''}
-              >
-                <img src={pet.imgUrl} alt={`${pet.petName} 사진`} />
-                <p>{pet.petName}</p>
-              </li>
-            ))
-          )}
+          {petData.pets.map((pet: MyPets) => (
+            <li
+              key={pet.id}
+              onClick={() => handlePickPetClick(pet.petName)}
+              className={pickPets.includes(pet.petName) ? 'pick' : ''}
+            >
+              <img src={pet.imgUrl} alt={`${pet.petName} 사진`} />
+              <p>{pet.petName}</p>
+            </li>
+          ))}
         </ul>
         {pickPets.length > 0 ? (
           <Link href="/walks/write">

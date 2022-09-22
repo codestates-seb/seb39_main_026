@@ -5,4 +5,5 @@ export const API = {
   PICKPET: `${BASE_URL}/members/pets`,
   COMMUNITYDETAIL: `${BASE_URL}/community`,
   USERS: `${BASE_URL}/members`,
+  PETS: `${BASE_URL}/pets`,
 };

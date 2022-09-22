@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 

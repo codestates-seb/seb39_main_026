@@ -1,5 +1,7 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
+import { format } from 'date-fns';
+import ko from 'date-fns/locale/ko';
 import { WalkDetail } from '../../../models/WalkDefault';
 import LoadingInfo from '../skeleton/walksDetail/LoadingInfo';
 
@@ -9,6 +11,7 @@ const informationContainer = css`
   padding: 32px 23px;
   gap: 20px 0;
   align-items: center;
+  font-weight: 500;
 
   li:nth-of-type(2n - 1) {
     display: flex;
@@ -28,6 +31,20 @@ const informationContainer = css`
     }
   }
 
+  p.everyweek-moim {
+    span:first-of-type {
+      margin-left: 6px;
+    }
+
+    span + span {
+      &::before {
+        content: '•';
+        margin-left: 3px;
+        margin-right: 3px;
+      }
+    }
+  }
+
   @media screen and (max-width: 505px) {
     grid-template-columns: 120px 1fr;
     padding: 22px 13px;
@@ -41,38 +58,61 @@ const informationContainer = css`
   }
 `;
 
-export default function Information({ walksData }: { walksData: WalkDetail }) {
-  const moimDate = walksData?.dayInfo;
-  const moimTime = walksData?.time;
+export default function Information({
+  walkDetail,
+}: {
+  walkDetail?: WalkDetail;
+}) {
+  if (walkDetail == null || walkDetail.time == null) {
+    return (
+      <ul css={informationContainer}>
+        <LoadingInfo />
+      </ul>
+    );
+  }
+
+  const [hour, minutes, seconds] = walkDetail.time?.split(':').map(Number);
+  const morningOrAfternoon = format(
+    new Date(2000, 1, 1, hour, minutes, seconds),
+    'a h:mm',
+    { locale: ko }
+  );
   return (
     <ul css={informationContainer}>
-      {walksData == null ? (
-        <LoadingInfo />
-      ) : (
-        <>
-          <li>
-            <span>
-              <Icon icon="clarity:date-solid" />
-            </span>
-            일시
-          </li>
-          <li>{moimDate}</li>
-          <li>
-            <span>
-              <Icon icon="clarity:alarm-clock-solid" />
-            </span>
-            시간대
-          </li>
-          <li>{moimTime} ~</li>
-          <li>
-            <span>
-              <Icon icon="ic:baseline-place" width="1em" height="1em" />
-            </span>
-            장소
-          </li>
-          <li>{walksData.place}</li>
-        </>
-      )}
+      <>
+        <li>
+          <span>
+            <Icon icon="clarity:date-solid" />
+          </span>
+          일시
+        </li>
+        <li>
+          {walkDetail.dateInfo != null ? (
+            format(new Date(walkDetail?.dateInfo), 'yyyy년 MM월 dd일')
+          ) : (
+            <p className="everyweek-moim">
+              매주
+              {walkDetail.dayInfo.map((yoil) => (
+                <span key={`${yoil}`}>{yoil}</span>
+              ))}
+            </p>
+          )}
+        </li>
+        <li>
+          <span>
+            <Icon icon="clarity:alarm-clock-solid" />
+          </span>
+          시간대
+        </li>
+        <li>{morningOrAfternoon} ~</li>
+        <li>
+          <span>
+            <Icon icon="ic:baseline-place" width="1em" height="1em" />
+          </span>
+          장소
+        </li>
+        <li>{walkDetail.place}</li>
+      </>
     </ul>
   );
 }

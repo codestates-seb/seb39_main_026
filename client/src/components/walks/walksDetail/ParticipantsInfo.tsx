@@ -27,66 +27,67 @@ const participantContainer = css`
 `;
 
 export default function ParticipantsInfo({
-  walksData,
+  walkDetail,
   setIsDogInfoModalOpen,
   getPetId,
 }: {
-  walksData: WalkDetail;
+  walkDetail?: WalkDetail;
   setIsDogInfoModalOpen: Dispatch<SetStateAction<boolean>>;
-  getPetId: (petId: string) => void;
+  getPetId: (petId: number) => void;
 }) {
-  return (
-    <>
+  if (walkDetail == null) {
+    return (
       <article css={participantContainer}>
-        {walksData == null ? (
-          <LoadingParticipantInfo />
-        ) : (
-          <>
-            <h2>
-              참여 중인 강아지
-              <span
-                css={css`
-                  color: ${walksData?.memberPetList?.length > 0
-                    ? Theme.mainColor
-                    : '#000'};
-                  margin-left: 4px;
-                  letter-spacing: 2px;
-                `}
-              >
-                {walksData?.memberPetList?.length}
-              </span>
-              <span
-                css={css`
-                  letter-spacing: 2px;
-                `}
-              >
-                /{walksData.capacity}
-              </span>
-            </h2>
-            <ul>
-              {walksData?.memberPetList?.map((pet) => (
-                <li
-                  key={pet.petName}
-                  onClick={() => {
-                    setIsDogInfoModalOpen(true);
-                    getPetId('1');
-                  }}
-                >
-                  <img
-                    src="/main_image.jpg"
-                    css={css`
-                      width: 35px;
-                      height: 35px;
-                      object-fit: cover;
-                    `}
-                    alt={pet.petName}
-                  />
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+        <LoadingParticipantInfo />
       </article>
-    </>
+    );
+  }
+
+  return (
+    <article css={participantContainer}>
+      <h2>
+        참여 중인 강아지
+        <span
+          css={css`
+            color: ${walkDetail.communityPetList.length > 0
+              ? Theme.mainColor
+              : '#000'};
+            margin-left: 4px;
+            letter-spacing: 2px;
+          `}
+        >
+          {walkDetail.communityPetList.length}
+        </span>
+        <span
+          css={css`
+            letter-spacing: 2px;
+          `}
+        >
+          /{walkDetail.capacity}
+        </span>
+      </h2>
+      <ul>
+        {walkDetail.communityPetList.map((pet) => (
+          <li
+            key={pet.petName}
+            onClick={() => {
+              setIsDogInfoModalOpen(true);
+              getPetId(pet.id);
+            }}
+          >
+            <img
+              src={pet.imgUrl}
+              css={css`
+                width: 35px;
+                height: 35px;
+                object-fit: cover;
+                cursor: pointer;
+              `}
+              alt={`${pet.petName} 의 사진`}
+            />
+          </li>
+        ))}
+      </ul>
+    </article>
   );
 }

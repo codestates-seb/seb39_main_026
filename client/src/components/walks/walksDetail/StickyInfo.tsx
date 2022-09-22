@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { format } from 'date-fns';
 import { Dispatch, SetStateAction } from 'react';
 import { WalkDetail } from '../../../models/WalkDefault';
 import { Theme } from '../../../styles/Theme';
@@ -20,7 +21,7 @@ const infoContainer = css`
     padding: 20px 30px;
     background-color: #f7f7f5;
 
-    h2 {
+    h1 {
       margin-bottom: 10px;
       font-size: 1.3rem;
     }
@@ -36,17 +37,32 @@ const infoContainer = css`
       margin: 18px 0 28px;
     }
   }
+
+  p.everyweek-moim {
+    span:first-of-type {
+      margin-left: 6px;
+    }
+
+    span + span {
+      &::before {
+        content: '•';
+        margin-left: 3px;
+        margin-right: 3px;
+      }
+    }
+  }
 `;
 
 export default function StickyInfo({
-  walksData,
+  walkDetail,
   setIsModalOpen,
 }: {
-  walksData: WalkDetail;
+  walkDetail?: WalkDetail;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const imgUrl = 'https://images.unsplash.com/photo-1585938389612-a552a28d6914';
-
+  if (walkDetail == null || walkDetail.imgUrls == null) {
+    return <LoadingStickyInfo />;
+  }
   return (
     <div
       css={css`
@@ -55,31 +71,34 @@ export default function StickyInfo({
       `}
     >
       <aside css={infoContainer}>
-        {walksData == null ? (
-          <LoadingStickyInfo />
-        ) : (
+        <div
+          css={css`
+            background-image: url(${walkDetail.imgUrls[0]});
+            background-size: cover;
+            background-position: center;
+            height: 200px;
+          `}
+        ></div>
+        <div className="info-content">
+          <h1>{walkDetail.name}</h1>
           <>
-            <div
-              css={css`
-                background-image: url(${imgUrl});
-                background-size: cover;
-                background-position: center;
-                height: 200px;
-              `}
-            ></div>
-            <div className="info-content">
-              <h2>{walksData?.name}</h2>
-              <p>{walksData?.dayInfo}</p>
-              <p>{walksData?.place}</p>
-              <p>
-                {walksData?.capacity - walksData?.participant}자리 남았어요!
+            {walkDetail.dateInfo != null ? (
+              format(new Date(walkDetail?.dateInfo), 'yyyy년 MM월 dd일')
+            ) : (
+              <p className="everyweek-moim">
+                매주
+                {walkDetail?.dayInfo?.map((x) => (
+                  <span key={`${x}`}>{x}</span>
+                ))}
               </p>
-              <CommonButton type="button" onClick={() => setIsModalOpen(true)}>
-                모임 참여하기
-              </CommonButton>
-            </div>
+            )}
           </>
-        )}
+          <p>{walkDetail.place}</p>
+          <p>{walkDetail.capacity - walkDetail.participant}자리 남았어요!</p>
+          <CommonButton type="button" onClick={() => setIsModalOpen(true)}>
+            모임 참여하기
+          </CommonButton>
+        </div>
       </aside>
     </div>
   );

@@ -60,7 +60,7 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
     <div css={walkitem} onClick={handleItemClick}>
       <Image
         className="img"
-        src={walk.imgUrls[0]}
+        src={`${process.env.NEXT_PUBLIC_BASE_URL}/${walk.imgUrls[0]}`}
         alt="산책 모임 대표 이미지"
         height="120px"
         width="321px"

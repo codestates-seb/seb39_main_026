@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
-import { WalkDetail } from '../../../models/WalkDefault';
 import CommonButton from '../../CommonButton';
 import DogChoiceModal from '../../DogChoiceModal';
 import Comments from './Comments';
@@ -19,12 +18,12 @@ export default function DetailLayout({
   walkId: string;
   children: React.ReactNode;
 }) {
-  const walksData: WalkDetail = useWalksDetailQuery(walkId);
+  const walkDetail = useWalksDetailQuery(walkId);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDogInfoModalOpen, setIsDogInfoModalOpen] = useState(false);
-  const [petInfoId, setPetInfoId] = useState('');
+  const [petInfoId, setPetInfoId] = useState(1);
 
-  const getPetId = (petId: string) => {
+  const getPetId = (petId: number) => {
     setPetInfoId(petId);
   };
 
@@ -32,27 +31,19 @@ export default function DetailLayout({
     <>
       <section css={sancheckDetailLayout}>
         <div>
-          <Title
-            walksData={walksData}
-            setIsDogInfoModalOpen={setIsDogInfoModalOpen}
-            getPetId={getPetId}
-          />
-          <Information walksData={walksData} />
+          <Title walkDetail={walkDetail} />
+          <Information walkDetail={walkDetail} />
           <PageNav />
           {children}
           <ParticipantsInfo
-            walksData={walksData}
+            walkDetail={walkDetail}
             setIsDogInfoModalOpen={setIsDogInfoModalOpen}
             getPetId={getPetId}
           />
-          <Comments
-            walksData={walksData}
-            setIsDogInfoModalOpen={setIsDogInfoModalOpen}
-            getPetId={getPetId}
-          />
+          <Comments walkDetail={walkDetail} />
         </div>
         <div className="sticky-info-container">
-          <StickyInfo walksData={walksData} setIsModalOpen={setIsModalOpen} />
+          <StickyInfo walkDetail={walkDetail} setIsModalOpen={setIsModalOpen} />
         </div>
         <div css={mobileMoimJoin}>
           <CommonButton type="button" onClick={() => setIsModalOpen(true)}>

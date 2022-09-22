@@ -58,7 +58,7 @@ export default function PetInfo({ pets }: { pets: MyPets[] }) {
             return (
               <div className="petInfo" key={pet.id}>
                 <Image
-                  src=""
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/${pet.imgUrl}`}
                   // 서버에서 imgUrl 보내주면 교체할 것
                   height="50px"
                   width="50px"
