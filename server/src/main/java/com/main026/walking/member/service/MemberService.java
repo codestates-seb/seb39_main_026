@@ -52,9 +52,13 @@ public class MemberService {
     }
 
     //R
-    public MemberDto.Response findMember(Long memberId){
+    public MemberDto.Response findMember(Long memberId,Boolean isOwner){
+
         Member member = memberRepository.findById(memberId).orElseThrow();
-        return memberMapper.memberToMemberResponseDto(member);
+        MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
+        response.setIsOwner(isOwner);
+
+        return response;
     }
 
     //U

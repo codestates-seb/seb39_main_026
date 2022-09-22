@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .apply(new CustomDsl())
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/members/**","/community/**","/comment/**","/notice/**").access("hasRole('ROLE_USER')")
+                .antMatchers(HttpMethod.POST,"/community/**","/comment/**","/notice/**").access("hasRole('ROLE_USER')")
                 .antMatchers(HttpMethod.PATCH,"/members/**","/community/**","/comment/**","/notice/**").access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll()
                 .and()
