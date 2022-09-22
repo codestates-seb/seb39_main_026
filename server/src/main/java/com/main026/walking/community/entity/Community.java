@@ -117,14 +117,9 @@ public class Community {
         this.time = time;
         this.representMember = representMember;
         this.capacity = capacity;
-        this.viewed = viewed;
-        this.liked = liked;
+        this.viewed = viewed==null?0L:viewed;
+        this.liked = liked==null?0L:liked;
         this.createdAt = createdAt;
-    }
-
-    public void setViewAndLike(){
-        this.viewed = 0L;
-        this.liked = 0L;
     }
 }
 

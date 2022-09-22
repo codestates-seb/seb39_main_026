@@ -3,6 +3,7 @@ package com.main026.walking.auth.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.main026.walking.auth.jwt.JwtUtils;
 import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.member.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ import java.util.Date;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -43,11 +46,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             log.info("Login success!! hello : {}",principalDetails.getMember().getUsername());
             System.out.println("###################################################");
 
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             return authentication;
-
         }catch (IOException e){
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+        return null;
     }
 
     @Override
@@ -58,19 +62,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("로그인 완료");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
-        String jwtToken = JWT.create()
-                .withSubject("main 026 jwt")
-                .withExpiresAt(new Date(System.currentTimeMillis() + (360 * 1000 * 10)))
-                .withClaim("id", principalDetails.getMember().getId())
-                .withClaim("email", principalDetails.getMember().getEmail())
-                .sign(Algorithm.HMAC512("main 026 jwt"));
+        Long memberId = principalDetails.getMember().getId();
+        String email = principalDetails.getMember().getEmail();
 
-        response.addHeader("Authorization", "Bearer " + jwtToken);
-        response.addHeader("email" , principalDetails.getUsername());
+        String accessToken = jwtUtils.createAccessToken(memberId, email);
+        String refreshToken = jwtUtils.createRefreshToken(memberId, email);
+
+        response.addHeader("Authorization", accessToken);
+        response.addHeader("refresh_token",refreshToken);
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("utf-8");
         //TODO 멤버 컨트롤러 수정필요
-        //chain.doFilter(request,response);
+        chain.doFilter(request,response);
     }
 }

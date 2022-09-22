@@ -1,13 +1,20 @@
 package com.main026.walking.pet.controller;
 
 import com.main026.walking.auth.principal.PrincipalDetails;
+import com.main026.walking.exception.BusinessLogicException;
+import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.service.PetService;
+import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,10 +23,25 @@ import java.util.List;
 public class PetController {
 
     private final PetService petService;
+    private final FileStore fileStore;
 
-    @PostMapping
+    //강아지 등록페이지 접근
+    @GetMapping("/post")
+    public List<String> getPostPage(@RequestParam String username){
+        List<String> personality = new ArrayList<>();
+        personality.add("느긋해요");
+        personality.add("사교적이에요");
+        personality.add("독립적이에요");
+        personality.add("고집이 세요");
+        personality.add("겁이 많아요");
+        return personality;
+    }
+
+    @PostMapping("/post")
     public PetDto.Response postPet(@RequestBody PetDto.Post postDto, @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        System.out.println("회원이름 " + username);
+        if(principalDetails.getMember().getUsername()!=username){
+            throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
+        }
         Member member = principalDetails.getMember();
         return petService.postPet(postDto,member);
     }
@@ -37,7 +59,7 @@ public class PetController {
     }
 
     @PatchMapping("/{petId}")
-    public PetDto.Response patchPet(@PathVariable Long petId, PetDto.Patch patchDto){
+    public PetDto.Response patchPet(@PathVariable Long petId, @RequestBody PetDto.Patch patchDto){
         return petService.editPet(petId,patchDto);
     }
 
@@ -46,5 +68,11 @@ public class PetController {
     public String deletePet(@PathVariable Long petId){
         petService.deletePet(petId);
         return "삭제완료";
+    }
+
+    @ResponseBody
+    @GetMapping("/img/{filename}")
+    public Resource showImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 }

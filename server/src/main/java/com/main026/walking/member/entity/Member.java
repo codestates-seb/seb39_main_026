@@ -27,7 +27,8 @@ public class Member {
     @Embedded
     private Address address;
     private String imgUrl;
-    private String roles;
+    @Enumerated(value = EnumType.STRING)
+    private Role roles;
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
     private List<Pet> petList = new ArrayList<>();
 
@@ -44,16 +45,13 @@ public class Member {
         this.username = username;
         this.address = address;
         this.imgUrl = imgUrl;
+        this.roles = roles==null?Role.ROLE_USER:roles;
     }
 
     public void update(MemberDto.Patch patchDto){
         this.password = patchDto.getPassword();
         this.username = patchDto.getUsername();
         this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
-    }
-
-    public void setRole(String role){
-        this.roles = role;
     }
 
     public void setPassword(String password){
@@ -67,11 +65,16 @@ public class Member {
     public void setAddress(String si,String gu,String dong){
         this.address = new Address(si,gu,dong);
     }
-    //TODO ENUM 으로 교체
-    public List<String> getRoleList() {
-        if(this.roles.length() > 0) {
-            return Arrays.asList(this.roles.split(","));
+
+    @Getter
+    public enum Role {
+
+        ROLE_ADMIN("관리자"), ROLE_USER("일반사용자");
+
+        private String description;
+
+        Role(String description) {
+            this.description = description;
         }
-        return new ArrayList<>();
     }
 }

@@ -49,7 +49,6 @@ public class InitData {
                 .password("12345678")
                 .imgUrl("memberImg.jpeg")
                 .build();
-        kimcoding.setRole("ROLE_USER");
         memberRepository.save(kimcoding);
 
         Member parkhacker = Member.builder()
@@ -59,7 +58,6 @@ public class InitData {
                 .password("12345678")
                 .imgUrl("memberImg.jpeg")
                 .build();
-        parkhacker.setRole("ROLE_USER");
         memberRepository.save(parkhacker);
 
         Member steven = Member.builder()
@@ -69,7 +67,6 @@ public class InitData {
                 .password("12345678")
                 .imgUrl("memberImg.jpeg")
                 .build();
-        steven.setRole("ROLE_USER");
         memberRepository.save(steven);
 
         log.info("김코딩 강아지 등록");
@@ -80,7 +77,7 @@ public class InitData {
                 .imgUrl("profileImg.jpeg")
                 .neuter("O")
                 .breed("세퍼트")
-                .petAges(new PetAge(3,8))
+                .petAges(new PetAge(3,8,""))
                 .petGender("여")
                 .personality("발랄함")
                 .build();
@@ -93,7 +90,7 @@ public class InitData {
                 .imgUrl("profileImg.jpeg")
                 .neuter("O")
                 .breed("믹스견")
-                .petAges(new PetAge(2,4))
+                .petAges(new PetAge(2,4,""))
                 .petGender("남")
                 .personality("똑똑함")
                 .build();
@@ -106,7 +103,7 @@ public class InitData {
                 .imgUrl("profileImg.jpeg")
                 .neuter("X")
                 .breed("푸들")
-                .petAges(new PetAge(0,3))
+                .petAges(new PetAge(0,3,""))
                 .petGender("남")
                 .personality("침착함")
                 .build();
@@ -119,7 +116,7 @@ public class InitData {
                 .imgUrl("profileImg.jpeg")
                 .neuter("X")
                 .breed("삽살개")
-                .petAges(new PetAge(7,7))
+                .petAges(new PetAge(7,7,""))
                 .petGender("남")
                 .personality("활발함")
                 .build();
