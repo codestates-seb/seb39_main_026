@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Optional;
 
+//TODO 비밀번호 찾기
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -68,6 +69,9 @@ public class MemberService {
 
     //U
     public MemberDto.Response updateMember(Long memberId,MemberDto.Patch patchDto){
+
+        verifyExistMemberWithUsername(patchDto.getUsername());
+
         Member member = verifyExistMemberWithId(memberId);
 
         member.update(patchDto);
@@ -94,12 +98,12 @@ public class MemberService {
 
     private void verifyExistMemberWithEmail(String email){
         Optional<Member> checkMember =  memberRepository.findByEmail(email);
-        if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+        if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
     }
 
     private void verifyExistMemberWithUsername(String username){
         Optional<Member> checkMember =  memberRepository.findByUsername(username);
-        if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+        if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.USERNAME_EXISTS);
     }
 
     private Member verifyExistMemberWithId(Long memberId){

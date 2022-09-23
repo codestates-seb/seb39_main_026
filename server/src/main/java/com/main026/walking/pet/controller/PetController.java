@@ -39,7 +39,7 @@ public class PetController {
 
     @PostMapping("/post")
     public PetDto.Response postPet(@RequestBody PetDto.Post postDto, @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        if(principalDetails.getMember().getUsername()!=username){
+        if(!principalDetails.getMember().getUsername().equals(username)){
             throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
         }
         Member member = principalDetails.getMember();
