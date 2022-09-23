@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import TabTitle from '../components/TabTitle';
 import LoginButton from '../components/login/LoginButton';
+import LoginModal from '../components/login/LoginModal';
 
 const signupButtonContainer = css`
   display: grid;
@@ -53,10 +54,17 @@ export default function Login() {
     console.log('login button clicked');
   };
 
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   return (
     <>
       <TabTitle prefix="로그인" />
-
+      {isLoginModalOpen && (
+        <LoginModal
+          isLoginModalOpen={isLoginModalOpen}
+          setIsLoginModalOpen={setIsLoginModalOpen}
+        />
+      )}
       <section
         css={css`
           min-height: calc(100vh - 75px);
@@ -100,8 +108,11 @@ export default function Login() {
 
           <button
             type="submit"
-            onClick={handleLoginButtonClick}
             css={loginButton('1/2')}
+            onClick={(e) => {
+              e.preventDefault();
+              setIsLoginModalOpen(true);
+            }}
           >
             이메일로 로그인
           </button>
