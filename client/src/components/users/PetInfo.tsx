@@ -16,7 +16,9 @@ export default function PetInfo({
   isValidated: boolean;
 }) {
   const [isPetEditMode, setIsPetEditMode] = useState(false);
+  const [isPetAddMode, setIsPetAddMode] = useState(false);
   const [petId, setPetId] = useState(0);
+
   const mypet = css`
     margin-bottom: 1.2rem;
     display: flex;
@@ -48,6 +50,25 @@ export default function PetInfo({
       .icon {
         font-size: 1.5rem;
         color: ${Theme.disableColor};
+      }
+    }
+    .noPets {
+      font-weight: 500;
+      color: ${Theme.disableColor};
+    }
+    .firstAddButton {
+      cursor: pointer;
+      background-color: #fafafa;
+      border: 1px solid #c6c6c6;
+      padding: 0.5rem;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+      .firstAddIcon {
+        font-size: 0.8rem;
+        margin-right: 0.2rem;
+        color: ${Theme.mainColor};
       }
     }
   `;
@@ -103,13 +124,33 @@ export default function PetInfo({
               </React.Fragment>
             );
           })}
-          {isValidated && (
+          {isValidated && pets.length > 0 && (
             <button type="button" className="addButton">
               <Icon icon="akar-icons:plus" className="icon" />
             </button>
           )}
+          {!isValidated && pets.length === 0 && (
+            <p className="noPets">아직 등록한 반려동물이 없어요!</p>
+          )}
+          {isValidated && pets.length === 0 && (
+            <button
+              type="button"
+              className="firstAddButton"
+              onClick={() => {
+                setIsPetAddMode(true);
+              }}
+            >
+              <Icon icon="akar-icons:plus" className="firstAddIcon" />
+              반려동물 등록하기
+            </button>
+          )}
           {isValidated && isPetEditMode ? (
             <PetEditOverlay setIsPetEditMode={setIsPetEditMode} id={petId} />
+          ) : (
+            ''
+          )}
+          {isValidated && isPetAddMode ? (
+            <PetEditOverlay setIsPetEditMode={setIsPetAddMode} id={909090} />
           ) : (
             ''
           )}

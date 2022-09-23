@@ -13,6 +13,20 @@ export default function UserInfo({
   data: UserDefault;
   isValidated: boolean;
 }) {
+  const [isNameEditMode, setIsNameEditMode] = useState(false);
+  const [name, setName] = useState(data.username);
+
+  const handleNameEdit = async () => {
+    if (isNameEditMode === true) {
+      // 프로필 이름 수정 api 요청하는 부분
+    }
+    setIsNameEditMode(!isNameEditMode);
+  };
+
+  const handleNameChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setName(event.currentTarget.value);
+  };
+
   const userInfo = css`
     display: flex;
     margin-bottom: 1.5rem;
@@ -39,6 +53,9 @@ export default function UserInfo({
       padding: 0.4rem 0;
       height: 27px;
       width: 10rem;
+      :focus {
+        outline: none;
+      }
     }
     .icon {
       cursor: pointer;
@@ -72,18 +89,6 @@ export default function UserInfo({
       color: transparent;
     }
   `;
-  const [isNameEditMode, setIsNameEditMode] = useState(false);
-  const [name, setName] = useState('');
-  const handleNameEdit = () => {
-    if (isNameEditMode === true) {
-      // 프로필 이름 수정 api 요청하는 부분
-    }
-    setIsNameEditMode(!isNameEditMode);
-  };
-  const handleNameChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setName(event.currentTarget.value);
-  };
-
   return (
     <>
       {typeof data !== 'string' ? (
@@ -100,9 +105,8 @@ export default function UserInfo({
           {isNameEditMode ? (
             <input
               type="text"
-              placeholder={data.username}
+              defaultValue={name}
               onChange={handleNameChange}
-              value={name}
             />
           ) : (
             <p className="username">{data.username}</p>
