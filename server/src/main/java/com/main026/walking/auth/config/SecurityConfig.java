@@ -2,7 +2,9 @@ package com.main026.walking.auth.config;
 
 import com.main026.walking.auth.filter.JwtAuthenticationFilter;
 import com.main026.walking.auth.filter.JwtAuthorizationFilter;
+import com.main026.walking.auth.filter.JwtExceptionFilter;
 import com.main026.walking.auth.jwt.JwtUtils;
+import com.main026.walking.exception.BusinessLogicException;
 import com.main026.walking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +21,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -60,11 +63,15 @@ public class SecurityConfig {
 
 
         @Override
-        public void configure(HttpSecurity builder) throws Exception {
+        public void configure(HttpSecurity builder) throws Exception{
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
             final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager,jwtUtils);
+            final JwtExceptionFilter jwtExceptionFilter = new JwtExceptionFilter();
+
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
             builder
+                    //.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(jwtExceptionFilter,JwtAuthenticationFilter.class)
                     .addFilter(corsFilter())
                     .addFilter(jwtAuthenticationFilter)
                     .addFilter(new JwtAuthorizationFilter(authenticationManager,memberRepository,jwtUtils));

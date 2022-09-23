@@ -34,7 +34,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException,BusinessLogicException {
         System.out.println("인증이나 권한이 필요한 주소가 요청되었습니다.");
 
         String access_token = request.getHeader("Authorization");
@@ -44,11 +44,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         if(access_token == null || !access_token.startsWith("Bearer")) {
             chain.doFilter(request, response);
             System.out.println("헤더에 인증 정보가 없거나, 양식에 맞지 않은 요청입니다.");
-            return;
         //엑세스 토큰이 만료되었다면?
         }else if(jwtUtils.isTokenExpired(JWT.decode(access_token.replace("Bearer ","")))){
             //거기에 리프레시 토큰도 없다면
             if(refresh_token==null||!refresh_token.startsWith("Bearer")){
+                throw new BusinessLogicException(ExceptionCode.TOKEN_EXPIRED);
             }else{//리프레시 토큰이 존재하는 경우
                 refresh_token = refresh_token.replace("Bearer ","");
                 DecodedJWT decodedRT = JWT.decode(refresh_token);

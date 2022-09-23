@@ -8,14 +8,13 @@ public enum ExceptionCode {
     NO_AUTHORIZATION(401,"You don't have authority"),
     TOKEN_EXPIRED(401, "Token is expired");
 
-
     @Getter
-    private int statusCode;
+    private int status;
     @Getter
-    private String message;
+    private String error;
 
     ExceptionCode(int code, String message) {
-        this.statusCode = code;
-        this.message = message;
+        this.status = code;
+        this.error = message;
     }
 }

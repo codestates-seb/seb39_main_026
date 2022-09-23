@@ -35,6 +35,7 @@ dependencies {
 			"javax.persistence:javax.persistence-api",
 			"javax.annotation:javax.annotation-api",
 			"com.querydsl:querydsl-apt:5.0.0:jpa")
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
