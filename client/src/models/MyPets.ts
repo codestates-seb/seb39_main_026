@@ -12,4 +12,5 @@ export interface MyPets {
   neuter: string;
   breed: string;
   about: string;
+  birthday: string;
 }

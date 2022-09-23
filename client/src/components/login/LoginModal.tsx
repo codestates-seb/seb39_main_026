@@ -45,9 +45,11 @@ export default function LoginModal({
     try {
       const res = await handleLogin(value);
       setUser(res.data);
+      localStorage.setItem('userId', res.data.id);
+      localStorage.setItem('accessToken', res.headers.authorization);
+      localStorage.setItem('refreshToken', res.headers.refresh_token);
       console.log(res);
       setIsLoggedIn(true);
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.response.data.status === 401) {

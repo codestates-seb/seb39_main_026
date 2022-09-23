@@ -18,16 +18,18 @@ export default function User({ userId }: { userId: string }) {
     flex-direction: column;
     .walks {
       display: flex;
+      align-items: center;
       padding: 1rem 0;
       border-bottom: 1px solid ${Theme.divisionLineColor};
       font-weight: 500;
       .icon {
+        margin-right: 0.5rem;
         font-size: 1.7rem;
       }
       span {
         font-weight: 600;
         color: ${Theme.mainColor};
-        margin: 0 0.2rem 0rem 0.8rem;
+        margin: 0 0.2rem 0rem 0rem;
       }
     }
   `;

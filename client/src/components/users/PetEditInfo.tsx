@@ -1,11 +1,10 @@
 import { css } from '@emotion/react';
-// import axios from 'axios';
 import Image from 'next/image';
 import React, { useState, Dispatch, SetStateAction } from 'react';
-// import { API } from '../../apis/api';
 import { MyPets } from '../../models/MyPets';
 import { Theme } from '../../styles/Theme';
 import CommonButton from '../CommonButton';
+import PetBirthdaySelector from './PetBirthdaySelector';
 import PetPersonalityButton from './PetPersonalityButton';
 import SelectButton from './SelectButton';
 
@@ -22,6 +21,7 @@ export default function PetEditInfo({
   const [petNeuter, setPetNeuter] = useState(pet.neuter);
   const [petPersonality, setPetPersonality] = useState(pet.personality);
   const [petAbout, setPetAbout] = useState(pet.about);
+  const [petBirthday, setPetBirthday] = useState(pet.birthday);
 
   const handleSubmitClick = () => {
     const editedData = {
@@ -31,10 +31,10 @@ export default function PetEditInfo({
       neuter: petNeuter,
       personality: petPersonality,
       about: petAbout,
+      birthday: petBirthday,
     };
     console.log(editedData);
     setIsPetEditMode(false);
-    // axios.patch(`${API.USERS}/${pet.id}`, editedData);
   };
   const handlePetNameEdit = (event: React.FormEvent<HTMLInputElement>) => {
     setPetName(event.currentTarget.value);
@@ -71,6 +71,7 @@ export default function PetEditInfo({
       object-fit: cover;
     }
     dl {
+      width: 80%;
       display: grid;
       grid-template-columns: 50% 50%;
       font-size: 18px;
@@ -93,6 +94,22 @@ export default function PetEditInfo({
         }
         .about {
           width: 100%;
+        }
+      }
+      .birthday {
+        text-align: right;
+        width: 100%;
+        select {
+          border: 0;
+          font-size: 1rem;
+          margin-right: 0.3rem;
+          :focus {
+            outline: none;
+          }
+        }
+        span {
+          margin-right: 0.3rem;
+          font-weight: 500;
         }
       }
     }
@@ -138,8 +155,11 @@ export default function PetEditInfo({
           />
         </dd>
         <dt>생일</dt>
-        <dd>
-          {pet.petAges.years}년 {pet.petAges.months}월 {pet.petAges.days}일
+        <dd className="birthday">
+          <PetBirthdaySelector
+            petBirthday={petBirthday}
+            setPetBirthday={setPetBirthday}
+          />
         </dd>
         <dt>성별</dt>
         <dd>
