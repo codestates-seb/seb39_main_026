@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,36 +38,42 @@ public class InitData {
     private final CommentRepository commentRepository;
     private final ImageRepository imageRepository;
 
+    private final BCryptPasswordEncoder encoder;
+
     @EventListener(ApplicationReadyEvent.class)
     public void init(){
         Address address = new Address("뉴욕시","맨하튼구","동도동");
 
         log.info("멤버 추가");
+        //TODO 테스트용 김코딩 토큰
         Member kimcoding = Member.builder()
                 .email("kimcoding@codestates.com")
                 .address(address)
                 .username("김코딩")
-                .password("12345678")
+                .password(encoder.encode("12345678"))
                 .imgUrl("memberImg.jpeg")
                 .build();
+        kimcoding.setRoles();
         memberRepository.save(kimcoding);
 
         Member parkhacker = Member.builder()
                 .email("parkhacker@codestates.com")
                 .address(address)
                 .username("박해커")
-                .password("12345678")
+                .password(encoder.encode("12345678"))
                 .imgUrl("memberImg.jpeg")
                 .build();
+        kimcoding.setRoles();
         memberRepository.save(parkhacker);
 
         Member steven = Member.builder()
                 .email("steven@codestates.com")
                 .address(address)
                 .username("제갈스티븐")
-                .password("12345678")
+                .password(encoder.encode("12345678"))
                 .imgUrl("memberImg.jpeg")
                 .build();
+        kimcoding.setRoles();
         memberRepository.save(steven);
 
         log.info("김코딩 강아지 등록");
