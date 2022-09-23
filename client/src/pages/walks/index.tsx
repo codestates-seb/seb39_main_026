@@ -23,7 +23,7 @@ export default function Walks() {
   `;
 
   const walksWrapper = css`
-    h1 {
+    h2 {
       font-weight: 500;
       font-size: 22px;
       text-align: center;
@@ -38,6 +38,15 @@ export default function Walks() {
           setIsModalOpen={setIsModalOpen}
         />
       )}
+      <h1
+        css={css`
+          cursor: default;
+          font-size: 1px;
+          opacity: 0%;
+        `}
+      >
+        모임 둘러보기
+      </h1>
       <section>
         <TabTitle prefix="모임 둘러보기" />
         <div css={header}>
@@ -45,7 +54,7 @@ export default function Walks() {
           <AddressPicker />
         </div>
         <div css={walksWrapper}>
-          <h1>🐕 모든 산책 보기</h1>
+          <h2>🐕 모든 산책 보기</h2>
           <WalksList />
           <AddButton onClick={handleModalClick} />
         </div>

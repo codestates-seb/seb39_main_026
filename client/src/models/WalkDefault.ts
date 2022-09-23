@@ -2,6 +2,7 @@ export interface WalkDefault {
   communityId: string;
   name: string;
   dateInfo: string;
+  dayInfo: (string | null)[];
   place: string;
   imgUrls: [string];
   capacity: number;
@@ -12,7 +13,6 @@ export interface WalkDetail extends WalkDefault {
   name: string;
   body: string;
   time: string;
-  dayInfo: (string | null)[];
   memberPetList: [
     {
       petName: string;

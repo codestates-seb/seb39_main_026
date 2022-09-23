@@ -25,8 +25,8 @@ export default function MainImage() {
   return (
     <section css={img}>
       <div className="text">
-        <h2 className="image_title">산책 전, 이것만은 지켜주세요!</h2>
-        <h3 className="image_subtitle">슬기로운 산책을 위한 5가지 약속</h3>
+        <h1 className="image_title">산책 전, 이것만은 지켜주세요!</h1>
+        <p className="image_subtitle">슬기로운 산책을 위한 5가지 약속</p>
       </div>
     </section>
   );
