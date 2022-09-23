@@ -24,6 +24,7 @@ export default function PetEditOverlay({
     min-height: calc(100vh - 75px);
     top: 0;
     left: 0;
+    right: 0;
     height: 100%;
     width: 100%;
     background-color: white;
@@ -49,6 +50,25 @@ export default function PetEditOverlay({
     setDogInfoData(response.data);
   };
   useEffect(() => {
+    if (id === 909090) {
+      setDogInfoData({
+        id: 909090,
+        birthday: '',
+        petName: '',
+        breed: '',
+        about: '',
+        imgUrl: '',
+        petGender: '',
+        personality: '',
+        neuter: '',
+        petAges: {
+          years: 0,
+          months: 0,
+          days: 0,
+        },
+      });
+      return;
+    }
     getDogInfo(id);
   }, [id]);
 

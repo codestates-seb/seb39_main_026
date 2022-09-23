@@ -1,11 +1,10 @@
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { API } from '../../apis/api';
-import { UserDefault } from '../../models/UserDefault';
 
-export function useGetUsersQuery(userId: string) {
+export function useGetUsersQuery(id: string) {
   const { status, data, error } = useQuery('users', async () => {
-    const { data } = await axios.get(`${API.USERS}/${userId}`);
+    const { data } = await axios.get(`${API.USERS}/${id}`);
     return data;
   });
   if (status === 'loading') {
@@ -19,19 +18,26 @@ export function useGetUsersQuery(userId: string) {
   }
 }
 
-export function usePatchUserQuery(userId: string, body: UserDefault) {
-  const { status, data, error } = useQuery('users', async () => {
-    const { data } = await axios.patch(`${API.USERS}/${userId}`, body);
-    return data;
-  });
-  if (status === 'loading') {
-    return 'loading';
-  }
-  if (status === 'error') {
-    return error;
-  }
-  if (status === 'success') {
-    return data;
-  }
+export function useUpdateUsernameMutation() {
+  return useMutation(
+    async ({
+      id,
+      body,
+      accessToken,
+    }: {
+      id: number;
+      body: string;
+      accessToken: string;
+    }) => {
+      await axios.patch(
+        `${API.USERS}/${id}`,
+        { username: body },
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
+      );
+    }
+  );
 }
-
