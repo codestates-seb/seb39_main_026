@@ -43,7 +43,7 @@ export default function User({ userId }: { userId: string }) {
     <section css={user}>
       <TabTitle prefix={userId} />
       <UserInfo data={UserData} isValidated={isValidated} />
-      <PetInfo pets={UserData.petList} />
+      <PetInfo pets={UserData.petList} isValidated={isValidated} />
       <div className="walks">
         <Icon icon="fluent-emoji-flat:paw-prints" className="icon" />
         {isValidated ? (

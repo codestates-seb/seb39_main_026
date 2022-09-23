@@ -55,9 +55,9 @@ export default function Navbar() {
     width: 100%;
     background-color: #fff3e3;
     position: fixed;
-    top: 0;
     width: 100%;
-
+    top: 0;
+    z-index: 1;
     a {
       text-decoration: none;
       color: black;
