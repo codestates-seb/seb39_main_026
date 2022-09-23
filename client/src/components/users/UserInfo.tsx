@@ -89,7 +89,6 @@ export default function UserInfo({
       color: transparent;
     }
   `;
-
   return (
     <>
       {typeof data !== 'string' ? (
