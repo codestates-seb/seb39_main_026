@@ -1,7 +1,5 @@
 package com.main026.walking.notice.dto;
 
-import com.main026.walking.member.dto.MemberDto;
-import com.main026.walking.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

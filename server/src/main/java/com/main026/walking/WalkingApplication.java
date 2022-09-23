@@ -32,7 +32,8 @@ public class WalkingApplication {
 							 CommunityPetRepository communityPetRepository,
 							 NoticeRepository noticeRepository,
 							 CommentRepository commentRepository,
-							 ImageRepository imageRepository){
+							 ImageRepository imageRepository,
+							 BCryptPasswordEncoder encoder){
 		return new InitData(
 				memberRepository,
 				petRepository,
@@ -40,7 +41,8 @@ public class WalkingApplication {
 				communityPetRepository,
 				noticeRepository,
 				commentRepository,
-				imageRepository
+				imageRepository,
+				encoder
 		);
 	}
 

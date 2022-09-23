@@ -79,6 +79,7 @@ public class SecurityConfig {
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader("Authorization");
+        config.addExposedHeader("refresh_token");
         config.addExposedHeader("Email");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);

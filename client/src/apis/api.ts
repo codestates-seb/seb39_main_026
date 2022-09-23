@@ -6,4 +6,5 @@ export const API = {
   COMMUNITYDETAIL: `${BASE_URL}/community`,
   USERS: `${BASE_URL}/members`,
   PETS: `${BASE_URL}/pets`,
+  Login: `${BASE_URL}/members/login`,
 };
