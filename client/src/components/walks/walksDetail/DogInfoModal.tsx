@@ -23,7 +23,7 @@ const modalContainer = (isModalOpen: boolean) => css`
   &.modal-wrapper section.modal {
     height: 500px;
     width: 100%;
-    /* max-width: 1200px; */
+    max-width: 1200px;
     border-radius: 20px 20px 0 0;
     padding: 42px 41px 22px;
     background-color: #fff;
@@ -107,7 +107,13 @@ export default function DogChoiceModal({
   }, []);
 
   if (dogInfoData == null) {
-    return <p>loading... </p>;
+    return (
+      <div className="modal-wrapper" css={modalContainer(isDogInfoModalOpen)}>
+        <section className="modal">
+          <p>로딩중...</p>
+        </section>
+      </div>
+    );
   }
 
   return (

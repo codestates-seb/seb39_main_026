@@ -6,7 +6,7 @@ import CommonButton from '../components/CommonButton';
 import ResionPick from '../components/ResionPick';
 import TabTitle from '../components/TabTitle';
 import useSignup from '../hooks/SignupQuery';
-import { UserSingup } from '../models/UserSingup';
+import { UserSignup } from '../models/UserSignup';
 import { Theme } from '../styles/Theme';
 
 const signUpContainer = css`
@@ -70,7 +70,7 @@ const signUpContainer = css`
 
 export default function Signup() {
   const router = useRouter();
-  const methods = useForm<UserSingup>({
+  const methods = useForm<UserSignup>({
     mode: 'onChange',
   });
 
@@ -84,7 +84,7 @@ export default function Signup() {
 
   const { handleSignup } = useSignup();
 
-  const onClickSignup = async (value: UserSingup) => {
+  const onClickSignup = async (value: UserSignup) => {
     try {
       const address = localStorage.getItem('currentAddress');
 

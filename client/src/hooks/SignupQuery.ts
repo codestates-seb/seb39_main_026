@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { API } from '../apis/api';
-import { UserSingup } from '../models/UserSingup';
+import { UserSignup } from '../models/UserSignup';
 
 export default function useSignup() {
-  const handleSignup = async (data: UserSingup) => {
+  const handleSignup = async (data: UserSignup) => {
     const res = await axios.post(API.Signup, {
       ...data,
     });
