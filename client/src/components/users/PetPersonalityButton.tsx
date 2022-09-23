@@ -32,24 +32,24 @@ export default function PetPersonalityButton({
         font-weight: 500;
         background-color: #f7f7f5;
         padding: 1.5rem;
-        .selected {
-          color: ${Theme.mainColor};
-        }
+      }
+      .selected {
+        color: ${Theme.mainColor};
       }
     }
   `;
 
   return (
     <ul css={personalityBtn}>
-      {personalities.map((personality) => {
+      {personalities.map((p) => {
         return (
-          <li key={personality}>
+          <li key={p}>
             <button
               type="button"
-              className={personality === select ? 'selected' : ''}
+              className={p === select ? 'selected' : ''}
               onClick={onClick}
             >
-              {personality}
+              {p}
             </button>
           </li>
         );
