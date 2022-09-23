@@ -53,6 +53,7 @@ export default function PetEditOverlay({
     if (id === 909090) {
       setDogInfoData({
         id: 909090,
+        birthday: '',
         petName: '',
         breed: '',
         about: '',
