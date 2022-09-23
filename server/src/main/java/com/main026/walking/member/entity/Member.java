@@ -62,6 +62,10 @@ public class Member {
         this.imgUrl = imgUrl;
     }
 
+    public void setRoles(){
+        this.roles = Role.ROLE_USER;
+    }
+
     public void setAddress(String si,String gu,String dong){
         this.address = new Address(si,gu,dong);
     }
