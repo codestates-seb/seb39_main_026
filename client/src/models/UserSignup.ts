@@ -2,7 +2,7 @@ export interface UserSignup {
   email: string;
   password: string;
   username: string;
-  si: string | undefined;
-  gu: string | undefined;
-  dong: string | undefined;
+  si: string;
+  gu: string;
+  dong: string;
 }
