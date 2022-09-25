@@ -5,6 +5,8 @@ import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.community.mapper.CommunityMapper;
 import com.main026.walking.community.service.CommunityService;
+import com.main026.walking.exception.BusinessLogicException;
+import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.pet.dto.PetDto;
@@ -34,6 +36,7 @@ public class CommunityController {
     private final FileStore fileStore;
 
     //  Create
+    //TODO 이미지와 json데이터를 함께 보내는게 몹시 곤란, 분리하면 편하다는데 그걸 어떻게하지?
     @PostMapping
     public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         if(principalDetails==null){
@@ -45,6 +48,10 @@ public class CommunityController {
 
         return new ResponseEntity(communityMapper.entityToDtoResponse(createdCommunity), HttpStatus.CREATED);
     }
+
+    //community/postimg 에서 post 요청을 처리, 이미지를 저장하고 경로주소를 생성한뒤
+    //어떻게 응답하지? 그냥 String으로 경로를 반환하면 되나?
+
 
     //  Read
     // TODO 커뮤니티 요청시 회원의 강아지를 응답해주고있는데 이것이 최선일까?
@@ -61,6 +68,7 @@ public class CommunityController {
         }
         CommunityDto.Response response = communityMapper.entityToDtoResponse(community);
         response.setPetList(petList);
+
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
