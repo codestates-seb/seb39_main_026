@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { format } from 'date-fns';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { WalkDefault } from '../../models/WalkDefault';
@@ -34,6 +35,13 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
       .walk_des {
         font-weight: 300;
         font-size: 10px;
+        span + span {
+          &::before {
+            content: '・';
+            margin-left: 3px;
+            margin-right: 3px;
+          }
+        }
       }
     }
     .status {
@@ -67,9 +75,20 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
       />
       <div className="walk_wrapper">
         <div className="walk_info">
-          <h1 className="walk_title">{walk.name}</h1>
-          <h3 className="walk_des">{walk.dateInfo}</h3>
-          <h3 className="walk_des">{walk.place}</h3>
+          <h3 className="walk_title">{walk.name}</h3>
+          <h4 className="walk_des">
+            {walk.dateInfo != null ? (
+              format(new Date(walk?.dateInfo), 'yyyy년 MM월 dd일')
+            ) : (
+              <p className="everyweek-moim">
+                매주{' '}
+                {walk.dayInfo.map((yoil) => (
+                  <span key={`${yoil}`}>{yoil}</span>
+                ))}
+              </p>
+            )}
+          </h4>
+          <h4 className="walk_des">{walk.place}</h4>
         </div>
         <div className="status">
           <p>
