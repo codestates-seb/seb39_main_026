@@ -1,5 +1,7 @@
 package com.main026.walking.pet.service;
 
+import com.main026.walking.exception.BusinessLogicException;
+import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.pet.dto.PetDto;
@@ -36,7 +38,7 @@ public class PetService {
 
         //나이 파싱 로직
         try {
-            parseAge(postDto, pet);
+            parseAge(postDto.getBirthDay(), pet);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -45,51 +47,21 @@ public class PetService {
         pet.setMember(member);
 
         if(postDto.getProfileImg()!=null){
-            try {
-                MultipartFile profileImg = postDto.getProfileImg();
-                String storeFile = fileStore.storeFile(profileImg);
-                pet.setImgUrl(storeFile);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
+            String profileImg = postDto.getProfileImg();
+            pet.setImgUrl(profileImg);
         }
 
         petRepository.save(pet);
 
         return petMapper.petToPetResponseDto(pet);
     }
-    //TODO 메소드 재사용성을 높히자.
-    private void parseAge(PetDto.Post postDto, Pet pet) {
-        String birthDay = postDto.getBirthDay();
 
-        LocalDate parsedDate = LocalDate.parse(birthDay);
-        LocalDateTime now = LocalDateTime.now();
-        Integer year,month;
-        if(now.getMonthValue() - parsedDate.getMonthValue()<0){
-            year = now.getYear()-parsedDate.getYear()-1;
-            month = now.getMonthValue() + 12 - parsedDate.getMonthValue();
-        }else{
-            year = now.getYear()-parsedDate.getYear();
-            month = now.getMonthValue() - parsedDate.getMonthValue();
+    public String saveImage(MultipartFile multipartFile){
+        try {
+            return fileStore.storeFile(multipartFile);
+        }catch (IOException e){
+            throw new BusinessLogicException(ExceptionCode.FILE_NOT_FOUND);
         }
-        PetAge petAge = new PetAge(year,month,birthDay);
-        pet.setPetAges(petAge);
-    }
-
-    private void parseAge(PetDto.Patch patchDto, Pet pet) {
-        String birthDay = patchDto.getBirthDay();
-        LocalDate parsedDate = LocalDate.parse(birthDay);
-        LocalDateTime now = LocalDateTime.now();
-        Integer year,month;
-        if(now.getMonthValue() - parsedDate.getMonthValue()<0){
-            year = now.getYear()-parsedDate.getYear()-1;
-            month = now.getMonthValue() + 12 - parsedDate.getMonthValue();
-        }else{
-            year = now.getYear()-parsedDate.getYear();
-            month = now.getMonthValue() - parsedDate.getMonthValue();
-        }
-        PetAge petAge = new PetAge(year,month,birthDay);
-        pet.setPetAges(petAge);
     }
 
     public PetDto.Response findPet(Long petId){
@@ -109,17 +81,29 @@ public class PetService {
     public PetDto.Response editPet(Long petId, PetDto.Patch patchDto){
         Pet pet = petRepository.findById(petId).orElseThrow();
         pet.update(patchDto);
-        parseAge(patchDto,pet);
+        parseAge(patchDto.getBirthDay(),pet);
 
         Pet savedPet = petRepository.save(pet);
         return petMapper.petToPetResponseDto(savedPet);
     }
 
-
-
-
     public void deletePet(Long petId){
         petRepository.deleteById(petId);
+    }
+
+    private void parseAge(String birthDay, Pet pet) {
+        LocalDate parsedDate = LocalDate.parse(birthDay);
+        LocalDateTime now = LocalDateTime.now();
+        Integer year,month;
+        if(now.getMonthValue() - parsedDate.getMonthValue()<0){
+            year = now.getYear()-parsedDate.getYear()-1;
+            month = now.getMonthValue() + 12 - parsedDate.getMonthValue();
+        }else{
+            year = now.getYear()-parsedDate.getYear();
+            month = now.getMonthValue() - parsedDate.getMonthValue();
+        }
+        PetAge petAge = new PetAge(year,month,birthDay);
+        pet.setPetAges(petAge);
     }
 
 }

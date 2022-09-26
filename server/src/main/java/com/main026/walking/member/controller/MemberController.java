@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
 
@@ -47,8 +48,19 @@ public class MemberController {
     }
 
     @PatchMapping("/{memberId}")
-    public MemberDto.Response patchMember(@PathVariable Long memberId,@RequestBody MemberDto.Patch patchDto){
+    public MemberDto.Response patchMember(@PathVariable Long memberId,
+                                          @RequestBody MemberDto.Patch patchDto,
+                                          @AuthenticationPrincipal PrincipalDetails principalDetails){
+        //인증로직
+
         return memberService.updateMember(memberId,patchDto);
+    }
+
+    @PostMapping("/image/{memberId}")
+    public String postImage(@PathVariable Long memberId,
+                            @RequestPart MultipartFile imgFile,
+                            @AuthenticationPrincipal PrincipalDetails principalDetails){
+        return memberService.saveImage(imgFile);
     }
 
     @DeleteMapping("/{memberId}")

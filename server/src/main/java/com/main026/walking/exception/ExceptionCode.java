@@ -7,6 +7,7 @@ public enum ExceptionCode {
     USERNAME_EXISTS(409, "Username already exists"),
     MEMBER_NOT_FOUND(404, "Member not found"),
     NO_AUTHORIZATION(401,"You don't have authority"),
+    FILE_NOT_FOUND(400,"Can not found attached file"),
     TOKEN_EXPIRED(401, "Token is expired");
 
     @Getter

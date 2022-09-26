@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class PetController {
     private final FileStore fileStore;
 
     //강아지 등록페이지 접근
+    //TODO 미리 데이터를 넣어두는 방식 변경 필요
     @GetMapping("/post")
     public List<String> getPostPage(@RequestParam String username){
         List<String> personality = new ArrayList<>();
@@ -44,6 +46,11 @@ public class PetController {
         }
         Member member = principalDetails.getMember();
         return petService.postPet(postDto,member);
+    }
+
+    @PostMapping("/post/image")
+    public String postImage(@RequestPart MultipartFile imgFile){
+        return petService.saveImage(imgFile);
     }
 
     //이름이 괴상한데 그냥하는 이유 : requestMapping 의 이름 통일성을 지키는게 더 낫다고 생각해서,
