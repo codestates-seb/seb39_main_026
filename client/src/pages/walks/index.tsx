@@ -1,14 +1,24 @@
 import { css } from '@emotion/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import DogChoiceModal from '../../components/DogChoiceModal';
 import SearchInput from '../../components/SearchInput';
 import TabTitle from '../../components/TabTitle';
 import AddButton from '../../components/walks/AddButton';
 import AddressPicker from '../../components/walks/AddressPicker';
 import WalksList from '../../components/walks/WalksList';
+import UserState from '../../states/UserState';
 export default function Walks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user] = useRecoilState(UserState);
+  const router = useRouter();
+
   const handleModalClick = () => {
+    if (user == null) {
+      router.push('/login');
+      return;
+    }
     setIsModalOpen(!isModalOpen);
   };
 

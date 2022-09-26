@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
+import UserState from '../../../states/UserState';
 import CommonButton from '../../CommonButton';
 import DogChoiceModal from '../../DogChoiceModal';
 import Comments from './Comments';
@@ -22,6 +25,8 @@ export default function DetailLayout({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDogInfoModalOpen, setIsDogInfoModalOpen] = useState(false);
   const [petInfoId, setPetInfoId] = useState(1);
+  const [user] = useRecoilState(UserState);
+  const router = useRouter();
 
   const getPetId = (petId: number) => {
     setPetInfoId(petId);
@@ -46,7 +51,16 @@ export default function DetailLayout({
           <StickyInfo walkDetail={walkDetail} setIsModalOpen={setIsModalOpen} />
         </div>
         <div css={mobileMoimJoin}>
-          <CommonButton type="button" onClick={() => setIsModalOpen(true)}>
+          <CommonButton
+            type="button"
+            onClick={() => {
+              if (user == null) {
+                router.push('/login');
+                return;
+              }
+              return setIsModalOpen(true);
+            }}
+          >
             모임 참여하기
           </CommonButton>
         </div>
