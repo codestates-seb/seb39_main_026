@@ -30,11 +30,13 @@ jobs:
         with:
           files: 'server/src/main/resources/application.yml'
         env:
-          cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
-          cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          cloud.s3.bucket: ${{ secrets.AWS_S3_BUCKET_NAME }}
+          override.value: ${{ secrets.DI_APP_YML_SECRET }}
+#          cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
+#          cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          cloud.s3.bucket: ${{ secrets.AWS_S3_BUCKET_NAME }}
 #          jwt.refresh: ${{ secrets.JWT_REFRESH }}
 #          jwt.access: ${{ secrets.JWT_ACCESS }}
+
 
 
       - name: Server Build
