@@ -68,7 +68,7 @@ public class MemberController {
                             @AuthenticationPrincipal PrincipalDetails principalDetails){
         return memberService.saveImage(imgFile);
     }
-
+    
     @DeleteMapping("/{memberId}")
     public String deleteMember(@PathVariable Long memberId){
         memberService.deleteMember(memberId);

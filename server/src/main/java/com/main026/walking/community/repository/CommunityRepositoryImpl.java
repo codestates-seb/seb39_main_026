@@ -87,8 +87,6 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom{
         return null;
     }
 
-
-
     private OrderSpecifier<?> boardSort(Pageable page) {
         //서비스에서 보내준 Pageable 객체에 정렬조건 null 값 체크
         //TODO 연산을 변수화했는데 맞는지 모르겠다.
