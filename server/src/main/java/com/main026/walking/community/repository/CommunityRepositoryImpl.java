@@ -8,10 +8,12 @@ import com.querydsl.core.types.Visitor;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -30,8 +32,16 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom{
     @Override
     public Page<Community> findAllWithCond(CommunitySearchCond searchCond, Pageable pageable) {
         List<Community> content = searchCommunity(searchCond,pageable);
+        JPAQuery<Long> countQuery = getCountQuery(searchCond);
 
-        return null;
+        return PageableExecutionUtils.getPage(content,pageable,countQuery::fetchOne);
+    }
+
+    private JPAQuery<Long> getCountQuery(CommunitySearchCond searchCond){
+        return queryFactory
+                .select(community.count())
+                .from(community)
+                .where(searchText(searchCond.getName()));
     }
 
 
@@ -39,16 +49,40 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom{
         return queryFactory
                 .select(community)
                 .from(community)
-                .where(searchText(searchCond.getText()))
+                .where(searchText(searchCond.getName()),
+                        searchSi(searchCond.getSi()),
+                        searchGu(searchCond.getGu()),
+                        searchDong(searchCond.getDong()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                //.orderBy()
+                .orderBy(boardSort(pageable))
                 .fetch();
     }
 
-    private BooleanExpression searchText(String text){
-        if(StringUtils.hasText(text)){
-            return community.name.like("%"+text+"%");
+    private BooleanExpression searchSi(String si){
+        if(StringUtils.hasText(si)){
+            return community.address.si.like("%"+si+"%");
+        }
+        return null;
+    }
+
+    private BooleanExpression searchGu(String gu){
+        if(StringUtils.hasText(gu)){
+            return community.address.gu.like("%"+gu+"%");
+        }
+        return null;
+    }
+
+    private BooleanExpression searchDong(String dong){
+        if(StringUtils.hasText(dong)){
+            return community.address.dong.like("%"+dong+"%");
+        }
+        return null;
+    }
+
+    private BooleanExpression searchText(String name){
+        if(StringUtils.hasText(name)){
+            return community.name.like("%"+name+"%");
         }
         return null;
     }
@@ -59,6 +93,7 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom{
         NumberExpression<Integer> limited = community.communityPets.size();
         NumberExpression<Integer> capacity = community.capacity.castToNum(Integer.class);
         NumberExpression<Integer> subtract = capacity.subtract(limited);
+
         if (!page.getSort().isEmpty()) {
             //정렬값이 들어 있으면 for 사용하여 값을 가져온다
             for (Sort.Order order : page.getSort()) {

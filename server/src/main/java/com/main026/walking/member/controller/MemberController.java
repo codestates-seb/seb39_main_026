@@ -63,6 +63,12 @@ public class MemberController {
         return memberService.saveImage(imgFile);
     }
 
+    @PostMapping("/image")
+    public String postImage(@RequestPart MultipartFile imgFile,
+                            @AuthenticationPrincipal PrincipalDetails principalDetails){
+        return memberService.saveImage(imgFile);
+    }
+    
     @DeleteMapping("/{memberId}")
     public String deleteMember(@PathVariable Long memberId){
         memberService.deleteMember(memberId);

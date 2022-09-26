@@ -2,6 +2,8 @@ package com.main026.walking.community.controller;
 
 import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.community.dto.CommunityDto;
+import com.main026.walking.community.dto.CommunityListResponseDto;
+import com.main026.walking.community.dto.CommunitySearchCond;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.community.mapper.CommunityMapper;
 import com.main026.walking.community.service.CommunityService;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -91,13 +94,14 @@ public class CommunityController {
     @GetMapping
     public ResponseEntity getCommunities(
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            CommunitySearchCond communitySearchCond) {
+        PageRequest pageRequest = PageRequest.of(page-1,size);
 
-        Page<Community> communityPage = communityService.findCommunities(page - 1, size);
 
-        List<Community> communities = communityPage.getContent();
+        CommunityListResponseDto communities = communityService.findCommunities(communitySearchCond, pageRequest);
 
-        return new ResponseEntity(new MultiResponseDto<>(communityMapper.multiEntityToDtoInfo(communities), communityPage), HttpStatus.OK);
+        return new ResponseEntity(communities, HttpStatus.OK);
     }
 
     //TODO 기존 이미지를 보여주고 삭제할건 삭제하고, 변경할 수 있어야 한다. - 연관관계 때문
