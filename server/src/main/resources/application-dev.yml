@@ -27,5 +27,3 @@ spring:
 jwt:
   refresh: main 026 refresh
   access: main 026 jwt
-server:
-  port: 9090
