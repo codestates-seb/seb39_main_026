@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import DogChoiceModal from '../../components/DogChoiceModal';
 import SearchInput from '../../components/SearchInput';
@@ -6,10 +7,20 @@ import TabTitle from '../../components/TabTitle';
 import AddButton from '../../components/walks/AddButton';
 import AddressPicker from '../../components/walks/AddressPicker';
 import WalksList from '../../components/walks/WalksList';
+
 export default function Walks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
   const handleModalClick = () => {
-    setIsModalOpen(!isModalOpen);
+    if (!localStorage.getItem('accessToken')) {
+      router.push('/login');
+    } else if (
+      JSON.parse(localStorage.getItem('recoil-persist') || '').UserState.petList
+        .length === 0
+    ) {
+      // 모달로 바꿀 것
+      alert('반려동물을 등록해주세요');
+    } else setIsModalOpen(!isModalOpen);
   };
 
   const header = css`
