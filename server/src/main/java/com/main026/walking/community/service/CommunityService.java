@@ -2,6 +2,8 @@ package com.main026.walking.community.service;
 
 import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.community.dto.CommunityDto;
+import com.main026.walking.community.dto.CommunityListResponseDto;
+import com.main026.walking.community.dto.CommunitySearchCond;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.community.mapper.CommunityMapper;
 import com.main026.walking.community.repository.CommunityRepository;
@@ -21,6 +23,7 @@ import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
@@ -113,9 +116,19 @@ public class CommunityService {
         return communityRepository.save(community);
     }
 
-    public Page<Community> findCommunities(int page, int size) {
-        return communityRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
+    public CommunityListResponseDto findCommunities(CommunitySearchCond searchCond, Pageable pageable) {
+        Page<Community> communityPage = communityRepository.findAllWithCond(searchCond, pageable);
+        List<Community> communityList = communityPage.getContent();
+
+        List<CommunityDto.Response> responseList = new ArrayList<>();
+        for (Community community : communityList) {
+            responseList.add(communityMapper.entityToDtoResponse(community));
+        }
+
+        return new CommunityListResponseDto(responseList,communityPage);
+
     }
+
 
     //  Update
     public Community updateCommunity(long communityId, CommunityDto.Patch patchDto) {

@@ -11,5 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CommunitySearchCond {
 
-    private String text;
+    private String name;
+    private String si;
+    private String gu;
+    private String dong;
 }
