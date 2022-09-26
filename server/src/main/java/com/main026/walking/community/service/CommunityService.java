@@ -163,6 +163,6 @@ public class CommunityService {
     //  Valid
     public void findVerifiedCommunity(Long questionId) {
         Optional<Community> checkCommunity = communityRepository.findById(questionId);
-        if(checkCommunity.isPresent()) throw new BusinessLogicException(ExceptionCode.COMMUNITY_NOT_FOUND);
+        if(!checkCommunity.isPresent()) throw new BusinessLogicException(ExceptionCode.COMMUNITY_NOT_FOUND);
     }
 }
