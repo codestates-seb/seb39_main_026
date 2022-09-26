@@ -1,7 +1,10 @@
 import { css } from '@emotion/react';
 import { format } from 'date-fns';
+import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
+import { useRecoilState } from 'recoil';
 import { WalkDetail } from '../../../models/WalkDefault';
+import UserState from '../../../states/UserState';
 import { Theme } from '../../../styles/Theme';
 import CommonButton from '../../CommonButton';
 import LoadingStickyInfo from '../skeleton/walksDetail/LoadingStickyInfo';
@@ -60,9 +63,13 @@ export default function StickyInfo({
   walkDetail?: WalkDetail;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const [user] = useRecoilState(UserState);
+  const router = useRouter();
+
   if (walkDetail == null || walkDetail.imgUrls == null) {
     return <LoadingStickyInfo />;
   }
+
   return (
     <div
       css={css`
@@ -95,7 +102,16 @@ export default function StickyInfo({
           </>
           <p>{walkDetail.place}</p>
           <p>{walkDetail.capacity - walkDetail.participant}자리 남았어요!</p>
-          <CommonButton type="button" onClick={() => setIsModalOpen(true)}>
+          <CommonButton
+            type="button"
+            onClick={() => {
+              if (user == null) {
+                router.push('/login');
+                return;
+              }
+              return setIsModalOpen(true);
+            }}
+          >
             모임 참여하기
           </CommonButton>
         </div>

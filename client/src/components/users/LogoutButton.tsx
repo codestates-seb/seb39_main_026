@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../../states/LoginState';
-import { UserState } from '../../states/UserState';
+import UserState from '../../states/UserState';
 import { Theme } from '../../styles/Theme';
 
 export default function LogoutButton() {
@@ -15,7 +15,7 @@ export default function LogoutButton() {
     localStorage.removeItem('userId');
     localStorage.removeItem('currentAddress');
     setIsLogin(false);
-    setUserState({});
+    setUserState(null);
     router.push('/');
   };
 

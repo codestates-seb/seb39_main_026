@@ -6,7 +6,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import useLogin from '../../hooks/LoginQuery';
 import { UserLogin } from '../../models/UserLogin';
 import { LoginState } from '../../states/LoginState';
-import { UserState } from '../../states/UserState';
+import UserState from '../../states/UserState';
 import { Theme } from '../../styles/Theme';
 import CommonButton from '../CommonButton';
 
