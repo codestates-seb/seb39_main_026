@@ -8,4 +8,17 @@ export interface UserInfo {
     gu: string;
     dong: string;
   };
+  petList: Array<Pet>;
+}
+
+interface Pet {
+  id: number;
+  petName: string;
+  petGender: string;
+  petAges: {
+    years: number;
+    months: number;
+    birthDay: string;
+  };
+  imgUrl?: string;
 }

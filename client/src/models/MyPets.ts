@@ -1,16 +1,11 @@
 export interface MyPets {
   id: number;
   petName: string;
-  imgUrl: string;
+  petGender: string;
   petAges: {
     years: number;
     months: number;
-    days: number;
+    birthDay: string;
   };
-  petGender: string;
-  personality: string;
-  neuter: string;
-  breed: string;
-  about: string;
-  birthday: string;
+  imgUrl?: string;
 }

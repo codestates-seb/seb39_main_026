@@ -2,8 +2,10 @@
 import { css, keyframes } from '@emotion/react';
 import Link from 'next/link';
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import { useMyDogsListQuery } from '../hooks/MyDogsListQuery';
 import { MyPets } from '../models/MyPets';
+import UserState from '../states/UserState';
 import { Theme } from '../styles/Theme';
 import CommonButton from './CommonButton';
 
@@ -126,9 +128,13 @@ export default function DogChoiceModal({
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const petData = useMyDogsListQuery();
-
+  const [user] = useRecoilState(UserState);
   const [pickPets, setPickPets] = useState<string[]>([]);
+
+  const userData = useMyDogsListQuery(user);
+
+  // NOTE: type 에러로 일단은 이렇게 해결해놓았습니다. 추후에 수정해야합니다.
+  const { petList } = userData || {};
 
   const handlePickPetClick = (pet: string) => {
     if (pickPets.includes(pet)) {
@@ -145,8 +151,37 @@ export default function DogChoiceModal({
     };
   }, []);
 
-  if (petData == null) {
-    return <p>loading</p>;
+  if (petList?.length === 0) {
+    return (
+      <div
+        css={modalContainer(isModalOpen)}
+        className="modal-wrapper"
+        onClick={() => setIsModalOpen(false)}
+      >
+        <section onClick={(e) => e.stopPropagation()} className="modal">
+          <h1>강아지가 없네요 😢</h1>
+          <p
+            css={css`
+              margin: 30px 0;
+            `}
+          >
+            강아지를 등록해주세요!
+          </p>
+          <Link href={`/users/${user.id}`}>
+            <a>
+              <CommonButton
+                type="button"
+                onClick={() => {
+                  setIsModalOpen(false);
+                }}
+              >
+                강아지 등록하러 가기
+              </CommonButton>
+            </a>
+          </Link>
+        </section>
+      </div>
+    );
   }
 
   return (
@@ -158,13 +193,13 @@ export default function DogChoiceModal({
       <section onClick={(e) => e.stopPropagation()} className="modal">
         <h1>어떤 강아지랑 산책할 건가요?</h1>
         <ul>
-          {petData.pets.map((pet: MyPets) => (
+          {petList?.map((pet: MyPets) => (
             <li
               key={pet.id}
               onClick={() => handlePickPetClick(pet.petName)}
               className={pickPets.includes(pet.petName) ? 'pick' : ''}
             >
-              <img src={pet.imgUrl} alt={`${pet.petName} 사진`} />
+              <img src={`${pet.imgUrl}`} alt={`${pet.petName} 사진`} />
               <p>{pet.petName}</p>
             </li>
           ))}
