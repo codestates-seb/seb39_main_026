@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
 import TabTitle from '../../components/TabTitle';
+import LogoutButton from '../../components/users/LogoutButton';
 import PetInfo from '../../components/users/PetInfo';
 import UserInfo from '../../components/users/UserInfo';
 import { useGetUsersQuery } from '../../components/users/UsersQuery';
@@ -57,6 +58,7 @@ export default function User({ userId }: { userId: string }) {
         )}
       </div>
       <WalksInfo walks={UserData?.memberCommunityList} />
+      <footer>{isValidated && <LogoutButton />}</footer>
     </section>
   );
 }

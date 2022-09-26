@@ -19,6 +19,7 @@ export default function Walks() {
       router.push('/login');
       return;
     }
+    console.log(user);
     setIsModalOpen(!isModalOpen);
   };
 
