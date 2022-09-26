@@ -18,6 +18,7 @@ import com.main026.walking.pet.entity.CommunityPet;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.pet.repository.CommunityPetRepository;
 import com.main026.walking.pet.repository.PetRepository;
+import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.enums.Weeks;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class CommunityService {
     private final PetRepository petRepository;
     private final CommunityPetRepository communityPetRepository;
     private final CommunityMapper communityMapper;
-    private final FileStore fileStore;
+    private final AwsS3Service awsS3Service;
 
 
     //  Create
@@ -92,19 +93,6 @@ public class CommunityService {
         }
 
         return communityMapper.entityToDtoResponse(community);
-    }
-
-    public List<String> saveMultiImage(List<MultipartFile> files){
-        List<String> images = new ArrayList<>();
-        for (MultipartFile file : files) {
-            try {
-                String storedFile = fileStore.storeFile(file);
-                images.add(storedFile);
-            }catch (IOException e){
-                throw new BusinessLogicException(ExceptionCode.FILE_NOT_FOUND);
-            }
-        }
-        return images;
     }
 
     //Read
@@ -160,9 +148,26 @@ public class CommunityService {
         communityRepository.deleteById(communityId);
     }
 
-    //  Valid
-    public void findVerifiedCommunity(Long questionId) {
-        Optional<Community> checkCommunity = communityRepository.findById(questionId);
+//  CRUD-IMAGE
+    //  CREATE
+    public List<String> saveMultiImage(List<MultipartFile> files){
+        List<String> images = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String storedFile = awsS3Service.uploadImage(file);
+            images.add(storedFile);
+        }
+        return images;
+    }
+
+    //  READ
+
+    //  UPDATE
+
+    //  DELETE
+
+//  Valid
+    public void findVerifiedCommunity(Long communityId) {
+        Optional<Community> checkCommunity = communityRepository.findById(communityId);
         if(!checkCommunity.isPresent()) throw new BusinessLogicException(ExceptionCode.COMMUNITY_NOT_FOUND);
     }
 }

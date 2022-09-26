@@ -7,7 +7,9 @@ public enum ExceptionCode {
     USERNAME_EXISTS(409, "Username already exists"),
     MEMBER_NOT_FOUND(404, "Member not found"),
     NO_AUTHORIZATION(401,"You don't have authority"),
+    INVALID_AUTHORIZATION(401,"Authorization is invalid"),
     FILE_NOT_FOUND(404,"Can not found attached file"),
+    FILE_UPLOAD_FAILED(400,"Can not upload file"),
     COMMUNITY_NOT_FOUND(404,"Community not found"),
     TOKEN_EXPIRED(401, "Token is expired");
 

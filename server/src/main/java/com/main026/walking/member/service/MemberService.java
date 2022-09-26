@@ -7,6 +7,7 @@ import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.mapper.MemberMapper;
 import com.main026.walking.member.repository.MemberRepository;
+import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.PushBuilder;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -25,7 +27,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final FileStore fileStore;
+    private final AwsS3Service awsS3Service;
 
     public MemberDto.Response loginMember(Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -33,7 +35,7 @@ public class MemberService {
         return memberMapper.memberToMemberResponseDto(loginMember);
     }
 
-    //C
+    //  CREATE
     public MemberDto.Response saveMember(MemberDto.Post postDto){
 
         verifyExistMemberWithEmail(postDto.getEmail());
@@ -48,8 +50,7 @@ public class MemberService {
         return memberMapper.memberToMemberResponseDto(member);
     }
 
-
-    //R
+    //  READ
     public MemberDto.Response findMember(Long memberId,Boolean isOwner){
 
         MemberDto.Response response =
@@ -59,7 +60,7 @@ public class MemberService {
         return response;
     }
 
-    //U
+    //  UPDATE
     public MemberDto.Response updateMember(Long memberId,MemberDto.Patch patchDto){
 
         verifyExistMemberWithUsername(patchDto.getUsername());
@@ -73,19 +74,48 @@ public class MemberService {
         return memberMapper.memberToMemberResponseDto(member);
     }
 
-    public String saveImage(MultipartFile multipartFile){
-        try {
-            return fileStore.storeFile(multipartFile);
-        }catch (IOException e){
-            throw new BusinessLogicException(ExceptionCode.FILE_NOT_FOUND);
-        }
-    }
-
-    //D
+    //  DELETE
     public void deleteMember(Long memberId){
+        String image = verifyExistMemberWithId(memberId).getImgUrl();
         memberRepository.deleteById(memberId);
+        awsS3Service.deleteImage(image);
     }
 
+// CRUD-IMAGE
+    //  CREATE
+    public String saveImage(MultipartFile multipartFile, Long memberId){
+        Member findMember = verifyExistMemberWithId(memberId);
+        String uploadImage = awsS3Service.uploadImage(multipartFile);
+        findMember.setImgUrl(uploadImage);
+        return uploadImage;
+    }
+
+    //  READ
+    public String findImage(Long memberId) throws IOException {
+        Member findMember = verifyExistMemberWithId(memberId);
+        return findMember.getImgUrl();
+    }
+
+    //  UPDATE
+    public String updateImage(MultipartFile multipartFile, Long memberId){
+        Member findMember = verifyExistMemberWithId(memberId);
+        String uploadImage = awsS3Service.uploadImage(multipartFile);
+
+        String findImage = findMember.getImgUrl();
+        awsS3Service.deleteImage(findImage);
+
+        findMember.setImgUrl(uploadImage);
+        return uploadImage;
+    }
+    //  DELETE
+    public void deleteImage(Long memberId) {
+        Member findMember = verifyExistMemberWithId(memberId);
+        String findImage = findMember.getImgUrl();
+        awsS3Service.deleteImage(findImage);
+        findMember.setImgUrl("");
+    }
+
+//  VALID
     private void verifyExistMemberWithEmail(String email){
         Optional<Member> checkMember =  memberRepository.findByEmail(email);
         if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);

@@ -13,6 +13,7 @@ import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.Pet;
+import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.file.FileStore;
 import com.main026.walking.util.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CommunityController {
     private final CommunityService communityService;
-    private final FileStore fileStore;
+    private final AwsS3Service awsS3Service;
 
     // Create
     // TODO 모임 등록시 모임하는 사람의 펫도 등록
@@ -65,8 +67,8 @@ public class CommunityController {
 
     // Read
     // TODO 커뮤니티 요청시 회원의 강아지를 응답해주고있는데 이것이 최선일까?
-    @GetMapping("/{community-id}")
-    public ResponseEntity getCommunity(@PathVariable("community-id") long communityId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @GetMapping("/{communityId}")
+    public ResponseEntity getCommunity(@PathVariable long communityId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         List<PetDto.compactResponse> petList = new ArrayList<>();
         if(principalDetails!=null) {
@@ -79,8 +81,8 @@ public class CommunityController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @PostMapping("/{community-id}")
-    public ResponseEntity joinCommunity(@PathVariable("community-id") long communityId,
+    @PostMapping("/{communityId}")
+    public ResponseEntity joinCommunity(@PathVariable long communityId,
                                         @RequestBody List<Long> petIdList
     ) {
         CommunityDto.Response community = communityService.joinPet(communityId, petIdList);
@@ -103,9 +105,9 @@ public class CommunityController {
 
     //TODO 기존 이미지를 보여주고 삭제할건 삭제하고, 변경할 수 있어야 한다. - 연관관계 때문
     //Update
-    @PatchMapping("/{community-id}")
+    @PatchMapping("/{communityId}")
     public ResponseEntity patchCommunity(
-            @PathVariable("community-id") long communityId,
+            @PathVariable long communityId,
             @RequestBody CommunityDto.Patch dto,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
@@ -120,17 +122,16 @@ public class CommunityController {
     }
 
     //  Delete
-    @DeleteMapping("/{community-id}")
+    @DeleteMapping("/{communityId}")
     public ResponseEntity deleteCommunity(
-            @PathVariable("community-id") long communityId,
+            @PathVariable long communityId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         communityService.deleteCommunity(communityId,principalDetails);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @ResponseBody
     @GetMapping("/img/{filename}")
-    public Resource showImage(@PathVariable String filename) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(filename));
+    public ResponseEntity showImage(@PathVariable String filename) throws IOException {
+        return new ResponseEntity(awsS3Service.getImageBin(filename),HttpStatus.OK);
     }
 }

@@ -1,8 +1,11 @@
 package com.main026.walking.member.controller;
 
 import com.main026.walking.auth.principal.PrincipalDetails;
+import com.main026.walking.exception.BusinessLogicException;
+import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.service.MemberService;
+import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -14,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 @RestController
@@ -22,7 +26,7 @@ import java.net.MalformedURLException;
 public class MemberController {
 
     private final MemberService memberService;
-    private final FileStore fileStore;
+    private final AwsS3Service awsS3Service;
 
     @PostMapping("/signup")
     public MemberDto.Response signUp(@RequestBody MemberDto.Post memberPostDto){
@@ -44,7 +48,6 @@ public class MemberController {
         }
 
         return memberService.findMember(memberId,authorization);
-
     }
 
     @PatchMapping("/{memberId}")
@@ -56,29 +59,51 @@ public class MemberController {
         return memberService.updateMember(memberId,patchDto);
     }
 
-    @PostMapping("/image/{memberId}")
-    public String postImage(@PathVariable Long memberId,
-                            @RequestPart MultipartFile imgFile,
-                            @AuthenticationPrincipal PrincipalDetails principalDetails){
-        return memberService.saveImage(imgFile);
-    }
-
-    @PostMapping("/image")
-    public String postImage(@RequestPart MultipartFile imgFile,
-                            @AuthenticationPrincipal PrincipalDetails principalDetails){
-        return memberService.saveImage(imgFile);
-    }
-    
     @DeleteMapping("/{memberId}")
     public String deleteMember(@PathVariable Long memberId){
         memberService.deleteMember(memberId);
         return "회원 삭제 완료";
     }
 
-    @ResponseBody
-    @GetMapping("/img/{filename}")
-    public Resource showImage(@PathVariable String filename) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(filename));
+// CRUD-IMAGE
+    // CREATE
+    @PostMapping("/image/{memberId}")
+    public ResponseEntity postImage(@PathVariable Long memberId,
+                            @RequestPart MultipartFile imgFile,
+                            @AuthenticationPrincipal PrincipalDetails principalDetails){
+        authorization(memberId,principalDetails);
+        return new ResponseEntity(memberService.saveImage(imgFile,memberId),HttpStatus.CREATED);
     }
 
+    // READ
+    @GetMapping("/image/{memberId}")
+    public ResponseEntity showImage(@PathVariable Long memberId) throws IOException {
+        String findImage = memberService.findImage(memberId);
+        return new ResponseEntity(awsS3Service.getImageBin(findImage),HttpStatus.OK);
+    }
+
+    //  UPDATE
+    @PatchMapping("/image/{memberId}")
+    public ResponseEntity patchImage(@PathVariable Long memberId,
+                             @RequestPart MultipartFile imgFile,
+                             @AuthenticationPrincipal PrincipalDetails principalDetails){
+        authorization(memberId,principalDetails);
+        return new ResponseEntity(memberService.updateImage(imgFile,memberId),HttpStatus.OK);
+    }
+
+    //  DELETE
+    @DeleteMapping("/image/{memberId}")
+    public ResponseEntity deleteImage(@PathVariable Long memberId,
+                                      @AuthenticationPrincipal PrincipalDetails principalDetails){
+        authorization(memberId,principalDetails);
+        memberService.deleteImage(memberId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+//  VALID
+    private void authorization(Long memberId, PrincipalDetails principalDetails){
+        if(principalDetails == null) throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
+        if(!memberId.equals(principalDetails.getMember().getId()))
+            throw new BusinessLogicException(ExceptionCode.INVALID_AUTHORIZATION);
+    }
 }
