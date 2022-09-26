@@ -46,8 +46,6 @@ export default function RegionPick() {
       return;
     }
 
-    console.log({ alltowns });
-
     const town = alltowns.find((x) => x.name.endsWith(gu));
     if (town == null) {
       return;
