@@ -4,6 +4,7 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.S3ObjectResource;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +42,6 @@ public class AwsS3Service {
     } catch(IOException e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "IMAGE_UPLOAD_FAILED");
     }
-
     return fileName;
   }
 
@@ -78,5 +78,11 @@ public class AwsS3Service {
         .withExpiration(expiration);
 
     return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
+  }
+
+  public byte[] getImageBin(String fileName) throws IOException {
+    log.info("INPUT_FILE_NAME" + fileName);
+    S3Object findObject = amazonS3.getObject(bucket,fileName);
+    return IOUtils.toByteArray(findObject.getObjectContent());
   }
 }
