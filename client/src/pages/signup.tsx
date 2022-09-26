@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import CommonButton from '../components/CommonButton';
-import ResionPick from '../components/ResionPick';
+import RegionPick from '../components/RegionPick';
 import TabTitle from '../components/TabTitle';
 import useSignup from '../hooks/SignupQuery';
 import { UserSignup } from '../models/UserSignup';
@@ -86,18 +86,9 @@ export default function Signup() {
 
   const onClickSignup = async (value: UserSignup) => {
     try {
-      const address = localStorage.getItem('currentAddress');
+      await handleSignup(value);
 
-      const data = {
-        ...value,
-        gu: address?.split(' ')[0],
-        si: address?.split(' ')[1],
-        dong: address?.split(' ')[2],
-      };
-
-      const res = await handleSignup(data);
-
-      console.log(res);
+      console.log(value.email, value.password);
       router.push('/login');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -110,7 +101,6 @@ export default function Signup() {
   };
 
   useEffect(() => {
-    localStorage.removeItem('currentAddress');
     setFocus('email');
   }, [setFocus]);
 
@@ -189,7 +179,7 @@ export default function Signup() {
                 {errors.username && errors.username.message}
               </dd>
               <h2>주 산책 지역</h2>
-              <ResionPick />
+              <RegionPick />
             </dl>
             <CommonButton
               type="button"
