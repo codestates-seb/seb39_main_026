@@ -5,7 +5,7 @@ import { useGetWalksQuery } from './WalksListQuery';
 import LoadingWalkItem from './skeleton/LoadingWalkItem';
 
 export default function WalksList() {
-  const { data } = useGetWalksQuery();
+  const { communityList } = useGetWalksQuery();
   const walksList = css`
     display: flex;
     justify-content: center;
@@ -15,10 +15,11 @@ export default function WalksList() {
       align-items: center;
     }
   `;
+
   return (
     <section css={walksList}>
-      {data ? (
-        data.map((walk: WalkDefault) => {
+      {communityList ? (
+        communityList.map((walk: WalkDefault) => {
           return <WalkItem key={walk.communityId} walk={walk} />;
         })
       ) : (
