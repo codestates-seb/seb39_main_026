@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
+import axios from 'axios';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UserDefault } from '../../models/UserDefault';
 import { skeletonGradient } from '../../styles/GlobalStyle';
 import { Theme } from '../../styles/Theme';
@@ -19,6 +20,17 @@ export default function UserInfo({
   const handleNameEdit = async () => {
     if (isNameEditMode === true) {
       // 프로필 이름 수정 api 요청하는 부분
+      axios
+        .patch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/members/${data.id}`,
+          { username: name },
+          {
+            headers: {
+              authorization: localStorage.getItem('accessToken') || '',
+            },
+          }
+        )
+        .then((res) => setName(res.data.username));
     }
     setIsNameEditMode(!isNameEditMode);
   };
@@ -26,6 +38,10 @@ export default function UserInfo({
   const handleNameChange = (event: React.FormEvent<HTMLInputElement>) => {
     setName(event.currentTarget.value);
   };
+
+  useEffect(() => {
+    setName(data.username);
+  }, [data]);
 
   const userInfo = css`
     display: flex;
@@ -95,7 +111,7 @@ export default function UserInfo({
         <div css={userInfo}>
           <div className="img">
             <Image
-              alt={`${data.username}'s profile`}
+              alt={`${name}'s profile`}
               src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.imgUrl}`}
               width="75px"
               height="75px"
@@ -109,7 +125,7 @@ export default function UserInfo({
               onChange={handleNameChange}
             />
           ) : (
-            <p className="username">{data.username}</p>
+            <p className="username">{name}</p>
           )}
           {isValidated && (
             <Icon
