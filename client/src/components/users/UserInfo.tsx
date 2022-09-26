@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import axios from 'axios';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { UserDefault } from '../../models/UserDefault';
 import { skeletonGradient } from '../../styles/GlobalStyle';
 import { Theme } from '../../styles/Theme';
@@ -16,10 +16,10 @@ export default function UserInfo({
 }) {
   const [isNameEditMode, setIsNameEditMode] = useState(false);
   const [name, setName] = useState(data.username);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleNameEdit = async () => {
     if (isNameEditMode === true) {
-      // 프로필 이름 수정 api 요청하는 부분
       axios
         .patch(
           `${process.env.NEXT_PUBLIC_BASE_URL}/members/${data.id}`,
@@ -38,6 +38,23 @@ export default function UserInfo({
   const handleNameChange = (event: React.FormEvent<HTMLInputElement>) => {
     setName(event.currentTarget.value);
   };
+
+  const onUploadImgClick = useCallback(() => {
+    if (!inputRef.current) {
+      return;
+    }
+    inputRef.current.click();
+  }, []);
+
+  const onUploadImage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files) {
+        return;
+      }
+      console.log(e.target.files[0].name);
+    },
+    []
+  );
 
   useEffect(() => {
     setName(data.username);
@@ -72,6 +89,9 @@ export default function UserInfo({
       :focus {
         outline: none;
       }
+    }
+    .imgUpload {
+      display: none;
     }
     .icon {
       cursor: pointer;
@@ -109,7 +129,7 @@ export default function UserInfo({
     <>
       {typeof data !== 'string' ? (
         <div css={userInfo}>
-          <div className="img">
+          <div className="img" onClick={onUploadImgClick}>
             <Image
               alt={`${name}'s profile`}
               src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.imgUrl}`}
@@ -128,11 +148,20 @@ export default function UserInfo({
             <p className="username">{name}</p>
           )}
           {isValidated && (
-            <Icon
-              icon="ant-design:edit-outlined"
-              className="icon"
-              onClick={handleNameEdit}
-            />
+            <>
+              <Icon
+                icon="ant-design:edit-outlined"
+                className="icon"
+                onClick={handleNameEdit}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                className="imgUpload"
+                onChange={onUploadImage}
+                ref={inputRef}
+              />
+            </>
           )}
         </div>
       ) : (
