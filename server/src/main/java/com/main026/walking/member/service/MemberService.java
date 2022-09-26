@@ -43,19 +43,11 @@ public class MemberService {
         member.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
         member.setPassword(passwordEncoder.encode(member.getPassword()));
 
-        if(postDto.getProfileImg()!=null){
-            try {
-                MultipartFile profileImg = postDto.getProfileImg();
-                String storeFile = fileStore.storeFile(profileImg);
-                member.setImgUrl(storeFile);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }
         memberRepository.save(member);
 
         return memberMapper.memberToMemberResponseDto(member);
     }
+
 
     //R
     public MemberDto.Response findMember(Long memberId,Boolean isOwner){
@@ -76,19 +68,17 @@ public class MemberService {
 
         member.update(patchDto);
 
-        if(patchDto.getProfileImg()!=null){
-            try {
-                MultipartFile profileImg = patchDto.getProfileImg();
-                String storeFile = fileStore.storeFile(profileImg);
-                member.setImgUrl(storeFile);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-
         memberRepository.save(member);
 
         return memberMapper.memberToMemberResponseDto(member);
+    }
+
+    public String saveImage(MultipartFile multipartFile){
+        try {
+            return fileStore.storeFile(multipartFile);
+        }catch (IOException e){
+            throw new BusinessLogicException(ExceptionCode.FILE_NOT_FOUND);
+        }
     }
 
     //D

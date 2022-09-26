@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -51,6 +52,10 @@ public class CommunityController {
 
     //community/postimg 에서 post 요청을 처리, 이미지를 저장하고 경로주소를 생성한뒤
     //어떻게 응답하지? 그냥 String으로 경로를 반환하면 되나?
+    @PostMapping("/image")
+    public List<String> postImage(@RequestPart List<MultipartFile> imgFile){
+        return communityService.saveMultiImage(imgFile);
+    }
 
 
     //  Read
@@ -95,11 +100,18 @@ public class CommunityController {
         return new ResponseEntity(new MultiResponseDto<>(communityMapper.multiEntityToDtoInfo(communities), communityPage), HttpStatus.OK);
     }
 
-    //  Update
-    @PatchMapping("{community-id}")
+    //TODO 기존 이미지를 보여주고 삭제할건 삭제하고, 변경할 수 있어야 한다. - 연관관계 때문
+    //Update
+    @PatchMapping("/{community-id}")
     public ResponseEntity patchCommunity(
             @PathVariable("community-id") long communityId,
-            @RequestBody CommunityDto.Patch dto) {
+            @RequestBody CommunityDto.Patch dto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        //TODO 인증로직은 서비스에서 처리
+        if(communityService.findCommunity(communityId).getRepresentMember().getId()!=principalDetails.getMember().getId()){
+            throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
+        }
 
         communityService.updateCommunity(communityId, dto);
         Community community = communityService.findCommunity(communityId);
@@ -108,7 +120,7 @@ public class CommunityController {
     }
 
     //  Delete
-    @DeleteMapping("{community-id}")
+    @DeleteMapping("/{community-id}")
     public ResponseEntity deleteCommunity(
             @PathVariable("community-id") long communityId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {

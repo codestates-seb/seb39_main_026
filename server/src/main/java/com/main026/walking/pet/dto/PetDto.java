@@ -17,7 +17,7 @@ public class PetDto {
     public static class Post{
         private String petName;
         private String petGender;
-        private MultipartFile profileImg;
+        private String profileImg;
         private String neuter;
         private String birthDay;
         private String personality;
@@ -34,11 +34,11 @@ public class PetDto {
         private String birthDay;
         private String personality;
         private String breed;
-        private MultipartFile profileImg;
+        private String profileImg;
         private String about;
 
         @Builder
-        public Patch(String perName, String petGender, String neuter,String birthDay, Integer petAge, String personality, String breed, MultipartFile profileImg, String about) {
+        public Patch(String perName, String petGender, String neuter,String birthDay, String personality, String breed, String profileImg, String about) {
             this.perName = perName;
             this.petGender = petGender;
             this.neuter = neuter;

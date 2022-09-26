@@ -35,7 +35,7 @@ public class Member {
     //모임 목록은 펫리스트로 조회가능
 
     @OneToMany(mappedBy = "member")
-    private List<Comment> commentList;
+    private List<Comment> commentList = new ArrayList<>();
 
     @Builder
     public Member(Long id, String email, String password, String username, Address address, String imgUrl) {
@@ -52,6 +52,7 @@ public class Member {
         this.password = patchDto.getPassword();
         this.username = patchDto.getUsername();
         this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
+        this.imgUrl = patchDto.getProfileImg();
     }
 
     public void setPassword(String password){

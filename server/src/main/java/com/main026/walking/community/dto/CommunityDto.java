@@ -25,7 +25,7 @@ public class CommunityDto {
     public static class Post {
         private String name;
 
-        private List<MultipartFile> Images = new ArrayList<>();
+        private List<String> images = new ArrayList<>();
 
         /**
          * 시,구,동을 받아야하는데 나눠서 받는 방법 외에 또 있을까?
@@ -66,6 +66,8 @@ public class CommunityDto {
         private String date;
         //요일로 받는 경우
         private String[] dates;
+
+        private List<String> images;
 
         private String time;
 

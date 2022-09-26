@@ -34,6 +34,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+//TODO 엔티티를 반환하면 안됨
 public class CommunityService {
     private final CommunityRepository communityRepository;
     private final ImageRepository imageRepository;
@@ -60,22 +61,19 @@ public class CommunityService {
         community.setRepresentMember(member);
         community.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
 
+        //TODO update쿼리가 두번날아가는 말도안되는 상황.
         //이미지 세팅
         Community savedCommunity = communityRepository.save(community);
-        List<MultipartFile> attachFiles = postDto.getImages();
+        List<String> imagePaths = postDto.getImages();
 
-        try {
-            for (MultipartFile attachFile : attachFiles) {
-                String storeFile = fileStore.storeFile(attachFile);
-                Image image = Image.builder()
-                        .storeFilename(storeFile)
-                        .community(savedCommunity)
-                        .build();
-                imageRepository.save(image);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String imagePath : imagePaths) {
+            Image image = Image.builder()
+                    .storeFilename(imagePath)
+                    .community(savedCommunity)
+                    .build();
+            imageRepository.save(image);
         }
+
         return communityRepository.save(community);
     }
 
@@ -94,6 +92,19 @@ public class CommunityService {
         return community;
     }
 
+    public List<String> saveMultiImage(List<MultipartFile> files){
+        List<String> images = new ArrayList<>();
+        for (MultipartFile file : files) {
+            try {
+                String storedFile = fileStore.storeFile(file);
+                images.add(storedFile);
+            }catch (IOException e){
+                throw new BusinessLogicException(ExceptionCode.FILE_NOT_FOUND);
+            }
+        }
+        return images;
+    }
+
     //Read
     public Community findCommunity(long communityId) {
 
@@ -110,7 +121,17 @@ public class CommunityService {
     public Community updateCommunity(long communityId, CommunityDto.Patch patchDto) {
         Community community = findVerifiedCommunity(communityId);
         community.update(patchDto);
-        //communityMapper.updateEntityFromDto(dto, community);
+
+        //이미지는 위 update 메서드로 적용불가 - 연관관계때문
+        List<String> imagePaths = patchDto.getImages();
+
+        for (String imagePath : imagePaths) {
+            Image image = Image.builder()
+                    .storeFilename(imagePath)
+                    .community(community)
+                    .build();
+            imageRepository.save(image);
+        }
 
         return communityRepository.save(community);
     }

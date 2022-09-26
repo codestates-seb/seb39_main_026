@@ -28,7 +28,7 @@ public class MemberDto {
         private String gu;
         private String dong;
 
-        private MultipartFile profileImg;
+        //private MultipartFile profileImg;
 
         public void setPassword(String password){
             this.password = password;
@@ -45,10 +45,10 @@ public class MemberDto {
         private String gu;
         private String dong;
 
-        private MultipartFile profileImg;
+        private String profileImg;
 
         @Builder
-        public Patch(String password, String username, String si, String gu, String dong, MultipartFile profileImg) {
+        public Patch(String password, String username, String si, String gu, String dong, String profileImg) {
             this.password = password;
             this.username = username;
             this.si = si;
