@@ -104,6 +104,7 @@ public class MemberService {
         String findImage = findMember.getImgUrl();
         if(!findImage.equals("DEFAULT_MEMBER_IMAGE.jpg")) awsS3Service.deleteImage(findImage);
         findMember.setImgUrl(uploadImage);
+        memberRepository.save(findMember);
         return uploadImage;
     }
     //  DELETE
@@ -114,6 +115,7 @@ public class MemberService {
             awsS3Service.deleteImage(findImage);
             findMember.setImgUrl("DEFAULT_MEMBER_IMAGE.jpg");
         }
+        memberRepository.save(findMember);
     }
 
 //  VALID
