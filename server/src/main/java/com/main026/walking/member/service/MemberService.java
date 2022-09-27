@@ -91,7 +91,7 @@ public class MemberService {
 //    }
 
     //  READ
-    public String findImage(Long memberId) throws IOException {
+    public String findImage(Long memberId) {
         Member findMember = verifyExistMemberWithId(memberId);
         return findMember.getImgUrl();
     }
