@@ -9,10 +9,14 @@ import AddButton from '../../components/walks/AddButton';
 import AddressPicker from '../../components/walks/AddressPicker';
 import WalksList from '../../components/walks/WalksList';
 import UserState from '../../states/UserState';
+
 export default function Walks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user] = useRecoilState(UserState);
-  const [walks, setWalks] = useState('');
+  const [query, setQuery] = useState('');
+  const [address, setAddress] = useState(
+    localStorage.getItem('currentAddress') || ''
+  );
   const router = useRouter();
 
   const handleModalClick = () => {
@@ -61,12 +65,16 @@ export default function Walks() {
       <section>
         <TabTitle prefix="모임 둘러보기" />
         <div css={header}>
-          <SearchInput setWalks={setWalks} />
-          <AddressPicker />
+          <SearchInput setQuery={setQuery} />
+          <AddressPicker setAddress={setAddress} />
         </div>
         <div css={walksWrapper}>
           <h2>🐕 모든 산책 보기</h2>
-          <WalksList query={walks} />
+          <WalksList
+            query={`?si=${address?.split(' ')[0]}&gu=${
+              address?.split(' ')[1]
+            }&dong=${address?.split(' ')[2]}${query}`}
+          />
           <AddButton onClick={handleModalClick} />
         </div>
       </section>

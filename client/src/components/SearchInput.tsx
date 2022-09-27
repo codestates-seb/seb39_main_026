@@ -3,9 +3,9 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Theme } from '../styles/Theme';
 
 export default function SearchInput({
-  setWalks,
+  setQuery,
 }: {
-  setWalks: Dispatch<SetStateAction<string>>;
+  setQuery: Dispatch<SetStateAction<string>>;
 }) {
   const [searchInput, setSearchInput] = useState('');
   const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -13,7 +13,11 @@ export default function SearchInput({
   };
   const handleSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      setWalks(event.currentTarget.value);
+      if (event.currentTarget.value === '') {
+        setQuery('');
+      } else {
+        setQuery(`?name=${event.currentTarget.value}`);
+      }
     }
   };
   const searchContainer = css`
