@@ -55,7 +55,7 @@ export default function UserInfo({
     const formData = new FormData();
     formData.append('image', uploadImg);
     axios
-      .post(`${process.env.NEXT_PUBLIC_BASE_URL}/members/image`, formData, {
+      .patch(`${process.env.NEXT_PUBLIC_BASE_URL}/members/img`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           authorization: localStorage.getItem('accessToken') || '',
