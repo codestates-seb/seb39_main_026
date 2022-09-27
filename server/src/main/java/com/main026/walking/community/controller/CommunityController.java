@@ -145,6 +145,11 @@ public class CommunityController {
         return new ResponseEntity(awsS3Service.getImageBin(filename),HttpStatus.OK);
     }
 
+    @GetMapping("/images/{communityId}")
+    public ResponseEntity showImages(@PathVariable long communityId) throws IOException {
+        return new ResponseEntity(communityService.readImages(communityId), HttpStatus.OK);
+    }
+
     //  UPDATE
     @PatchMapping("/img/{filename}")
     public ResponseEntity updateImage(@PathVariable String filename, @RequestPart MultipartFile imgFile, @AuthenticationPrincipal PrincipalDetails principalDetails){
