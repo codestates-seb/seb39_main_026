@@ -26,8 +26,7 @@ public class Notice {
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "community_id")
+    @OneToOne(mappedBy = "notice")
     private Community community;
 
 }

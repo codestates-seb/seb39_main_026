@@ -70,8 +70,9 @@ public class Community {
 
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "community")
-    private List<Notice> notices = new ArrayList<>();
+    @OneToOne
+    @JoinColumn(name = "notice_id")
+    private Notice notice;
 
     @OneToMany(mappedBy = "community")
     private List<Comment> comments = new ArrayList<>();
