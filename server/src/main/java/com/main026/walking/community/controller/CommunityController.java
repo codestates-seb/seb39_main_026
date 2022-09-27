@@ -130,6 +130,8 @@ public class CommunityController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+//  CRUD - IMAGE
+    //  READ
     @GetMapping("/img/{filename}")
     public ResponseEntity showImage(@PathVariable String filename) throws IOException {
         return new ResponseEntity(awsS3Service.getImageBin(filename),HttpStatus.OK);

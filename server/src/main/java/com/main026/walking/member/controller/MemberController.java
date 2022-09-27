@@ -67,7 +67,7 @@ public class MemberController {
 
 // CRUD-IMAGE
     // CREATE
-    @PostMapping("/image/{memberId}")
+    @PostMapping("/img/{memberId}")
     public ResponseEntity postImage(@PathVariable Long memberId,
                             @RequestPart MultipartFile imgFile,
                             @AuthenticationPrincipal PrincipalDetails principalDetails){
@@ -76,11 +76,12 @@ public class MemberController {
     }
 
     // READ
-    @GetMapping("/image/{memberId}")
-    public ResponseEntity showImage(@PathVariable Long memberId) throws IOException {
-        String findImage = memberService.findImage(memberId);
-        return new ResponseEntity(awsS3Service.getImageBin(findImage),HttpStatus.OK);
-    }
+//    TODO : Community와 달리 Member랑 Pet은 하나의 사진만 가지면 되는데 Read시에 멤버 아이디만 넣는게 편하지 않을까?
+//    @GetMapping("/img/{memberId}")
+//    public ResponseEntity showImage(@PathVariable Long memberId) throws IOException {
+//        String findImage = memberService.findImage(memberId);
+//        return new ResponseEntity(awsS3Service.getImageBin(findImage),HttpStatus.OK);
+//    }
 
     @GetMapping("/img/{filename}")
     public ResponseEntity showImage(@PathVariable String filename) throws IOException {
@@ -88,7 +89,7 @@ public class MemberController {
     }
 
     //  UPDATE
-    @PatchMapping("/image/{memberId}")
+    @PatchMapping("/img/{memberId}")
     public ResponseEntity patchImage(@PathVariable Long memberId,
                              @RequestPart MultipartFile imgFile,
                              @AuthenticationPrincipal PrincipalDetails principalDetails){
@@ -97,7 +98,7 @@ public class MemberController {
     }
 
     //  DELETE
-    @DeleteMapping("/image/{memberId}")
+    @DeleteMapping("/img/{memberId}")
     public ResponseEntity deleteImage(@PathVariable Long memberId,
                                       @AuthenticationPrincipal PrincipalDetails principalDetails){
         authorization(memberId,principalDetails);
