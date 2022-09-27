@@ -46,15 +46,32 @@ export default function UserInfo({
     inputRef.current.click();
   }, []);
 
-  const onUploadImage = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) {
-        return;
-      }
-      console.log(e.target.files[0].name);
-    },
-    []
-  );
+  const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (!e.target.files) {
+      return;
+    }
+    const uploadImg = e.target.files[0];
+    const formData = new FormData();
+    formData.append('imgFile', uploadImg);
+    axios
+      .patch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: localStorage.getItem('accessToken') || '',
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     setName(data.username);
@@ -125,6 +142,7 @@ export default function UserInfo({
       color: transparent;
     }
   `;
+
   return (
     <>
       {typeof data !== 'string' ? (
@@ -132,7 +150,7 @@ export default function UserInfo({
           <div className="img" onClick={onUploadImgClick}>
             <Image
               alt={`${name}'s profile`}
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.imgUrl}`}
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`}
               width="75px"
               height="75px"
               className="img"

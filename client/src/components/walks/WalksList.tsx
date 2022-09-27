@@ -4,8 +4,8 @@ import WalkItem from './WalkItem';
 import { useGetWalksQuery } from './WalksListQuery';
 import LoadingWalkItem from './skeleton/LoadingWalkItem';
 
-export default function WalksList() {
-  const { communityList } = useGetWalksQuery();
+export default function WalksList({ query }: { query: string }) {
+  const { communityList } = useGetWalksQuery(query);
   const walksList = css`
     display: flex;
     justify-content: center;

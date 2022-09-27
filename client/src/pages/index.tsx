@@ -24,11 +24,11 @@ const Home: NextPage = () => {
       <AddressPicker />
       <div className="new_walks">
         <h2 className="walks_title">✨ 동네 신규 산책</h2>
-        <WalksList />
+        <WalksList query="" />
       </div>
       <div className="hot_walks">
         <h2 className="walks_title">🔥 마감 임박 산책 </h2>
-        <WalksList />
+        <WalksList query="" />
       </div>
     </section>
   );

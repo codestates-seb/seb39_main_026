@@ -12,6 +12,7 @@ import UserState from '../../states/UserState';
 export default function Walks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user] = useRecoilState(UserState);
+  const [walks, setWalks] = useState('');
   const router = useRouter();
 
   const handleModalClick = () => {
@@ -19,7 +20,6 @@ export default function Walks() {
       router.push('/login');
       return;
     }
-    console.log(user);
     setIsModalOpen(!isModalOpen);
   };
 
@@ -61,12 +61,12 @@ export default function Walks() {
       <section>
         <TabTitle prefix="모임 둘러보기" />
         <div css={header}>
-          <SearchInput />
+          <SearchInput setWalks={setWalks} />
           <AddressPicker />
         </div>
         <div css={walksWrapper}>
           <h2>🐕 모든 산책 보기</h2>
-          <WalksList />
+          <WalksList query={walks} />
           <AddButton onClick={handleModalClick} />
         </div>
       </section>

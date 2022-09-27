@@ -21,6 +21,7 @@ export default function LogoutButton() {
 
   const logout = css`
     cursor: pointer;
+    z-index: 0;
     background-color: transparent;
     border: 0;
     color: ${Theme.disableColor};
