@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import DogChoiceModal from '../../components/DogChoiceModal';
 import SearchInput from '../../components/SearchInput';
@@ -9,14 +9,13 @@ import AddButton from '../../components/walks/AddButton';
 import AddressPicker from '../../components/walks/AddressPicker';
 import WalksList from '../../components/walks/WalksList';
 import UserState from '../../states/UserState';
+import { Theme } from '../../styles/Theme';
 
 export default function Walks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user] = useRecoilState(UserState);
   const [query, setQuery] = useState('');
-  const [address, setAddress] = useState(
-    localStorage.getItem('currentAddress') || ''
-  );
+  const [address, setAddress] = useState('');
   const router = useRouter();
 
   const handleModalClick = () => {
@@ -43,7 +42,16 @@ export default function Walks() {
       font-size: 22px;
       text-align: center;
     }
+    .alert {
+      text-align: center;
+      margin: 2rem;
+      color: ${Theme.disableColor};
+    }
   `;
+
+  useEffect(() => {
+    setAddress(localStorage.getItem('currentAddress') || '');
+  }, []);
 
   return (
     <>
@@ -70,11 +78,15 @@ export default function Walks() {
         </div>
         <div css={walksWrapper}>
           <h2>🐕 모든 산책 보기</h2>
-          <WalksList
-            query={`?si=${address?.split(' ')[0]}&gu=${
-              address?.split(' ')[1]
-            }&dong=${address?.split(' ')[2]}${query}`}
-          />
+          {address ? (
+            <WalksList
+              query={`?si=${address?.split(' ')[0]}&gu=${
+                address?.split(' ')[1]
+              }&dong=${address?.split(' ')[2]}${query}`}
+            />
+          ) : (
+            <p className="alert">동네를 선택하세요</p>
+          )}
           <AddButton onClick={handleModalClick} />
         </div>
       </section>

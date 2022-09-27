@@ -26,7 +26,7 @@ export default function WalksList({ query }: { query: string }) {
     display: flex;
     justify-content: center;
     p.alert {
-      margin-top: 2rem;
+      margin: 2rem;
       color: ${Theme.disableColor};
     }
     @media screen and (max-width: 768px) {
