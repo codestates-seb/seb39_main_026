@@ -70,8 +70,7 @@ public class Community {
 
     private LocalDateTime createdAt;
 
-    @OneToOne
-    @JoinColumn(name = "notice_id")
+    @OneToOne(mappedBy = "community")
     private Notice notice;
 
     @OneToMany(mappedBy = "community")
