@@ -1,27 +1,22 @@
 package com.main026.walking.auth.config;
 
+import com.main026.walking.auth.service.CustomOAuth2UserService;
 import com.main026.walking.auth.filter.JwtAuthenticationFilter;
 import com.main026.walking.auth.filter.JwtAuthorizationFilter;
 import com.main026.walking.auth.filter.JwtExceptionFilter;
 import com.main026.walking.auth.jwt.JwtUtils;
-import com.main026.walking.exception.BusinessLogicException;
 import com.main026.walking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -33,6 +28,7 @@ import org.springframework.web.filter.CorsFilter;
 @Order(3)
 public class SecurityConfig {
 
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final MemberRepository memberRepository;
     private final JwtUtils jwtUtils;
 
@@ -52,9 +48,11 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.DELETE,"/members/**","/community/**","/pets/**","/comment/**","/notice/**").access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll()
                 .and()
-                .exceptionHandling();
-                //.accessDeniedHandler(accessDeniedHandler)
-                //.authenticationEntryPoint(unauthorizedEntryPoint);
+                .exceptionHandling()
+                .and()
+                .oauth2Login().loginPage("/members/login")
+                .userInfoEndpoint()//코드를 받고, 토큰을 전달하는 과정을 알아서 해달라
+                .userService(customOAuth2UserService);
 
         return http.build();
     }
@@ -70,7 +68,6 @@ public class SecurityConfig {
 
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
             builder
-                    //.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                     .addFilterBefore(jwtExceptionFilter,JwtAuthenticationFilter.class)
                     .addFilter(corsFilter())
                     .addFilter(jwtAuthenticationFilter)
@@ -91,17 +88,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
-
-//    private final AuthenticationEntryPoint unauthorizedEntryPoint =
-//            (request, response, authException) -> {
-//                response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//            };
-//
-//    private final AccessDeniedHandler accessDeniedHandler =
-//            (request, response, accessDeniedException) -> {
-//                response.setStatus(HttpStatus.FORBIDDEN.value());
-//                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//            };
 }

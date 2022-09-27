@@ -27,7 +27,6 @@ public class NoticeService {
 
     entity.setCommunity(findCommunity);
 
-
     return noticeRepository.save(entity);
   }
 
@@ -36,9 +35,6 @@ public class NoticeService {
     return findVerifiedNotice(noticeId);
   }
 
-  public Page<Notice> findNotices(int page, int size) {
-    return noticeRepository.findAll(PageRequest.of( page, size, Sort.by("noticeId").descending()));
-  }
 
 //  Update
   public Notice updateNotice(long noticeId, NoticeDto.Patch dto) {

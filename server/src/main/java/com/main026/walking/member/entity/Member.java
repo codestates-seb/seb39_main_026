@@ -31,14 +31,13 @@ public class Member {
     private Role roles;
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
     private List<Pet> petList = new ArrayList<>();
-
-    //모임 목록은 펫리스트로 조회가능
-
     @OneToMany(mappedBy = "member")
     private List<Comment> commentList = new ArrayList<>();
+    private String provider;
+    private String providerId;
 
     @Builder
-    public Member(Long id, String email, String password, String username, Address address, String imgUrl) {
+    public Member(Long id, String email, String password, String username, Address address, String imgUrl,String provider,String providerId) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -46,6 +45,8 @@ public class Member {
         this.address = address;
         this.imgUrl = imgUrl;
         this.roles = roles==null?Role.ROLE_USER:roles;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 
     public void update(MemberDto.Patch patchDto){
@@ -53,6 +54,11 @@ public class Member {
         this.username = patchDto.getUsername();
         this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
         this.imgUrl = patchDto.getProfileImg();
+    }
+
+    public void update(String name, String picture){
+        this.username = name;
+        this.imgUrl = picture;
     }
 
     public void setPassword(String password){

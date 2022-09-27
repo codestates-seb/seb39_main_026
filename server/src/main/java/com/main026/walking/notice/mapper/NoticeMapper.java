@@ -22,5 +22,4 @@ public interface NoticeMapper {
   */
   NoticeDto.Response entityToDtoResponse(Notice entity);
 
-  List<NoticeDto.Response> multiEntityToDtoResponse(List<Notice> entities);
 }

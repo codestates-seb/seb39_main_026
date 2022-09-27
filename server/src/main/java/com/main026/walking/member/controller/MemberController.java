@@ -42,9 +42,7 @@ public class MemberController {
         if(principalDetails==null||principalDetails.getMember().getId()!=memberId){
             authorization = false;
         }
-
         return memberService.findMember(memberId,authorization);
-
     }
 
     @PatchMapping("/{memberId}")
@@ -52,15 +50,7 @@ public class MemberController {
                                           @RequestBody MemberDto.Patch patchDto,
                                           @AuthenticationPrincipal PrincipalDetails principalDetails){
         //인증로직
-
         return memberService.updateMember(memberId,patchDto);
-    }
-
-    @PostMapping("/image/{memberId}")
-    public String postImage(@PathVariable Long memberId,
-                            @RequestPart MultipartFile imgFile,
-                            @AuthenticationPrincipal PrincipalDetails principalDetails){
-        return memberService.saveImage(imgFile);
     }
 
     @PostMapping("/image")
