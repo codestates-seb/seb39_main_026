@@ -44,7 +44,7 @@ public class MemberService {
         Member member = memberMapper.memberPostDtoToMember(postDto);
         member.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
         member.setPassword(passwordEncoder.encode(member.getPassword()));
-
+        member.setImgUrl("DEFAULT_MEMBER_IMAGE.jpg");
         memberRepository.save(member);
 
         return memberMapper.memberToMemberResponseDto(member);
@@ -78,17 +78,17 @@ public class MemberService {
     public void deleteMember(Long memberId){
         String image = verifyExistMemberWithId(memberId).getImgUrl();
         memberRepository.deleteById(memberId);
-        awsS3Service.deleteImage(image);
+        if(!image.equals("DEFAULT_MEMBER_IMAGE.jpg")) awsS3Service.deleteImage(image);
     }
 
 // CRUD-IMAGE
-    //  CREATE
-    public String saveImage(MultipartFile multipartFile, Long memberId){
-        Member findMember = verifyExistMemberWithId(memberId);
-        String uploadImage = awsS3Service.uploadImage(multipartFile);
-        findMember.setImgUrl(uploadImage);
-        return uploadImage;
-    }
+//    //  CREATE
+//    public String saveImage(MultipartFile multipartFile, Long memberId){
+//        Member findMember = verifyExistMemberWithId(memberId);
+//        String uploadImage = awsS3Service.uploadImage(multipartFile);
+//        findMember.setImgUrl(uploadImage);
+//        return uploadImage;
+//    }
 
     //  READ
     public String findImage(Long memberId) throws IOException {
@@ -102,8 +102,7 @@ public class MemberService {
         String uploadImage = awsS3Service.uploadImage(multipartFile);
 
         String findImage = findMember.getImgUrl();
-        awsS3Service.deleteImage(findImage);
-
+        if(!findImage.equals("DEFAULT_MEMBER_IMAGE.jpg")) awsS3Service.deleteImage(findImage);
         findMember.setImgUrl(uploadImage);
         return uploadImage;
     }
@@ -111,8 +110,10 @@ public class MemberService {
     public void deleteImage(Long memberId) {
         Member findMember = verifyExistMemberWithId(memberId);
         String findImage = findMember.getImgUrl();
-        awsS3Service.deleteImage(findImage);
-        findMember.setImgUrl("");
+        if(!findImage.equals("DEFAULT_MEMBER_IMAGE.jpg")){
+            awsS3Service.deleteImage(findImage);
+            findMember.setImgUrl("DEFAULT_MEMBER_IMAGE.jpg");
+        }
     }
 
 //  VALID
