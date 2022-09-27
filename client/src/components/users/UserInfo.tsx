@@ -53,14 +53,18 @@ export default function UserInfo({
     }
     const uploadImg = e.target.files[0];
     const formData = new FormData();
-    formData.append('image', uploadImg);
+    formData.append('imgFile', uploadImg);
     axios
-      .patch(`${process.env.NEXT_PUBLIC_BASE_URL}/members/img`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          authorization: localStorage.getItem('accessToken') || '',
-        },
-      })
+      .patch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: localStorage.getItem('accessToken') || '',
+          },
+        }
+      )
       .then((response) => {
         console.log(response.data);
       })
@@ -138,6 +142,7 @@ export default function UserInfo({
       color: transparent;
     }
   `;
+
   return (
     <>
       {typeof data !== 'string' ? (
@@ -145,7 +150,7 @@ export default function UserInfo({
           <div className="img" onClick={onUploadImgClick}>
             <Image
               alt={`${name}'s profile`}
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.imgUrl}`}
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`}
               width="75px"
               height="75px"
               className="img"
