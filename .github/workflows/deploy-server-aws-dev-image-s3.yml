@@ -39,8 +39,8 @@ jobs:
 
       - name: Set Properties
         run: |
-        # TODO : 현재 git secrets에 모든 application.yml을 입력해서 덮어씌우는 형식임, 개선이 필요
-        # -> active 프로필 사용, 일부항목 수정하는 action 적용 등
+#         TODO : 현재 git secrets에 모든 application.yml을 입력해서 덮어씌우는 형식임, 개선이 필요
+#         -> active 프로필 사용, 일부항목 수정하는 action 적용 등
           cd server/src/main/resources
           echo "${{ secrets.DI_APP_YML_SECRET }}" > ./application.yml
         shell: bash
