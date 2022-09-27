@@ -4,23 +4,13 @@ import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.dto.CommunityListResponseDto;
 import com.main026.walking.community.dto.CommunitySearchCond;
-import com.main026.walking.community.entity.Community;
-import com.main026.walking.community.mapper.CommunityMapper;
 import com.main026.walking.community.service.CommunityService;
 import com.main026.walking.exception.BusinessLogicException;
 import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.entity.Member;
-import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.pet.dto.PetDto;
-import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.awsS3.AwsS3Service;
-import com.main026.walking.util.file.FileStore;
-import com.main026.walking.util.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.annotation.Before;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,13 +45,6 @@ public class CommunityController {
         CommunityDto.Response createdCommunity = communityService.createCommunity(postDto,loginMember);
 
         return new ResponseEntity(createdCommunity, HttpStatus.CREATED);
-    }
-
-    //community/postimg 에서 post 요청을 처리, 이미지를 저장하고 경로주소를 생성한뒤
-    //어떻게 응답하지? 그냥 String으로 경로를 반환하면 되나?
-    @PostMapping("/image")
-    public List<String> postImage(@RequestPart List<MultipartFile> imgFile){
-        return communityService.saveMultiImage(imgFile);
     }
 
     // Read
@@ -131,9 +113,51 @@ public class CommunityController {
     }
 
 //  CRUD - IMAGE
+    //  CREATE - ONE
+/*    @PostMapping("/img/{communityId}")
+    public ResponseEntity postImage(
+      @PathVariable long communityId,
+      @RequestPart MultipartFile imgFile,
+      @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        communityService.authorization(communityId,principalDetails);
+        communityService.saveImage(communityId, imgFile);
+
+        return new ResponseEntity(HttpStatus.CREATED);
+    }*/
+
+    //  CREATE - MULTI
+    @PostMapping("/img/{communityId}")
+    public ResponseEntity postImage(
+      @PathVariable long communityId,
+      @RequestPart List<MultipartFile> imgFile,
+      @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        communityService.authorization(communityId,principalDetails);
+        List<String> savedImages = communityService.saveMultiImage(communityId, imgFile);
+
+        return new ResponseEntity(savedImages,HttpStatus.CREATED);
+    }
+
     //  READ
     @GetMapping("/img/{filename}")
     public ResponseEntity showImage(@PathVariable String filename) throws IOException {
         return new ResponseEntity(awsS3Service.getImageBin(filename),HttpStatus.OK);
+    }
+
+    //  UPDATE
+    @PatchMapping("/img/{filename}")
+    public ResponseEntity updateImage(@PathVariable String filename, @RequestPart MultipartFile imgFile, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        String updatedImage = communityService.updateImage(filename, principalDetails, imgFile);
+
+        return new ResponseEntity(updatedImage,HttpStatus.OK);
+    }
+
+    //  DELETE
+    @DeleteMapping("/img/{filename}")
+    public ResponseEntity deleteImage(@PathVariable String filename, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        communityService.deleteImage(filename,principalDetails);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

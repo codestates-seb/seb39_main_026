@@ -80,7 +80,8 @@ public class MemberController {
                              @RequestPart MultipartFile imgFile,
                              @AuthenticationPrincipal PrincipalDetails principalDetails){
         authorization(memberId,principalDetails);
-        return new ResponseEntity(memberService.updateImage(imgFile,memberId),HttpStatus.OK);
+        String updateImage = memberService.updateImage(imgFile,memberId);
+        return new ResponseEntity(updateImage,HttpStatus.OK);
     }
 
     //  DELETE
@@ -94,7 +95,6 @@ public class MemberController {
 
 //  VALID
     private void authorization(Long memberId, PrincipalDetails principalDetails){
-        if(principalDetails == null) throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
         if(!memberId.equals(principalDetails.getMember().getId()))
             throw new BusinessLogicException(ExceptionCode.INVALID_AUTHORIZATION);
     }

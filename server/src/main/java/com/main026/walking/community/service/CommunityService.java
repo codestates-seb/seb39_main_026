@@ -12,30 +12,26 @@ import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.image.entity.Image;
 import com.main026.walking.image.repository.ImageRepository;
 import com.main026.walking.member.entity.Member;
-import com.main026.walking.member.repository.MemberRepository;
-import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.CommunityPet;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.pet.repository.CommunityPetRepository;
 import com.main026.walking.pet.repository.PetRepository;
 import com.main026.walking.util.awsS3.AwsS3Service;
-import com.main026.walking.util.enums.Weeks;
-import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Slf4j
+@Transactional
 @Service
 @RequiredArgsConstructor
 //TODO 엔티티를 반환하면 안됨
@@ -149,25 +145,67 @@ public class CommunityService {
     }
 
 //  CRUD-IMAGE
-    //  CREATE
-    public List<String> saveMultiImage(List<MultipartFile> files){
-        List<String> images = new ArrayList<>();
-        for (MultipartFile file : files) {
-            String storedFile = awsS3Service.uploadImage(file);
-            images.add(storedFile);
+    //  CREATE - ONE
+    public String saveImage(Long communityId, MultipartFile file){
+        Community findCommunity = findVerifiedCommunity(communityId);
+        String uploadImage = awsS3Service.uploadImage(file);
+
+        Image savedImage = Image.builder()
+                             .storeFilename(uploadImage)
+                             .community(findCommunity)
+                             .build();
+        imageRepository.save(savedImage);
+
+        return uploadImage;
         }
-        return images;
+
+    //  CREATE - MULTI
+    public List<String> saveMultiImage(Long communityId, List<MultipartFile> files){
+        List<String> savedImages = files.stream().map(file -> saveImage(communityId,file)).collect(Collectors.toList());
+
+        return savedImages;
     }
 
-    //  READ
+    //  READ - Controller에서 Aws S3 Service로 바로 리턴
 
     //  UPDATE
+    public String updateImage(String filename, PrincipalDetails principalDetails, MultipartFile imgFile){
+        Image findImage = imageRepository.findByStoreFilename(filename).orElseThrow( () -> new BusinessLogicException(ExceptionCode.FILE_NOT_FOUND));
+        long communityId = findImage.getCommunity().getId();
+
+        authorization(communityId,principalDetails);
+        String savedImage = saveImage(communityId, imgFile);
+
+        imageRepository.delete(findImage);
+        awsS3Service.deleteImage(filename);
+
+        return savedImage;
+    }
 
     //  DELETE
+    public void deleteImage(String filename, PrincipalDetails principalDetails){
+        Image findImage = imageRepository.findByStoreFilename(filename).orElseThrow(() -> new BusinessLogicException(ExceptionCode.FILE_NOT_FOUND));
+        long communityId = findImage.getCommunity().getId();
+
+        authorization(communityId, principalDetails);
+
+        imageRepository.delete(findImage);
+        awsS3Service.deleteImage(filename);
+    }
 
 //  Valid
-    public void findVerifiedCommunity(Long communityId) {
-        Optional<Community> checkCommunity = communityRepository.findById(communityId);
-        if(!checkCommunity.isPresent()) throw new BusinessLogicException(ExceptionCode.COMMUNITY_NOT_FOUND);
+    //  Author : 로그인한 유저 == 커뮤니티의 대표자 인지 확인
+    public void authorization(long communityId, PrincipalDetails principalDetails){
+        Community findCommunity = findVerifiedCommunity(communityId);
+        long findMemberId = findCommunity.getRepresentMember().getId();
+        long loginId = principalDetails.getMember().getId();
+        if(loginId != findMemberId){
+            throw new BusinessLogicException(ExceptionCode.INVALID_AUTHORIZATION);
+        }
+    }
+
+    private Community findVerifiedCommunity(Long communityId) {
+        Community findCommunity = communityRepository.findById(communityId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMUNITY_NOT_FOUND));
+        return findCommunity;
     }
 }

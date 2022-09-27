@@ -42,12 +42,13 @@ public class AwsS3Service {
     } catch(IOException e) {
       throw new BusinessLogicException(ExceptionCode.FILE_UPLOAD_FAILED);
     }
+    log.info(" [S3-Create] Input-File-Name : " + file.getOriginalFilename() + " -> " + " Upload-File-Name : " + fileName );
     return fileName;
   }
 
   public void deleteImage(String fileName) {
     amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
-  }
+    log.info(" [S3-Delete] Deleted-File-Name : " + fileName);  }
 
   private String createFileName(String fileName) {
     return UUID.randomUUID().toString().concat(getFileExtension(fileName));
@@ -63,7 +64,6 @@ public class AwsS3Service {
 
   // get presigned URL
   public String getFileURL(String fileName) {
-    log.info("INPUT_FILE_NAME : " + fileName);
 
     // set expiration
     Date expiration = new Date();
@@ -82,6 +82,7 @@ public class AwsS3Service {
 
   public byte[] getImageBin(String fileName) throws IOException {
     S3Object findObject = amazonS3.getObject(bucket,fileName);
+    log.info(" [S3-Get] Read-File-Name : " + fileName);
     return IOUtils.toByteArray(findObject.getObjectContent());
   }
 }

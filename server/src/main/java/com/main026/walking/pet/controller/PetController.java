@@ -107,7 +107,6 @@ public class PetController {
 //  VALID
     private void authorization(long petId, PrincipalDetails principalDetails){
         Long memberId = petService.findPet(petId).getMember().getId();
-        if(principalDetails == null) throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
         if(!memberId.equals(principalDetails.getMember().getId()))
             throw new BusinessLogicException(ExceptionCode.INVALID_AUTHORIZATION);
     }
