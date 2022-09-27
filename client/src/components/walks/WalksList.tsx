@@ -35,9 +35,7 @@ export default function WalksList({ query }: { query: string }) {
       align-items: center;
     }
   `;
-  useEffect(() => {
-    console.log(walks);
-  }, []);
+
   return (
     <section css={walksList}>
       {walks === undefined && <LoadingWalkItem />}
