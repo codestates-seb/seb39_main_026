@@ -46,15 +46,28 @@ export default function UserInfo({
     inputRef.current.click();
   }, []);
 
-  const onUploadImage = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) {
-        return;
-      }
-      console.log(e.target.files[0].name);
-    },
-    []
-  );
+  const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (!e.target.files) {
+      return;
+    }
+    const uploadImg = e.target.files[0];
+    const formData = new FormData();
+    formData.append('image', uploadImg);
+    axios
+      .post(`${process.env.NEXT_PUBLIC_BASE_URL}/members/image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: localStorage.getItem('accessToken') || '',
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     setName(data.username);
