@@ -10,6 +10,10 @@
 #    stack:
 #      auto: false
 #spring:
+#  servlet:
+#    multipart:
+#      maxFileSize: 20MB
+#      maxRequestSize: 20MB
 #  h2:
 #    console:
 #      enabled: true

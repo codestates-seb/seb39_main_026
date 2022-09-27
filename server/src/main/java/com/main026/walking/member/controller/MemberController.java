@@ -78,13 +78,13 @@ public class MemberController {
     // READ
 //    TODO : Community와 달리 Member랑 Pet은 하나의 사진만 가지면 되는데 Read시에 멤버 아이디만 넣는게 편하지 않을까?
     @GetMapping("/img/{memberId}")
-    public ResponseEntity showImage(@PathVariable Long memberId) throws IOException {
+    public ResponseEntity showImageById(@PathVariable Long memberId) throws IOException {
         String findImage = memberService.findImage(memberId);
         return new ResponseEntity(awsS3Service.getImageBin(findImage),HttpStatus.OK);
     }
 
     @GetMapping("/img/{filename}")
-    public ResponseEntity showImage(@PathVariable String filename) throws IOException {
+    public ResponseEntity showImageByFileName(@PathVariable String filename) throws IOException {
         return new ResponseEntity(awsS3Service.getImageBin(filename),HttpStatus.OK);
     }
 
