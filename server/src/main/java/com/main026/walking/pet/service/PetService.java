@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,11 +48,8 @@ public class PetService {
         //연관관계에 대한 고민 필요
         pet.setMember(member);
 
-        if(postDto.getProfileImg()!=null){
-            String profileImg = postDto.getProfileImg();
-            pet.setImgUrl(profileImg);
-        }
-
+        pet.setImgUrl("DEFAULT_PET_IMAGE.jpg");
+        
         petRepository.save(pet);
 
         return petMapper.petToPetResponseDto(pet);
@@ -100,11 +98,43 @@ public class PetService {
     }
 
 //  CRUD-IMAGE
-    //  CREATE
-    public String saveImage(MultipartFile multipartFile){
-        return awsS3Service.uploadImage(multipartFile);
-    }
+    //  CREATE : Default_image 적용으로 인한 해당 메소드 삭제
     //  READ
+    public String findImageById(long petId){
+        Pet findPet = verifyExistPetWithId(petId);
+        return findPet.getImgUrl();
+    }
+
     //  UPDATE
+    public String updateImage(MultipartFile imgFile, long petId) {
+        Pet findPet = verifyExistPetWithId(petId);
+        String uploadImage = awsS3Service.uploadImage(imgFile);
+        String findImage = findPet.getImgUrl();
+
+        if(!findImage.equals("DEFAULT_PET_IMAGE.jpg")) awsS3Service.deleteImage(findImage);
+
+        findPet.setImgUrl(uploadImage);
+        petRepository.save(findPet);
+
+        return uploadImage;
+    }
+
     //  DELETE
+    public void deleteImage(Long petId) {
+        Pet findPet = verifyExistPetWithId(petId);
+        String findImage = findPet.getImgUrl();
+
+        if(!findImage.equals("DEFAULT_PET_IMAGE.jpg")){
+            awsS3Service.deleteImage(findImage);
+            findPet.setImgUrl("DEFAULT_PET_IMAGE.jpg");
+        }
+
+        petRepository.save(findPet);
+    }
+
+//  VALID
+    private Pet verifyExistPetWithId(Long petId){
+        Optional<Pet> checkPet = petRepository.findById(petId);
+        return checkPet.orElseThrow(() -> new BusinessLogicException(ExceptionCode.PET_NOT_FOUND));
+    }
 }

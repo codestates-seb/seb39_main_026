@@ -6,6 +6,7 @@ public enum ExceptionCode {
     EMAIL_EXISTS(409, "Email already exists"),
     USERNAME_EXISTS(409, "Username already exists"),
     MEMBER_NOT_FOUND(404, "Member not found"),
+    PET_NOT_FOUND(404, "Pet not found"),
     NO_AUTHORIZATION(401,"You don't have authority"),
     INVALID_AUTHORIZATION(401,"Authorization is invalid"),
     FILE_NOT_FOUND(404,"Can not found attached file"),

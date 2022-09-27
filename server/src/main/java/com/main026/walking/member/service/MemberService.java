@@ -82,14 +82,7 @@ public class MemberService {
     }
 
 // CRUD-IMAGE
-//    //  CREATE
-//    public String saveImage(MultipartFile multipartFile, Long memberId){
-//        Member findMember = verifyExistMemberWithId(memberId);
-//        String uploadImage = awsS3Service.uploadImage(multipartFile);
-//        findMember.setImgUrl(uploadImage);
-//        return uploadImage;
-//    }
-
+    //  CREATE : Default_image 적용으로 인한 해당 메소드 삭제
     //  READ
     public String findImage(Long memberId) {
         Member findMember = verifyExistMemberWithId(memberId);

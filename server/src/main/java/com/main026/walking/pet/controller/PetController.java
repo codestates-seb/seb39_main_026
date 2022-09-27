@@ -77,20 +77,38 @@ public class PetController {
     }
 
 //    CRUD-IMAGE
-    //  CREATE
-    @PostMapping("/post/image")
-    public String postImage(@RequestPart MultipartFile imgFile){
-        return petService.saveImage(imgFile);
+    //  CREATE : DEFAULT_IMAGE 적용으로 메소드 삭제
+    //  UPDATE
+    @PatchMapping("/img/{petId}")
+    public ResponseEntity patchImage(@PathVariable long petId,
+                                     @RequestPart MultipartFile imgFile,
+                                     @AuthenticationPrincipal PrincipalDetails principalDetails){
+        authorization(petId,principalDetails);
+        return new ResponseEntity(petService.updateImage(imgFile,petId),HttpStatus.OK);
     }
 
-    //  UPDATE
-
     //  READ
-    @GetMapping("/img/{filename}")
-    public ResponseEntity showImage(@PathVariable String filename) throws IOException {
-        return new ResponseEntity(awsS3Service.getImageBin(filename), HttpStatus.OK);
+    @GetMapping("/img/{petId}")
+    public ResponseEntity showImage(@PathVariable long petId) throws IOException {
+        String findImage = petService.findImageById(petId);
+        return new ResponseEntity(awsS3Service.getImageBin(findImage), HttpStatus.OK);
     }
 
     //  DELETE
+    @DeleteMapping("/img/{petId}")
+    public ResponseEntity deleteImage(
+      @PathVariable long petId,
+      @AuthenticationPrincipal PrincipalDetails principalDetails){
+        authorization(petId,principalDetails);
+        petService.deleteImage(petId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
+//  VALID
+    private void authorization(long petId, PrincipalDetails principalDetails){
+        Long memberId = petService.findPet(petId).getMember().getId();
+        if(principalDetails == null) throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
+        if(!memberId.equals(principalDetails.getMember().getId()))
+            throw new BusinessLogicException(ExceptionCode.INVALID_AUTHORIZATION);
+    }
 }
