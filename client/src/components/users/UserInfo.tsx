@@ -16,6 +16,9 @@ export default function UserInfo({
 }) {
   const [isNameEditMode, setIsNameEditMode] = useState(false);
   const [name, setName] = useState(data.username);
+  const [imgSrc, setImgSrc] = useState(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`
+  );
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleNameEdit = async () => {
@@ -66,6 +69,7 @@ export default function UserInfo({
         }
       )
       .then((response) => {
+        setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`);
         console.log(response.data);
       })
       .catch((error) => {
@@ -75,6 +79,7 @@ export default function UserInfo({
 
   useEffect(() => {
     setName(data.username);
+    setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`);
   }, [data]);
 
   const userInfo = css`
@@ -150,7 +155,7 @@ export default function UserInfo({
           <div className="img" onClick={onUploadImgClick}>
             <Image
               alt={`${name}'s profile`}
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`}
+              src={imgSrc}
               width="75px"
               height="75px"
               className="img"
