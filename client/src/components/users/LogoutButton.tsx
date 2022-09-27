@@ -21,13 +21,21 @@ export default function LogoutButton() {
 
   const logout = css`
     cursor: pointer;
+<<<<<<< HEAD
     z-index: 0;
+=======
+>>>>>>> 3708a1006ce04ae439c1936fbe495d9c05e2ee43
     background-color: transparent;
     border: 0;
     color: ${Theme.disableColor};
     position: relative;
+<<<<<<< HEAD
     margin-top: 2rem;
     float: right;
+=======
+    float: right;
+    margin-top: 2rem;
+>>>>>>> 3708a1006ce04ae439c1936fbe495d9c05e2ee43
   `;
   return (
     <button css={logout} type="button" onClick={handleLogout}>

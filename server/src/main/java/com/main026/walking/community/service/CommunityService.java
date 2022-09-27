@@ -48,23 +48,23 @@ public class CommunityService {
 
 
     //  Create
-    public Community createCommunity(CommunityDto.Post postDto,Member member) {
+    public CommunityDto.Response createCommunity(CommunityDto.Post postDto,Member member) {
         Community community = communityMapper.postDtoToEntity(postDto);
 
         String[] dayInfo = postDto.getDates();
-        List<String> dayList = new ArrayList<>();
+        List<String> dayList = null;
+
         if (dayInfo != null) {
+            dayList = new ArrayList<>();
             for (String day : dayInfo) {
                 dayList.add(day);
             }
         }
 
         community.setDates(dayList);
-
         community.setRepresentMember(member);
         community.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
 
-        //TODO update쿼리가 두번날아가는 말도안되는 상황.
         //이미지 세팅
         Community savedCommunity = communityRepository.save(community);
         List<String> imagePaths = postDto.getImages();
@@ -76,11 +76,10 @@ public class CommunityService {
                     .build();
             imageRepository.save(image);
         }
-
-        return communityRepository.save(community);
+        return communityMapper.entityToDtoResponse(savedCommunity);
     }
 
-    public Community joinPet(Long communityId, List<Long> petIdList) {
+    public CommunityDto.Response joinPet(Long communityId, List<Long> petIdList) {
         Community community = communityRepository.findById(communityId).orElseThrow();
 
         for (Long petId : petIdList) {
@@ -92,7 +91,7 @@ public class CommunityService {
             communityPetRepository.save(communityPet);
         }
 
-        return community;
+        return communityMapper.entityToDtoResponse(community);
     }
 
     public List<String> saveMultiImage(List<MultipartFile> files){
@@ -109,11 +108,12 @@ public class CommunityService {
     }
 
     //Read
-    public Community findCommunity(long communityId) {
+    public CommunityDto.Response findCommunity(long communityId) {
+        findVerifiedCommunity(communityId);
+        Community community = communityRepository.findById(communityId).orElseThrow();
+        community.countView();
 
-        Community community = findVerifiedCommunity(communityId);
-
-        return communityRepository.save(community);
+        return communityMapper.entityToDtoResponse(community);
     }
 
     public CommunityListResponseDto findCommunities(CommunitySearchCond searchCond, Pageable pageable) {
@@ -129,10 +129,10 @@ public class CommunityService {
 
     }
 
-
     //  Update
-    public Community updateCommunity(long communityId, CommunityDto.Patch patchDto) {
-        Community community = findVerifiedCommunity(communityId);
+    public CommunityDto.Response updateCommunity(long communityId, CommunityDto.Patch patchDto) {
+        findVerifiedCommunity(communityId);
+        Community community = communityRepository.findById(communityId).orElseThrow();
         community.update(patchDto);
 
         //이미지는 위 update 메서드로 적용불가 - 연관관계때문
@@ -146,26 +146,23 @@ public class CommunityService {
             imageRepository.save(image);
         }
 
-        return communityRepository.save(community);
+        return communityMapper.entityToDtoResponse(community);
     }
 
     //  Delete
-    public void deleteCommunity(long communityId, PrincipalDetails principalDetails) {
+    public void deleteCommunity(Long communityId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long authId = principalDetails.getMember().getId();
         Long representId = communityRepository.findById(communityId).orElseThrow().getRepresentMember().getId();
         if (authId!=representId){
             throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
         }
-        Community community = findVerifiedCommunity(communityId);
-        communityRepository.delete(community);
+        findVerifiedCommunity(communityId);
+        communityRepository.deleteById(communityId);
     }
 
     //  Valid
-    public Community findVerifiedCommunity(long questionId) {
+    public void findVerifiedCommunity(Long questionId) {
         Optional<Community> checkCommunity = communityRepository.findById(questionId);
-        Community findCommunity =
-                checkCommunity.orElseThrow(() -> new RuntimeException("COMMUNITY_NOT_FOUND"));
-
-        return findCommunity;
+        if(!checkCommunity.isPresent()) throw new BusinessLogicException(ExceptionCode.COMMUNITY_NOT_FOUND);
     }
 }

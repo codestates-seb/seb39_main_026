@@ -16,6 +16,7 @@ import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.file.FileStore;
 import com.main026.walking.util.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -36,21 +37,23 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CommunityController {
     private final CommunityService communityService;
-    private final CommunityMapper communityMapper;
     private final FileStore fileStore;
 
-    //  Create
-    //TODO 이미지와 json데이터를 함께 보내는게 몹시 곤란, 분리하면 편하다는데 그걸 어떻게하지?
+    // Create
+    // TODO 모임 등록시 모임하는 사람의 펫도 등록
+    // TODO 리프레시 토큰 쿠키에다 저장(일단 테스트할때는)
+
     @PostMapping
     public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
         if(principalDetails==null){
             throw new RuntimeException("로그인하지않은 사용자 입니다.");
         }
         Member loginMember = principalDetails.getMember();
 
-        Community createdCommunity = communityService.createCommunity(postDto,loginMember);
+        CommunityDto.Response createdCommunity = communityService.createCommunity(postDto,loginMember);
 
-        return new ResponseEntity(communityMapper.entityToDtoResponse(createdCommunity), HttpStatus.CREATED);
+        return new ResponseEntity(createdCommunity, HttpStatus.CREATED);
     }
 
     //community/postimg 에서 post 요청을 처리, 이미지를 저장하고 경로주소를 생성한뒤
@@ -60,23 +63,18 @@ public class CommunityController {
         return communityService.saveMultiImage(imgFile);
     }
 
-
-    //  Read
+    // Read
     // TODO 커뮤니티 요청시 회원의 강아지를 응답해주고있는데 이것이 최선일까?
     @GetMapping("/{community-id}")
     public ResponseEntity getCommunity(@PathVariable("community-id") long communityId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-        Community community = communityService.findCommunity(communityId);
-        community.countView();
 
         List<PetDto.compactResponse> petList = new ArrayList<>();
         if(principalDetails!=null) {
             Member member = principalDetails.getMember();
             petList = member.getPetList().stream().map(pet -> new PetDto.compactResponse(pet)).collect(Collectors.toList());
         }
-        CommunityDto.Response response = communityMapper.entityToDtoResponse(community);
+        CommunityDto.Response response = communityService.findCommunity(communityId);
         response.setPetList(petList);
-
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -85,9 +83,9 @@ public class CommunityController {
     public ResponseEntity joinCommunity(@PathVariable("community-id") long communityId,
                                         @RequestBody List<Long> petIdList
     ) {
-        Community community = communityService.joinPet(communityId, petIdList);
+        CommunityDto.Response community = communityService.joinPet(communityId, petIdList);
 
-        return new ResponseEntity<>(communityMapper.entityToDtoResponse(community),HttpStatus.OK);
+        return new ResponseEntity<>(community,HttpStatus.OK);
     }
 
 
@@ -97,7 +95,6 @@ public class CommunityController {
             @RequestParam(value = "size", defaultValue = "10") int size,
             CommunitySearchCond communitySearchCond) {
         PageRequest pageRequest = PageRequest.of(page-1,size);
-
 
         CommunityListResponseDto communities = communityService.findCommunities(communitySearchCond, pageRequest);
 
@@ -113,14 +110,13 @@ public class CommunityController {
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         //TODO 인증로직은 서비스에서 처리
-        if(communityService.findCommunity(communityId).getRepresentMember().getId()!=principalDetails.getMember().getId()){
+        if(communityService.findCommunity(communityId).getMember().getId()!=principalDetails.getMember().getId()){
             throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
         }
 
-        communityService.updateCommunity(communityId, dto);
-        Community community = communityService.findCommunity(communityId);
+        CommunityDto.Response response = communityService.updateCommunity(communityId, dto);
 
-        return new ResponseEntity<>(communityMapper.entityToDtoResponse(community), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //  Delete

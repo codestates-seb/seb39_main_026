@@ -43,7 +43,7 @@ public class CommunityDto {
         //날짜로 받는 경우
         private String date;
         //요일로 받는 경우
-        private String[] dates;
+        private String[] dates = null;
 
         private String time;
 
