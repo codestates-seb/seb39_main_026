@@ -39,7 +39,7 @@ jobs:
 
       - name: Set Properties
         run: |
-          cd server/src/main/resource
+          cd server/src/main/resources
           echo "${{ secrets.DI_APP_YML_SECRET }}" > ./application.yml
         shell: bash
 
