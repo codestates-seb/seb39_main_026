@@ -82,6 +82,11 @@ public class MemberController {
         return new ResponseEntity(awsS3Service.getImageBin(findImage),HttpStatus.OK);
     }
 
+    @GetMapping("/img/{filename}")
+    public ResponseEntity showImage(@PathVariable String filename) throws IOException {
+        return new ResponseEntity(awsS3Service.getImageBin(filename),HttpStatus.OK);
+    }
+
     //  UPDATE
     @PatchMapping("/image/{memberId}")
     public ResponseEntity patchImage(@PathVariable Long memberId,
