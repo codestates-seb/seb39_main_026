@@ -1,6 +1,7 @@
 package com.main026.walking.member.controller;
 
 import com.main026.walking.auth.principal.PrincipalDetails;
+import com.main026.walking.member.dto.FindPasswordForm;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.service.MemberService;
 import com.main026.walking.util.file.FileStore;
@@ -69,6 +70,11 @@ public class MemberController {
     @GetMapping("/img/{filename}")
     public Resource showImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
+    }
+
+    @PostMapping("/findpassword")
+    public String findPassword(@RequestBody FindPasswordForm form){
+        return memberService.findPassword(form);
     }
 
 }
