@@ -1,8 +1,10 @@
 package com.main026.walking.member.service;
 
 import com.main026.walking.auth.principal.PrincipalDetails;
+import com.main026.walking.email.service.EmailSender;
 import com.main026.walking.exception.BusinessLogicException;
 import com.main026.walking.exception.ExceptionCode;
+import com.main026.walking.member.dto.FindPasswordForm;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.mapper.MemberMapper;
@@ -15,7 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.Optional;
+import java.util.UUID;
 
 //TODO 비밀번호 찾기
 @Service
@@ -26,6 +31,7 @@ public class MemberService {
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder passwordEncoder;
     private final FileStore fileStore;
+    private final EmailSender emailSender;
 
     public MemberDto.Response loginMember(Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -42,6 +48,7 @@ public class MemberService {
         Member member = memberMapper.memberPostDtoToMember(postDto);
         member.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
         member.setPassword(passwordEncoder.encode(member.getPassword()));
+
 
         memberRepository.save(member);
 
@@ -81,6 +88,22 @@ public class MemberService {
         }
     }
 
+    public String findPassword(FindPasswordForm form) {
+        Member member = verifyNotExistMemberWithEmail(form.getEmail());
+        String temPassword = UUID.randomUUID().toString();
+        //임시비밀번호로 교체
+        try {
+            member.setPassword(passwordEncoder.encode(temPassword));
+            memberRepository.save(member);
+            emailSender.sendEmail(form.getEmail(),temPassword);
+        }catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        return "이메일 전송 완료";
+    }
+
     //D
     public void deleteMember(Long memberId){
         memberRepository.deleteById(memberId);
@@ -89,6 +112,10 @@ public class MemberService {
     private void verifyExistMemberWithEmail(String email){
         Optional<Member> checkMember =  memberRepository.findByEmail(email);
         if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
+    }
+    private Member verifyNotExistMemberWithEmail(String email){
+        if(!memberRepository.findByEmail(email).isPresent()) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        return memberRepository.findByEmail(email).orElseThrow();
     }
 
     private void verifyExistMemberWithUsername(String username){
