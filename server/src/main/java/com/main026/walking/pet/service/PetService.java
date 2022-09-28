@@ -47,7 +47,7 @@ public class PetService {
 
         //연관관계에 대한 고민 필요
         pet.setMember(member);
-
+        if(pet.getImgUrl().isEmpty()) pet.setImgUrl("DEFAULT_PET_IMAGE.jpg");
         petRepository.save(pet);
 
         return petMapper.petToPetResponseDto(pet);

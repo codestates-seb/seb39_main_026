@@ -27,7 +27,7 @@ public class PetDto {
     @Getter
     @NoArgsConstructor
     public static class Patch{
-        private String perName;
+        private String petName;
         private String petGender;
         private String neuter;
         private String birthDay;
@@ -37,8 +37,8 @@ public class PetDto {
         private String about;
 
         @Builder
-        public Patch(String perName, String petGender, String neuter,String birthDay, String personality, String breed, String imgUrl, String about) {
-            this.perName = perName;
+        public Patch(String petName, String petGender, String neuter,String birthDay, String personality, String breed, String imgUrl, String about) {
+            this.petName = petName;
             this.petGender = petGender;
             this.neuter = neuter;
             this.birthDay = birthDay;
@@ -89,5 +89,4 @@ public class PetDto {
             this.imgUrl = pet.getImgUrl();
         }
     }
-
 }
