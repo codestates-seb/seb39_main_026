@@ -1,5 +1,5 @@
 export interface WalkDefault {
-  communityId: string;
+  communityId: number;
   name: string;
   dateInfo: string;
   dayInfo: (string | null)[];
@@ -19,6 +19,7 @@ export interface WalkDetail extends WalkDefault {
     }
   ];
   member: {
+    id: number;
     imgUrl: string;
     username: string;
     petList: [
@@ -87,4 +88,9 @@ interface WalkDetailMember {
   memberCommunityList: [];
   petList: [];
   username: string;
+}
+
+export interface CommentPost {
+  communityId: number;
+  body: string;
 }
