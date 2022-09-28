@@ -74,7 +74,11 @@ public class CommunityService {
                     .build();
             imageRepository.save(image);
         }
-        return communityMapper.entityToDtoResponse(savedCommunity);
+
+        CommunityDto.Response dto = communityMapper.entityToDtoResponse(savedCommunity);
+        List<String> fileUrls = dto.getImgUrls().stream().map(awsS3Service::getFileURL).collect(Collectors.toList());
+        dto.setImgUrls(fileUrls);
+        return dto;
     }
 
     public CommunityDto.Response joinPet(Long communityId, List<Long> petIdList) {
@@ -98,7 +102,11 @@ public class CommunityService {
         Community community = communityRepository.findById(communityId).orElseThrow();
         community.countView();
 
-        return communityMapper.entityToDtoResponse(community);
+        CommunityDto.Response dto = communityMapper.entityToDtoResponse(community);
+        List<String> fileUrls = dto.getImgUrls().stream().map(awsS3Service::getFileURL).collect(Collectors.toList());
+        dto.setImgUrls(fileUrls);
+
+        return dto;
     }
 
     public CommunityListResponseDto findCommunities(CommunitySearchCond searchCond, Pageable pageable) {

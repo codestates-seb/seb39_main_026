@@ -42,7 +42,7 @@ public class PetController {
     @PostMapping("/post")
     public PetDto.Response postPet(
       @RequestBody PetDto.Post postDto,
-      @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
+      @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
         if(!principalDetails.getMember().getUsername().equals(username)){
             throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
         }
@@ -53,7 +53,7 @@ public class PetController {
     //이름이 괴상한데 그냥하는 이유 : requestMapping 의 이름 통일성을 지키는게 더 낫다고 생각해서,
     //하지만 괴상하긴 해서 애초에 네이밍컨벤션에 대한 고민을 더 해야할것같다.
     @GetMapping("/{petId}")
-    public PetDto.Response getPet(@PathVariable Long petId){
+    public PetDto.Response getPet(@PathVariable Long petId) throws IOException {
         return petService.findPet(petId);
     }
 
@@ -89,7 +89,7 @@ public class PetController {
     @PatchMapping("/img/{petId}")
     public ResponseEntity patchImage(@PathVariable long petId,
                                      @RequestPart MultipartFile imgFile,
-                                     @AuthenticationPrincipal PrincipalDetails principalDetails){
+                                     @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
         authorization(petId,principalDetails);
         return new ResponseEntity(petService.updateImage(imgFile,petId),HttpStatus.OK);
     }
@@ -105,14 +105,14 @@ public class PetController {
     @DeleteMapping("/img/{petId}")
     public ResponseEntity deleteImage(
       @PathVariable long petId,
-      @AuthenticationPrincipal PrincipalDetails principalDetails){
+      @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
         authorization(petId,principalDetails);
         petService.deleteImage(petId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 //  VALID
-    private void authorization(long petId, PrincipalDetails principalDetails){
+    private void authorization(long petId, PrincipalDetails principalDetails) throws IOException {
         Long memberId = petService.findPet(petId).getMember().getId();
         if(!memberId.equals(principalDetails.getMember().getId()))
             throw new BusinessLogicException(ExceptionCode.INVALID_AUTHORIZATION);

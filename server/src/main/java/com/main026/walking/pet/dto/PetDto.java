@@ -67,6 +67,9 @@ public class PetDto {
         private String imgUrl;
         private String about;
 
+        public void setImgUrl(String imgUrl) {
+            this.imgUrl = imgUrl;
+        }
     }
 
     @Getter

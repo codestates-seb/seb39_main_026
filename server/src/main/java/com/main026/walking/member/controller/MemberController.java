@@ -29,7 +29,7 @@ public class MemberController {
     private final AwsS3Service awsS3Service;
 
     @PostMapping("/signup")
-    public MemberDto.Response signUp(@RequestBody MemberDto.Post memberPostDto){
+    public MemberDto.Response signUp(@RequestBody MemberDto.Post memberPostDto) throws IOException {
         return memberService.saveMember(memberPostDto);
     }
 
@@ -39,7 +39,7 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public MemberDto.Response getMember(@PathVariable Long memberId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public MemberDto.Response getMember(@PathVariable Long memberId, @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
 
         //TODO 개선 필요 : 로그인하지않았거나, 본인이 아님
         Boolean authorization = true;

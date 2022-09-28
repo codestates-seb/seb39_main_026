@@ -36,7 +36,7 @@ public class MemberService {
     }
 
     //  CREATE
-    public MemberDto.Response saveMember(MemberDto.Post postDto){
+    public MemberDto.Response saveMember(MemberDto.Post postDto) throws IOException {
 
         verifyExistMemberWithEmail(postDto.getEmail());
         verifyExistMemberWithUsername(postDto.getUsername());
@@ -47,16 +47,18 @@ public class MemberService {
         member.setImgUrl("DEFAULT_MEMBER_IMAGE.jpg");
         memberRepository.save(member);
 
-        return memberMapper.memberToMemberResponseDto(member);
+        MemberDto.Response dto = memberMapper.memberToMemberResponseDto(member);
+        dto.setImgUrl(awsS3Service.getImageBin(dto.getImgUrl()));
+        return dto;
     }
 
     //  READ
-    public MemberDto.Response findMember(Long memberId,Boolean isOwner){
+    public MemberDto.Response findMember(Long memberId,Boolean isOwner) throws IOException {
 
         MemberDto.Response response =
                 memberMapper.memberToMemberResponseDto(verifyExistMemberWithId(memberId));
         response.setIsOwner(isOwner);
-
+        response.setImgUrl(awsS3Service.getImageBin(response.getImgUrl()));
         return response;
     }
 
