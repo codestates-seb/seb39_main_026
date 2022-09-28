@@ -16,9 +16,7 @@ export default function UserInfo({
 }) {
   const [isNameEditMode, setIsNameEditMode] = useState(false);
   const [name, setName] = useState(data.username);
-  const [imgSrc, setImgSrc] = useState(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`
-  );
+  const [imgSrc, setImgSrc] = useState(data.imgUrl);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleNameEdit = async () => {

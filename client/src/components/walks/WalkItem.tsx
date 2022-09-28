@@ -9,6 +9,7 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
   const handleItemClick = () => {
     router.push(`/walks/${walk.communityId}`);
   };
+
   const walkitem = css`
     cursor: pointer;
     width: 320px;
@@ -66,42 +67,46 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
     }
   `;
   return (
-    <div css={walkitem} onClick={handleItemClick}>
-      <Image
-        className="img"
-        src={`${process.env.NEXT_PUBLIC_BASE_URL}/community/img/${walk.imgUrls[0]}`}
-        alt="산책 모임 대표 이미지"
-        height="120px"
-        width="321px"
-      />
-      <div className="walk_wrapper">
-        <div className="walk_info">
-          <h3 className="walk_title">{walk.name}</h3>
-          <h4 className="walk_des">
-            {walk.dateInfo != null ? (
-              format(new Date(walk?.dateInfo), 'yyyy년 MM월 dd일')
-            ) : (
-              <p className="everyweek-moim">
-                매주{' '}
-                {walk.dayInfo.map((yoil) => (
-                  <span key={`${yoil}`}>{yoil}</span>
-                ))}
+    <>
+      {walk && (
+        <div css={walkitem} onClick={handleItemClick}>
+          <Image
+            className="img"
+            src={walk.imgUrls[0]}
+            alt="산책 모임 대표 이미지"
+            height="120px"
+            width="321px"
+          />
+          <div className="walk_wrapper">
+            <div className="walk_info">
+              <h3 className="walk_title">{walk.name}</h3>
+              <h4 className="walk_des">
+                {walk.dateInfo != null ? (
+                  format(new Date(walk?.dateInfo), 'yyyy년 MM월 dd일')
+                ) : (
+                  <p className="everyweek-moim">
+                    매주{' '}
+                    {walk.dayInfo.map((yoil) => (
+                      <span key={`${yoil}`}>{yoil}</span>
+                    ))}
+                  </p>
+                )}
+              </h4>
+              <h4 className="walk_des">{walk.place}</h4>
+            </div>
+            <div className="status">
+              <p>
+                {walk.capacity <= walk.participant
+                  ? '다음 기회에...'
+                  : `${walk.capacity - walk.participant}자리 남았어요!`}
               </p>
-            )}
-          </h4>
-          <h4 className="walk_des">{walk.place}</h4>
+              <button>
+                {walk.capacity <= walk.participant ? '모집마감' : '모집중'}
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="status">
-          <p>
-            {walk.capacity <= walk.participant
-              ? '다음 기회에...'
-              : `${walk.capacity - walk.participant}자리 남았어요!`}
-          </p>
-          <button>
-            {walk.capacity <= walk.participant ? '모집마감' : '모집중'}
-          </button>
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
