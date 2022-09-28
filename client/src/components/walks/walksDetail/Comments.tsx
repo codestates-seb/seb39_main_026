@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { WalkDetail } from '../../../models/WalkDefault';
 import { Theme } from '../../../styles/Theme';
 import LoadingComment from '../skeleton/walksDetail/LoadingComment';
@@ -57,6 +58,8 @@ const commentContainer = css`
 `;
 
 export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
+  const router = useRouter();
+
   if (walkDetail == null) {
     return (
       <article css={commentContainer}>
@@ -92,6 +95,7 @@ export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
                   width="40px"
                   alt={`${item.member.username}의 사진`}
                   className="comment-profile"
+                  onClick={() => router.push(`/users/${item.member.id}`)}
                 />
                 <div>
                   <p
