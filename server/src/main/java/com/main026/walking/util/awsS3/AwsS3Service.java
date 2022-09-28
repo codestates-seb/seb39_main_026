@@ -69,7 +69,7 @@ public class AwsS3Service {
     // set expiration
     Date expiration = new Date();
     long expTimeMillis = expiration.getTime();
-    expTimeMillis += 1000 * 60 * 60; // 1 hour
+    expTimeMillis += 1000 * 60 * 300; // 1 hour
     expiration.setTime(expTimeMillis);
 
     // Generate the presigned URL.
@@ -82,9 +82,10 @@ public class AwsS3Service {
   }
 
   public String getImageBin(String fileName) throws IOException {
-    S3Object findObject = amazonS3.getObject(bucket,fileName);
+//    S3Object findObject = amazonS3.getObject(bucket,fileName);
     log.info(" [S3-Get] Read-File-Name : " + fileName);
-    return Base64.encodeAsString(findObject.getObjectContent().readAllBytes());
+//    return Base64.encodeAsString(findObject.getObjectContent().readAllBytes());
 //    return IOUtils.toByteArray(findObject.getObjectContent());
+    return getFileURL(fileName);
   }
 }
