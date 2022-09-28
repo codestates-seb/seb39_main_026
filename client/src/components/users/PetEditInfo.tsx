@@ -62,8 +62,8 @@ export default function PetEditInfo({
           {
             headers: {
               'Content-Type': 'multipart/form-data',
-              // authorization: localStorage.getItem('accessToken') || '',
-              // refresh_token: localStorage.getItem('refreshToken') || '',
+              authorization: localStorage.getItem('accessToken') || '',
+              refresh_token: localStorage.getItem('refreshToken') || '',
             },
           }
         )
