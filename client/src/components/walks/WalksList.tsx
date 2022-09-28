@@ -18,7 +18,6 @@ export default function WalksList({ query }: { query: string }) {
   useEffect(() => {
     axios.get(url).then((res) => {
       setWalks(res.data.communityList);
-      console.log(res);
     });
   }, [url]);
 

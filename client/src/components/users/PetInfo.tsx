@@ -102,7 +102,7 @@ export default function PetInfo({
     <>
       {pets ? (
         <div css={mypet}>
-          {pets?.map((pet: MyPets) => {
+          {pets.map((pet: MyPets) => {
             return (
               <React.Fragment key={pet.id}>
                 <button
@@ -113,7 +113,7 @@ export default function PetInfo({
                   }}
                 >
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`}
+                    src={pet.imgUrl}
                     height="50px"
                     width="50px"
                     alt={`${pet.petName}`}

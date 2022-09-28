@@ -3,7 +3,6 @@ import axios from 'axios';
 import Image from 'next/image';
 import React, {
   useState,
-  useEffect,
   useRef,
   useCallback,
   Dispatch,
@@ -34,9 +33,8 @@ export default function PetEditInfo({
   const [petPersonality, setPetPersonality] = useState(pet.personality);
   const [petAbout, setPetAbout] = useState(pet.about);
   const [petBirthday, setPetBirthday] = useState(pet.birthday);
-  const [imgSrc, setImgSrc] = useState(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`
-  );
+  const [petImgUrl, setPetImgUrl] = useState('');
+  const [imgSrc, setImgSrc] = useState(pet.imgUrl);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const onUploadImgClick = useCallback(() => {
@@ -54,52 +52,23 @@ export default function PetEditInfo({
     const uploadImg = e.target.files[0];
     const formData = new FormData();
     formData.append('imgFile', uploadImg);
-    if (pet.id === 909090) {
-      axios
-        .post(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              authorization: localStorage.getItem('accessToken') || '',
-              refresh_token: localStorage.getItem('refreshToken') || '',
-            },
-          }
-        )
-        .then((response) => {
-          setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`);
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      axios
-        .patch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              authorization: localStorage.getItem('accessToken') || '',
-              refresh_token: localStorage.getItem('refreshToken') || '',
-            },
-          }
-        )
-        .then((response) => {
-          setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`);
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
+    axios
+      .post(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/post/image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: localStorage.getItem('accessToken') || '',
+          refresh_token: localStorage.getItem('refreshToken') || '',
+        },
+      })
+      .then((response) => {
+        setImgSrc(URL.createObjectURL(uploadImg));
+        setPetImgUrl(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
-
-  useEffect(() => {
-    setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`);
-  }, [pet]);
 
   const handleSubmitClick = () => {
     const editedData = {
@@ -110,6 +79,7 @@ export default function PetEditInfo({
       personality: petPersonality,
       about: petAbout,
       birthDay: petBirthday,
+      imgUrl: petImgUrl,
     };
     console.log(editedData);
     if (pet.id === 909090) {
@@ -127,9 +97,9 @@ export default function PetEditInfo({
         },
       });
     }
-
     setIsPetEditMode(false);
   };
+
   const handleDeleteClick = () => {
     axios.delete(`${API.PETS}/${pet.id}`, {
       headers: {
@@ -139,23 +109,29 @@ export default function PetEditInfo({
     });
     setIsPetEditMode(false);
   };
+
   const handlePetNameEdit = (event: React.FormEvent<HTMLInputElement>) => {
     setPetName(event.currentTarget.value);
   };
+
   const handleGenderSelect = (event: React.MouseEvent<HTMLButtonElement>) => {
     setPetGender(event.currentTarget.innerText);
   };
+
   const handleNeuterSelect = (event: React.MouseEvent<HTMLButtonElement>) => {
     setPetNeuter(event.currentTarget.innerText);
   };
+
   const handlePersonliatySelect = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     setPetPersonality(event.currentTarget.innerText);
   };
+
   const handlePetAboutEdit = (event: React.FormEvent<HTMLInputElement>) => {
     setPetAbout(event.currentTarget.value);
   };
+
   const handlePetBreedEdit = (event: React.FormEvent<HTMLInputElement>) => {
     setPetBreed(event.currentTarget.value);
   };
@@ -172,6 +148,9 @@ export default function PetEditInfo({
       border-radius: 50%;
       background-color: ${Theme.disableBgColor};
       object-fit: cover;
+    }
+    .preview {
+      border-radius: 50%;
     }
     .imgUpload {
       display: none;
@@ -254,6 +233,7 @@ export default function PetEditInfo({
           src={imgSrc}
           width="100px"
           height="100px"
+          className="preview"
         />
         <input
           type="file"

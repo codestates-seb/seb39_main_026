@@ -36,17 +36,10 @@ export default function UserInfo({
         )
         .then((res) => setName(res.data.username))
         .catch((err) => {
-          if (
-            err.response.headers.authorization &&
-            err.response.headers.refresh_token
-          ) {
+          if (err.response.headers.authorization) {
             localStorage.setItem(
               'accessToken',
               err.response.headers.authorization
-            );
-            localStorage.setItem(
-              'refreshToken',
-              err.response.headers.refresh_token
             );
           }
         });
@@ -81,21 +74,28 @@ export default function UserInfo({
           headers: {
             'Content-Type': 'multipart/form-data',
             authorization: localStorage.getItem('accessToken') || '',
+            refresh_token: localStorage.getItem('refreshToken') || '',
           },
         }
       )
       .then((response) => {
-        setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`);
+        setImgSrc(URL.createObjectURL(uploadImg));
         console.log(response.data);
       })
-      .catch((error) => {
-        console.error(error);
+      .catch((err) => {
+        if (err.response.headers.authorization) {
+          localStorage.setItem(
+            'accessToken',
+            err.response.headers.authorization
+          );
+        }
+        console.error(err);
       });
   };
 
   useEffect(() => {
     setName(data.username);
-    setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`);
+    setImgSrc(data.imgUrl);
   }, [data]);
 
   const userInfo = css`
