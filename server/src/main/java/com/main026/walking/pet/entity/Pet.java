@@ -62,7 +62,7 @@ public class Pet {
 
 
     public void update(PetDto.Patch patchDto) {
-        this.petName = patchDto.getPerName();
+        this.petName = patchDto.getPetName();
         this.petGender = patchDto.getPetGender();
         this.neuter = patchDto.getNeuter();
         this.personality = patchDto.getPersonality();
