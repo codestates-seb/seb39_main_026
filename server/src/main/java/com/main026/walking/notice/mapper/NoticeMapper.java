@@ -20,6 +20,7 @@ public interface NoticeMapper {
   /*
   @Mapping(target = "representMember", expression = "java(notice.getCommunity().getRepresentMember())")
   */
+  @Mapping(source = "id",target = "noticeId")
   NoticeDto.Response entityToDtoResponse(Notice entity);
 
 }
