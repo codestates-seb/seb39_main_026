@@ -113,7 +113,7 @@ export default function PetInfo({
                   }}
                 >
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.imgUrl}`}
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`}
                     height="50px"
                     width="50px"
                     alt={`${pet.petName}`}
@@ -125,7 +125,13 @@ export default function PetInfo({
             );
           })}
           {isValidated && pets.length > 0 && (
-            <button type="button" className="addButton">
+            <button
+              type="button"
+              className="addButton"
+              onClick={() => {
+                setIsPetAddMode(true);
+              }}
+            >
               <Icon icon="akar-icons:plus" className="icon" />
             </button>
           )}

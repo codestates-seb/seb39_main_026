@@ -1,7 +1,11 @@
 import { css } from '@emotion/react';
+import axios from 'axios';
 import Image from 'next/image';
 import React, { useState, Dispatch, SetStateAction } from 'react';
+import { useRecoilState } from 'recoil';
+import { API } from '../../apis/api';
 import { MyPets } from '../../models/MyPets';
+import UserState from '../../states/UserState';
 import { Theme } from '../../styles/Theme';
 import CommonButton from '../CommonButton';
 import PetBirthdaySelector from './PetBirthdaySelector';
@@ -22,18 +26,44 @@ export default function PetEditInfo({
   const [petPersonality, setPetPersonality] = useState(pet.personality);
   const [petAbout, setPetAbout] = useState(pet.about);
   const [petBirthday, setPetBirthday] = useState(pet.birthday);
+  const [user] = useRecoilState(UserState);
 
   const handleSubmitClick = () => {
     const editedData = {
       petName,
-      gender: petGender,
+      petGender: petGender,
       breed: petBreed,
       neuter: petNeuter,
       personality: petPersonality,
       about: petAbout,
-      birthday: petBirthday,
+      birthDay: petBirthday,
     };
     console.log(editedData);
+    if (pet.id === 909090) {
+      axios.post(`${API.PETS}/post/?username=${user.username}`, editedData, {
+        headers: {
+          authorization: localStorage.getItem('accessToken') || '',
+          refresh_token: localStorage.getItem('refreshToken') || '',
+        },
+      });
+    } else {
+      axios.patch(`${API.PETS}/${pet.id}`, editedData, {
+        headers: {
+          authorization: localStorage.getItem('accessToken') || '',
+          refresh_token: localStorage.getItem('refreshToken') || '',
+        },
+      });
+    }
+
+    setIsPetEditMode(false);
+  };
+  const handleDeleteClick = () => {
+    axios.delete(`${API.PETS}/${pet.id}`, {
+      headers: {
+        authorization: localStorage.getItem('accessToken') || '',
+        refresh_token: localStorage.getItem('refreshToken') || '',
+      },
+    });
     setIsPetEditMode(false);
   };
   const handlePetNameEdit = (event: React.FormEvent<HTMLInputElement>) => {
@@ -114,7 +144,12 @@ export default function PetEditInfo({
       }
     }
     .submitBtn {
+      margin: 2rem 2rem 0 2rem;
+      width: 70%;
+    }
+    .deleteBtn {
       margin: 2rem;
+      margin: 1rem 2rem 7rem 2rem;
       width: 70%;
     }
     @media screen and (max-width: 768px) {
@@ -140,7 +175,7 @@ export default function PetEditInfo({
       <div className="img">
         <Image
           alt={`${pet.petName}`}
-          src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.imgUrl}`}
+          src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`}
           width="100px"
           height="100px"
         />
@@ -210,6 +245,14 @@ export default function PetEditInfo({
         onClick={handleSubmitClick}
       >
         저장하기
+      </CommonButton>
+      <CommonButton
+        type="submit"
+        className="deleteBtn"
+        onClick={handleDeleteClick}
+        buttonColor="#b4b4b4"
+      >
+        삭제하기
       </CommonButton>
     </div>
   );
