@@ -26,8 +26,7 @@ public class PetController {
     private final PetService petService;
     private final AwsS3Service awsS3Service;
 
-    //강아지 등록페이지 접근
-    //TODO 미리 데이터를 넣어두는 방식 변경 필요
+    // TODO 미리 데이터를 넣어두는 방식 변경 필요
     @GetMapping("/post")
     public List<String> getPostPage(@RequestParam String username){
         List<String> personality = new ArrayList<>();

@@ -98,7 +98,7 @@ public class CommunityDto {
         private List<PetDto.compactResponse> communityPetList;
         private List<PetDto.compactResponse> sessionMemberPetList;
         private List<CommentDto.Response> comments;
-        private List<NoticeDto.Response> notices;
+        private NoticeDto.Response notices;
         private Integer participant;
         private LocalDateTime createdAt;
         private Long viewed;

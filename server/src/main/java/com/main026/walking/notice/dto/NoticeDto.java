@@ -25,6 +25,7 @@ public class NoticeDto {
   @AllArgsConstructor
   @Builder
   public static class Response{
+    private Long noticeId;
     private String title;
     private String body;
   }

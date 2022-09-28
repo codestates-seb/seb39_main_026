@@ -40,18 +40,6 @@ public class NoticeController {
     return new ResponseEntity(noticeMapper.entityToDtoResponse(notice), HttpStatus.OK);
   }
 
-//  @GetMapping
-//  public ResponseEntity getNotices(
-//    @RequestParam(value = "page", defaultValue = "1") int page,
-//    @RequestParam(value = "size", defaultValue = "10") int size ) {
-//
-//    Page<Notice> noticePage = noticeService.findNotices(page - 1, size);
-//
-//    List<Notice> notices = noticePage.getContent();
-//
-//    return new ResponseEntity(new MultiResponseDto<>(noticeMapper.multiEntityToDtoResponse(notices), noticePage), HttpStatus.OK);
-//  }
-
   //  Update
   @PatchMapping("{notice-id}")
   public ResponseEntity patchNotice(

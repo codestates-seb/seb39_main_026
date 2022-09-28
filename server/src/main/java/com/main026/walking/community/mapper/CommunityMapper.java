@@ -88,15 +88,24 @@ public interface CommunityMapper {
         }
         response.imgUrls(imageList);
 
-        List<NoticeDto.Response> notices = new ArrayList<>();
-        for (int i = 0; i < entity.getNotices().size(); i++) {
-            Notice notice = entity.getNotices().get(i);
-            notices.add(NoticeDto.Response.builder()
-                    .title(notice.getTitle())
-                    .body(notice.getBody())
-                    .build());
+
+//        List<NoticeDto.Response> notices = new ArrayList<>();
+//        for (int i = 0; i < entity.getNotices().size(); i++) {
+//            Notice notice = entity.getNotices().get(i);
+//            notices.add(NoticeDto.Response.builder()
+//                    .title(notice.getTitle())
+//                    .body(notice.getBody())
+//                    .build());
+//        }
+        NoticeDto.Response notice = null;
+        if(entity.getNotice()!=null) {
+            entity.getNotice();
+            notice = NoticeDto.Response.builder()
+                    .title(entity.getNotice().getTitle())
+                    .body(entity.getNotice().getBody())
+                    .build();
         }
-        response.notices(notices);
+        response.notices(notice);
 
         return response.build();
     }

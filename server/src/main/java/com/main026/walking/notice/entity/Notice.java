@@ -26,7 +26,7 @@ public class Notice {
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "community_id")
     private Community community;
 

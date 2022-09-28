@@ -3,6 +3,7 @@ package com.main026.walking.member.controller;
 import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.exception.BusinessLogicException;
 import com.main026.walking.exception.ExceptionCode;
+import com.main026.walking.member.dto.FindPasswordForm;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.service.MemberService;
 import com.main026.walking.util.awsS3.AwsS3Service;
@@ -46,7 +47,6 @@ public class MemberController {
         if(principalDetails==null||principalDetails.getMember().getId()!=memberId){
             authorization = false;
         }
-
         return memberService.findMember(memberId,authorization);
     }
 
@@ -83,6 +83,12 @@ public class MemberController {
         String updateImage = memberService.updateImage(imgFile,memberId);
         return new ResponseEntity(updateImage,HttpStatus.OK);
     }
+
+    @PostMapping("/findpassword")
+    public String findPassword(@RequestBody FindPasswordForm form){
+        return memberService.findPassword(form);
+    }
+
 
     //  DELETE
     @DeleteMapping("/img/{memberId}")

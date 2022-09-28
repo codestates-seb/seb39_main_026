@@ -27,6 +27,7 @@ public class CommentDto {
   @AllArgsConstructor @NoArgsConstructor
   @Builder
   public static class Response{
+    private Long commentId;
     private String body;
     private LocalDateTime createdAt;
     private MemberDto.Response member;
