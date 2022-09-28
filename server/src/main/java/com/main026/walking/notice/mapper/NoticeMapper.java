@@ -23,5 +23,4 @@ public interface NoticeMapper {
   @Mapping(source = "id",target = "noticeId")
   NoticeDto.Response entityToDtoResponse(Notice entity);
 
-  List<NoticeDto.Response> multiEntityToDtoResponse(List<Notice> entities);
 }

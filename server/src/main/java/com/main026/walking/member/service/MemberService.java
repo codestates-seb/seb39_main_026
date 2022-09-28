@@ -49,6 +49,7 @@ public class MemberService {
         member.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
         member.setPassword(passwordEncoder.encode(member.getPassword()));
 
+
         memberRepository.save(member);
 
         return memberMapper.memberToMemberResponseDto(member);

@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { WalkDetail } from '../../../models/WalkDefault';
 import { Theme } from '../../../styles/Theme';
 import LoadingComment from '../skeleton/walksDetail/LoadingComment';
@@ -42,9 +44,22 @@ const commentContainer = css`
   button + button {
     margin-left: 7px;
   }
+
+  .comment-profile {
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  span {
+    height: 40px !important;
+    width: 40px !important;
+  }
 `;
 
 export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
+  const router = useRouter();
+
   if (walkDetail == null) {
     return (
       <article css={commentContainer}>
@@ -66,23 +81,21 @@ export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
               margin-left: 4px;
             `}
           >
-            {walkDetail?.comments?.length}
+            {walkDetail.comments.length}
           </span>
         </h2>
         <ul>
-          {walkDetail.comments?.map((item) => (
-            <li key={item.body}>
+          {walkDetail.comments?.map((item, idx) => (
+            <li key={`${item.body}-${idx}`}>
               <div>
-                <img
-                  src={item.member.imgUrl}
-                  css={css`
-                    width: 40px;
-                    height: 40px;
-                    object-fit: cover;
-                    border-radius: 50%;
-                    cursor: pointer;
-                  `}
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${item.member.id}`}
+                  // src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/image/${item.member.id}`}
+                  height="40px"
+                  width="40px"
                   alt={`${item.member.username}의 사진`}
+                  className="comment-profile"
+                  onClick={() => router.push(`/users/${item.member.id}`)}
                 />
                 <div>
                   <p
@@ -103,7 +116,7 @@ export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
           ))}
         </ul>
       </article>
-      <CommentInput />
+      <CommentInput walkDetail={walkDetail} />
     </>
   );
 }
