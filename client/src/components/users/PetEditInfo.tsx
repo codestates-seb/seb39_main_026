@@ -1,7 +1,14 @@
 import { css } from '@emotion/react';
 import axios from 'axios';
 import Image from 'next/image';
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { useRecoilState } from 'recoil';
 import { API } from '../../apis/api';
 import { MyPets } from '../../models/MyPets';
@@ -19,6 +26,7 @@ export default function PetEditInfo({
   pet: MyPets;
   setIsPetEditMode: Dispatch<SetStateAction<boolean>>;
 }) {
+  const [user] = useRecoilState(UserState);
   const [petName, setPetName] = useState(pet.petName);
   const [petGender, setPetGender] = useState(pet.petGender);
   const [petBreed, setPetBreed] = useState(pet.breed);
@@ -26,7 +34,72 @@ export default function PetEditInfo({
   const [petPersonality, setPetPersonality] = useState(pet.personality);
   const [petAbout, setPetAbout] = useState(pet.about);
   const [petBirthday, setPetBirthday] = useState(pet.birthday);
-  const [user] = useRecoilState(UserState);
+  const [imgSrc, setImgSrc] = useState(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`
+  );
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const onUploadImgClick = useCallback(() => {
+    if (!inputRef.current) {
+      return;
+    }
+    inputRef.current.click();
+  }, []);
+
+  const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (!e.target.files) {
+      return;
+    }
+    const uploadImg = e.target.files[0];
+    const formData = new FormData();
+    formData.append('imgFile', uploadImg);
+    if (pet.id === 909090) {
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              // authorization: localStorage.getItem('accessToken') || '',
+              // refresh_token: localStorage.getItem('refreshToken') || '',
+            },
+          }
+        )
+        .then((response) => {
+          setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      axios
+        .patch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              authorization: localStorage.getItem('accessToken') || '',
+              refresh_token: localStorage.getItem('refreshToken') || '',
+            },
+          }
+        )
+        .then((response) => {
+          setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  useEffect(() => {
+    setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`);
+  }, [pet]);
 
   const handleSubmitClick = () => {
     const editedData = {
@@ -100,6 +173,9 @@ export default function PetEditInfo({
       background-color: ${Theme.disableBgColor};
       object-fit: cover;
     }
+    .imgUpload {
+      display: none;
+    }
     dl {
       width: 80%;
       display: grid;
@@ -172,12 +248,19 @@ export default function PetEditInfo({
 
   return (
     <div css={petInfo}>
-      <div className="img">
+      <div className="img" onClick={onUploadImgClick}>
         <Image
           alt={`${pet.petName}`}
-          src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`}
+          src={imgSrc}
           width="100px"
           height="100px"
+        />
+        <input
+          type="file"
+          accept="image/*"
+          className="imgUpload"
+          onChange={onUploadImage}
+          ref={inputRef}
         />
       </div>
       <dl>
