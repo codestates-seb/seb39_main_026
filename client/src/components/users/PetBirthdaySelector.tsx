@@ -7,18 +7,20 @@ export default function PetBirthdaySelector({
   petBirthday: string;
   setPetBirthday: Dispatch<SetStateAction<string>>;
 }) {
-  const [birthYear, setBirthyear] = useState(
-    parseInt(petBirthday?.split('-')[0])
-  );
-  const [birthMonth, setBirthmonth] = useState(
-    parseInt(petBirthday?.split('-')[1])
-  );
-  const [birthDay, setBirthDay] = useState(
-    parseInt(petBirthday?.split('-')[2])
-  );
+  const [birthYear, setBirthyear] = useState(petBirthday?.split('-')[0]);
+  const [birthMonth, setBirthmonth] = useState(petBirthday?.split('-')[1]);
+  const [birthDay, setBirthDay] = useState(petBirthday?.split('-')[2]);
 
   useEffect(() => {
-    setPetBirthday(`${birthYear}-${birthMonth}-${birthDay}`);
+    if (parseInt(birthMonth) + 1 < 10 && parseInt(birthDay) >= 10) {
+      setPetBirthday(`${birthYear}-0${parseInt(birthMonth) + 1}-${birthDay}`);
+    } else if (parseInt(birthMonth) + 1 < 10 && parseInt(birthDay) < 10) {
+      setPetBirthday(`${birthYear}-0${parseInt(birthMonth) + 1}-0${birthDay}`);
+    } else if (parseInt(birthMonth) + 1 >= 10 && parseInt(birthDay) < 10) {
+      setPetBirthday(`${birthYear}-${parseInt(birthMonth) + 1}-0${birthDay}`);
+    } else {
+      setPetBirthday(`${birthYear}-${parseInt(birthMonth) + 1}-${birthDay}`);
+    }
   }, [birthYear, birthMonth, birthDay]);
 
   return (
@@ -28,10 +30,10 @@ export default function PetBirthdaySelector({
         start={1990} // default is 1900
         reverse // default is ASCENDING
         required={true} // default is false
-        value={birthYear} // mandatory
+        value={parseInt(birthYear)} // mandatory
         onChange={(year: number) => {
           // mandatory
-          setBirthyear(year);
+          setBirthyear(year.toString());
         }}
         id={'year'}
         name={'year'}
@@ -41,12 +43,12 @@ export default function PetBirthdaySelector({
       <MonthPicker
         defaultValue={'월'}
         numeric // to get months as numbers
-        year={birthYear} // mandatory
+        year={parseInt(birthYear)} // mandatory
         required={true} // default is false
-        value={birthMonth} // mandatory
+        value={parseInt(birthMonth)} // mandatory
         onChange={(month: number) => {
           // mandatory
-          setBirthmonth(month);
+          setBirthmonth(month.toString());
         }}
         id={'month'}
         name={'month'}
@@ -55,13 +57,13 @@ export default function PetBirthdaySelector({
       />
       <DayPicker
         defaultValue={'일'}
-        year={birthYear} // mandatory
-        month={birthMonth} // mandatory
+        year={parseInt(birthYear)} // mandatory
+        month={parseInt(birthMonth)} // mandatory
         required={false} // default is false
-        value={birthDay} // mandatory
+        value={parseInt(birthDay)} // mandatory
         onChange={(day: number) => {
           // mandatory
-          setBirthDay(day);
+          setBirthDay(day.toString());
         }}
         id={'day'}
         name={'day'}
