@@ -7,10 +7,7 @@ import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.service.PetService;
 import com.main026.walking.util.awsS3.AwsS3Service;
-import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +40,20 @@ public class PetController {
     }
 
     @PostMapping("/post")
-    public PetDto.Response postPet(@RequestBody PetDto.Post postDto, @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public PetDto.Response postPet(
+      @RequestPart PetDto.Post postDto,
+      @RequestPart MultipartFile imgFile,
+      @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
         if(!principalDetails.getMember().getUsername().equals(username)){
             throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
         }
         Member member = principalDetails.getMember();
+        if(imgFile.isEmpty()){
+            postDto.setImgUrl("DEFAULT_PET_IMAGE.jpg");
+        } else {
+            String savedImage = awsS3Service.uploadImage(imgFile);
+            postDto.setImgUrl(savedImage);
+        }
         return petService.postPet(postDto,member);
     }
 

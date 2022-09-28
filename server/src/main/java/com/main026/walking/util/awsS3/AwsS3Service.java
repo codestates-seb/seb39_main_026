@@ -3,6 +3,7 @@ package com.main026.walking.util.awsS3;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.Base64;
 import com.amazonaws.util.IOUtils;
 import com.main026.walking.exception.BusinessLogicException;
 import com.main026.walking.exception.ExceptionCode;
@@ -80,9 +81,10 @@ public class AwsS3Service {
     return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
   }
 
-  public byte[] getImageBin(String fileName) throws IOException {
+  public String getImageBin(String fileName) throws IOException {
     S3Object findObject = amazonS3.getObject(bucket,fileName);
     log.info(" [S3-Get] Read-File-Name : " + fileName);
-    return IOUtils.toByteArray(findObject.getObjectContent());
+    return Base64.encodeAsString(findObject.getObjectContent().readAllBytes());
+//    return IOUtils.toByteArray(findObject.getObjectContent());
   }
 }

@@ -146,7 +146,7 @@ public class CommunityService {
     }
 
 //  CRUD-IMAGE
-    //  CREATE - ONE
+    //  CREATE - ONCE
     public String saveImage(Long communityId, MultipartFile file){
         Community findCommunity = findVerifiedCommunity(communityId);
         String uploadImage = awsS3Service.uploadImage(file);
@@ -167,19 +167,21 @@ public class CommunityService {
         return savedImages;
     }
 
-    //  READ - Controller에서 Aws S3 Service로 바로 리턴
-    public List<byte[]> readImages(long communityId) throws IOException {
+    //  READ - ONCE : Controller에서 Aws S3 Service로 바로 리턴
+    //  READ - MULTI
+    public List<String> readImages(long communityId) throws IOException {
         Community findCommunity = findVerifiedCommunity(communityId);
 
         List<String> findImageNames = findCommunity.getImages().stream().map(Image::getStoreFilename).collect(Collectors.toList());
 
-        List<byte[]> findImages = new ArrayList<>();
+        List<String> findImages = new ArrayList<>();
         for (String filename : findImageNames) {
-            byte[] imageBin = awsS3Service.getImageBin(filename);
+            String imageBin = awsS3Service.getImageBin(filename);
             findImages.add(imageBin);
         }
         return findImages;
     }
+
     //  UPDATE
     public String updateImage(String filename, PrincipalDetails principalDetails, MultipartFile imgFile){
         Image findImage = imageRepository.findByStoreFilename(filename).orElseThrow( () -> new BusinessLogicException(ExceptionCode.FILE_NOT_FOUND));

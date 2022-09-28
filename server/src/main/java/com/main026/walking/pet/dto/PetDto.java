@@ -5,7 +5,6 @@ import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.embedded.PetAge;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,12 +16,16 @@ public class PetDto {
     public static class Post{
         private String petName;
         private String petGender;
-        private String profileImg;
+        private String imgUrl;
         private String neuter;
         private String birthDay;
         private String personality;
         private String breed;
         private String about;
+
+        public void setImgUrl(String imgUrl) {
+            this.imgUrl = imgUrl;
+        }
     }
 
     @Getter
