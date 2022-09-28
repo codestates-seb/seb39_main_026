@@ -9,6 +9,7 @@ import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.mapper.MemberMapper;
 import com.main026.walking.member.repository.MemberRepository;
+import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.PushBuilder;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
@@ -30,6 +32,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final AwsS3Service awsS3Service;
     private final FileStore fileStore;
     private final EmailSender emailSender;
 
@@ -39,8 +42,8 @@ public class MemberService {
         return memberMapper.memberToMemberResponseDto(loginMember);
     }
 
-    //C
-    public MemberDto.Response saveMember(MemberDto.Post postDto){
+    //  CREATE
+    public MemberDto.Response saveMember(MemberDto.Post postDto) throws IOException {
 
         verifyExistMemberWithEmail(postDto.getEmail());
         verifyExistMemberWithUsername(postDto.getUsername());
@@ -48,25 +51,25 @@ public class MemberService {
         Member member = memberMapper.memberPostDtoToMember(postDto);
         member.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
         member.setPassword(passwordEncoder.encode(member.getPassword()));
-
-
+        member.setImgUrl("DEFAULT_MEMBER_IMAGE.jpg");
         memberRepository.save(member);
 
-        return memberMapper.memberToMemberResponseDto(member);
+        MemberDto.Response dto = memberMapper.memberToMemberResponseDto(member);
+        dto.setImgUrl(awsS3Service.getImageBin(dto.getImgUrl()));
+        return dto;
     }
 
-
-    //R
-    public MemberDto.Response findMember(Long memberId,Boolean isOwner){
+    //  READ
+    public MemberDto.Response findMember(Long memberId,Boolean isOwner) throws IOException {
 
         MemberDto.Response response =
                 memberMapper.memberToMemberResponseDto(verifyExistMemberWithId(memberId));
         response.setIsOwner(isOwner);
-
+        response.setImgUrl(awsS3Service.getImageBin(response.getImgUrl()));
         return response;
     }
 
-    //U
+    //  UPDATE
     public MemberDto.Response updateMember(Long memberId,MemberDto.Patch patchDto){
 
         verifyExistMemberWithUsername(patchDto.getUsername());
@@ -80,6 +83,7 @@ public class MemberService {
         return memberMapper.memberToMemberResponseDto(member);
     }
 
+    //  DELETE
     public String saveImage(MultipartFile multipartFile){
         try {
             return fileStore.storeFile(multipartFile);
@@ -106,9 +110,42 @@ public class MemberService {
 
     //D
     public void deleteMember(Long memberId){
+        String image = verifyExistMemberWithId(memberId).getImgUrl();
         memberRepository.deleteById(memberId);
+        if(!image.equals("DEFAULT_MEMBER_IMAGE.jpg")) awsS3Service.deleteImage(image);
     }
 
+// CRUD-IMAGE
+    //  CREATE : Default_image 적용으로 인한 해당 메소드 삭제
+    //  READ
+    public String findImage(Long memberId) {
+        Member findMember = verifyExistMemberWithId(memberId);
+        return findMember.getImgUrl();
+    }
+
+    //  UPDATE
+    public String updateImage(MultipartFile multipartFile, Long memberId){
+        Member findMember = verifyExistMemberWithId(memberId);
+        String uploadImage = awsS3Service.uploadImage(multipartFile);
+
+        String findImage = findMember.getImgUrl();
+        if(!findImage.equals("DEFAULT_MEMBER_IMAGE.jpg")) awsS3Service.deleteImage(findImage);
+        findMember.setImgUrl(uploadImage);
+        memberRepository.save(findMember);
+        return uploadImage;
+    }
+    //  DELETE
+    public void deleteImage(Long memberId) {
+        Member findMember = verifyExistMemberWithId(memberId);
+        String findImage = findMember.getImgUrl();
+        if(!findImage.equals("DEFAULT_MEMBER_IMAGE.jpg")){
+            awsS3Service.deleteImage(findImage);
+            findMember.setImgUrl("DEFAULT_MEMBER_IMAGE.jpg");
+        }
+        memberRepository.save(findMember);
+    }
+
+//  VALID
     private void verifyExistMemberWithEmail(String email){
         Optional<Member> checkMember =  memberRepository.findByEmail(email);
         if(checkMember.isPresent()) throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);

@@ -51,7 +51,7 @@ public class InitData {
                 .address(address)
                 .username("김코딩")
                 .password(encoder.encode("12345678"))
-                .imgUrl("memberImg.jpeg")
+                .imgUrl("MEMBER_SAMPLE_01.jpg")
                 .build();
         kimcoding.setRoles();
         memberRepository.save(kimcoding);
@@ -61,7 +61,7 @@ public class InitData {
                 .address(address)
                 .username("박해커")
                 .password(encoder.encode("12345678"))
-                .imgUrl("memberImg.jpeg")
+                .imgUrl("MEMBER_SAMPLE_02.jpg")
                 .build();
         kimcoding.setRoles();
         memberRepository.save(parkhacker);
@@ -71,7 +71,7 @@ public class InitData {
                 .address(address)
                 .username("제갈스티븐")
                 .password(encoder.encode("12345678"))
-                .imgUrl("memberImg.jpeg")
+                .imgUrl("MEMBER_SAMPLE_03.jpg")
                 .build();
         kimcoding.setRoles();
         memberRepository.save(steven);
@@ -81,7 +81,7 @@ public class InitData {
                 .petName("고양이")
                 .member(kimcoding)
                 .about("하는 짓이 고양이같아서 고양이입니다")
-                .imgUrl("profileImg.jpeg")
+                .imgUrl("PET_SAMPLE_01.jpg")
                 .neuter("O")
                 .breed("세퍼트")
                 .petAges(new PetAge(3,8,""))
@@ -94,7 +94,7 @@ public class InitData {
                 .petName("코끼리")
                 .member(kimcoding)
                 .about("저는 과자를 주면 코로 받아서 코끼리에요")
-                .imgUrl("profileImg.jpeg")
+                .imgUrl("PET_SAMPLE_02.jpg")
                 .neuter("O")
                 .breed("믹스견")
                 .petAges(new PetAge(2,4,""))
@@ -107,7 +107,7 @@ public class InitData {
                 .petName("애플이")
                 .member(kimcoding)
                 .about("주인님이 애플을 너무 좋아해서 애플이되었어요 삼성이 아니라 다행이에요")
-                .imgUrl("profileImg.jpeg")
+                .imgUrl("PET_SAMPLE_03.jpg")
                 .neuter("X")
                 .breed("푸들")
                 .petAges(new PetAge(0,3,""))
@@ -120,7 +120,7 @@ public class InitData {
                 .petName("춘삼")
                 .member(steven)
                 .about("Hello! My name is ChunSam. Nice to meet you!")
-                .imgUrl("profileImg.jpeg")
+                .imgUrl("PET_SAMPLE_04.jpg")
                 .neuter("X")
                 .breed("삽살개")
                 .petAges(new PetAge(7,7,""))
@@ -144,7 +144,7 @@ public class InitData {
                 .representMember(kimcoding)
                 .build();
         communityRepository.save(sosim);
-        Image sosimImg = Image.builder().storeFilename("communityImg.jpeg").community(sosim).build();
+        Image sosimImg = Image.builder().storeFilename("COMMUNITY_SAMPLE_01.jpg").community(sosim).build();
         imageRepository.save(sosimImg);
 
 
@@ -162,7 +162,7 @@ public class InitData {
                 .representMember(steven)
                 .build();
         communityRepository.save(healthy);
-        Image healthyImg = Image.builder().storeFilename("communityImg.jpeg").community(healthy).build();
+        Image healthyImg = Image.builder().storeFilename("COMMUNITY_SAMPLE_02.jpg").community(healthy).build();
         imageRepository.save(healthyImg);
 
         Community walkwalk = Community.builder()
@@ -179,7 +179,7 @@ public class InitData {
                 .representMember(parkhacker)
                 .build();
         communityRepository.save(walkwalk);
-        Image walkImg = Image.builder().storeFilename("communityImg.jpeg").community(walkwalk).build();
+        Image walkImg = Image.builder().storeFilename("COMMUNITY_SAMPLE_03.jpg").community(walkwalk).build();
         imageRepository.save(walkImg);
 
         log.info("모임 가입");

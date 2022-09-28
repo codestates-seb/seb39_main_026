@@ -16,9 +16,6 @@ export default function UserInfo({
 }) {
   const [isNameEditMode, setIsNameEditMode] = useState(false);
   const [name, setName] = useState(data.username);
-  const [imgSrc, setImgSrc] = useState(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`
-  );
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleNameEdit = async () => {
@@ -49,37 +46,18 @@ export default function UserInfo({
     inputRef.current.click();
   }, []);
 
-  const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (!e.target.files) {
-      return;
-    }
-    const uploadImg = e.target.files[0];
-    const formData = new FormData();
-    formData.append('imgFile', uploadImg);
-    axios
-      .patch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            authorization: localStorage.getItem('accessToken') || '',
-          },
-        }
-      )
-      .then((response) => {
-        setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  const onUploadImage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files) {
+        return;
+      }
+      console.log(e.target.files[0].name);
+    },
+    []
+  );
 
   useEffect(() => {
     setName(data.username);
-    setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`);
   }, [data]);
 
   const userInfo = css`
@@ -147,7 +125,6 @@ export default function UserInfo({
       color: transparent;
     }
   `;
-
   return (
     <>
       {typeof data !== 'string' ? (
@@ -155,7 +132,7 @@ export default function UserInfo({
           <div className="img" onClick={onUploadImgClick}>
             <Image
               alt={`${name}'s profile`}
-              src={imgSrc}
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.imgUrl}`}
               width="75px"
               height="75px"
               className="img"

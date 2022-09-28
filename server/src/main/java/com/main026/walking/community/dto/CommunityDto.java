@@ -113,6 +113,10 @@ public class CommunityDto {
         public void setPetList(List<PetDto.compactResponse> petList){
             this.sessionMemberPetList = petList;
         }
+
+        public void setImgUrls(List<String> imgUrls) {
+            this.imgUrls = imgUrls;
+        }
     }
 
     @Getter

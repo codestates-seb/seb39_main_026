@@ -1,9 +1,12 @@
 package com.main026.walking.member.controller;
 
 import com.main026.walking.auth.principal.PrincipalDetails;
+import com.main026.walking.exception.BusinessLogicException;
+import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.dto.FindPasswordForm;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.service.MemberService;
+import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -15,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 @RestController
@@ -23,10 +27,10 @@ import java.net.MalformedURLException;
 public class MemberController {
 
     private final MemberService memberService;
-    private final FileStore fileStore;
+    private final AwsS3Service awsS3Service;
 
     @PostMapping("/signup")
-    public MemberDto.Response signUp(@RequestBody MemberDto.Post memberPostDto){
+    public MemberDto.Response signUp(@RequestBody MemberDto.Post memberPostDto) throws IOException {
         return memberService.saveMember(memberPostDto);
     }
 
@@ -36,7 +40,7 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public MemberDto.Response getMember(@PathVariable Long memberId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public MemberDto.Response getMember(@PathVariable Long memberId, @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
 
         //TODO 개선 필요 : 로그인하지않았거나, 본인이 아님
         Boolean authorization = true;
@@ -51,25 +55,33 @@ public class MemberController {
                                           @RequestBody MemberDto.Patch patchDto,
                                           @AuthenticationPrincipal PrincipalDetails principalDetails){
         //인증로직
+
         return memberService.updateMember(memberId,patchDto);
     }
 
-    @PostMapping("/image")
-    public String postImage(@RequestPart MultipartFile imgFile,
-                            @AuthenticationPrincipal PrincipalDetails principalDetails){
-        return memberService.saveImage(imgFile);
-    }
-    
     @DeleteMapping("/{memberId}")
     public String deleteMember(@PathVariable Long memberId){
         memberService.deleteMember(memberId);
         return "회원 삭제 완료";
     }
 
-    @ResponseBody
-    @GetMapping("/img/{filename}")
-    public Resource showImage(@PathVariable String filename) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(filename));
+// CRUD-IMAGE
+    // CREATE : Default Image 적용으로 해당 메소드 삭제
+    // READ
+    @GetMapping("/img/{memberId}")
+    public ResponseEntity showImage(@PathVariable long memberId) throws IOException {
+        String findImage = memberService.findImage(memberId);
+        return new ResponseEntity(awsS3Service.getImageBin(findImage),HttpStatus.OK);
+    }
+
+    //  UPDATE
+    @PatchMapping("/img/{memberId}")
+    public ResponseEntity patchImage(@PathVariable long memberId,
+                             @RequestPart MultipartFile imgFile,
+                             @AuthenticationPrincipal PrincipalDetails principalDetails){
+        authorization(memberId,principalDetails);
+        String updateImage = memberService.updateImage(imgFile,memberId);
+        return new ResponseEntity(updateImage,HttpStatus.OK);
     }
 
     @PostMapping("/findpassword")
@@ -77,4 +89,19 @@ public class MemberController {
         return memberService.findPassword(form);
     }
 
+
+    //  DELETE
+    @DeleteMapping("/img/{memberId}")
+    public ResponseEntity deleteImage(@PathVariable long memberId,
+                                      @AuthenticationPrincipal PrincipalDetails principalDetails){
+        authorization(memberId,principalDetails);
+        memberService.deleteImage(memberId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+//  VALID
+    private void authorization(Long memberId, PrincipalDetails principalDetails){
+        if(!memberId.equals(principalDetails.getMember().getId()))
+            throw new BusinessLogicException(ExceptionCode.INVALID_AUTHORIZATION);
+    }
 }

@@ -8,6 +8,7 @@ import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.pet.mapper.PetMapper;
 import com.main026.walking.pet.repository.PetRepository;
+import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.embedded.PetAge;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,9 +33,9 @@ public class PetService {
 
     private final PetRepository petRepository;
     private final PetMapper petMapper;
-    private final FileStore fileStore;
+    private final AwsS3Service awsS3Service;
 
-    public PetDto.Response postPet(PetDto.Post postDto,Member member){
+    public PetDto.Response postPet(PetDto.Post postDto,Member member) throws IOException {
         Pet pet = petMapper.petPostDtoToPet(postDto);
 
         //나이 파싱 로직
@@ -45,30 +47,22 @@ public class PetService {
 
         //연관관계에 대한 고민 필요
         pet.setMember(member);
-
-        if(postDto.getProfileImg()!=null){
-            String profileImg = postDto.getProfileImg();
-            pet.setImgUrl(profileImg);
-        }
-
+        if(pet.getImgUrl().isEmpty()) pet.setImgUrl("DEFAULT_PET_IMAGE.jpg");
         petRepository.save(pet);
 
-        return petMapper.petToPetResponseDto(pet);
+        PetDto.Response dto = petMapper.petToPetResponseDto(pet);
+        dto.setImgUrl(awsS3Service.getImageBin(dto.getImgUrl()));
+        return dto;
     }
 
-    public String saveImage(MultipartFile multipartFile){
-        try {
-            return fileStore.storeFile(multipartFile);
-        }catch (IOException e){
-            throw new BusinessLogicException(ExceptionCode.FILE_NOT_FOUND);
-        }
-    }
-
-    public PetDto.Response findPet(Long petId){
+    public PetDto.Response findPet(Long petId) throws IOException {
         Pet pet = petRepository.findById(petId).orElseThrow();
-
-        return petMapper.petToPetResponseDto(pet);
+        PetDto.Response dto = petMapper.petToPetResponseDto(pet);
+        dto.setImgUrl(awsS3Service.getImageBin(dto.getImgUrl()));
+        return dto;
     }
+
+    //Todo List 로 반환하면 다른 정보를 추가하기 어렵다.
     public List<PetDto.Response> findAllByUsername(String username){
         List<PetDto.Response> allPets = petRepository.findAllByMember_username(username)
                 .stream()
@@ -105,4 +99,44 @@ public class PetService {
         pet.setPetAges(petAge);
     }
 
+//  CRUD-IMAGE
+    //  CREATE : Default_image 적용으로 인한 해당 메소드 삭제
+    //  READ
+    public String findImageById(long petId){
+        Pet findPet = verifyExistPetWithId(petId);
+        return findPet.getImgUrl();
+    }
+
+    //  UPDATE
+    public String updateImage(MultipartFile imgFile, long petId) {
+        Pet findPet = verifyExistPetWithId(petId);
+        String uploadImage = awsS3Service.uploadImage(imgFile);
+        String findImage = findPet.getImgUrl();
+
+        if(!findImage.equals("DEFAULT_PET_IMAGE.jpg")) awsS3Service.deleteImage(findImage);
+
+        findPet.setImgUrl(uploadImage);
+        petRepository.save(findPet);
+
+        return uploadImage;
+    }
+
+    //  DELETE
+    public void deleteImage(Long petId) {
+        Pet findPet = verifyExistPetWithId(petId);
+        String findImage = findPet.getImgUrl();
+
+        if(!findImage.equals("DEFAULT_PET_IMAGE.jpg")){
+            awsS3Service.deleteImage(findImage);
+            findPet.setImgUrl("DEFAULT_PET_IMAGE.jpg");
+        }
+
+        petRepository.save(findPet);
+    }
+
+//  VALID
+    private Pet verifyExistPetWithId(Long petId){
+        Optional<Pet> checkPet = petRepository.findById(petId);
+        return checkPet.orElseThrow(() -> new BusinessLogicException(ExceptionCode.PET_NOT_FOUND));
+    }
 }

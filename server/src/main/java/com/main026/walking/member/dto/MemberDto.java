@@ -90,5 +90,9 @@ public class MemberDto {
         public void setIsOwner(Boolean isOwner){
             this.isOwner = isOwner;
         }
+
+        public void setImgUrl(String imgUrl) {
+            this.imgUrl = imgUrl;
+        }
     }
 }

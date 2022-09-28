@@ -7,5 +7,4 @@ export const API = {
   PETS: `${BASE_URL}/pets`,
   Login: `${BASE_URL}/members/login`,
   Signup: `${BASE_URL}/members/signup`,
-  COMMENT: `${BASE_URL}/comment/post`,
 };

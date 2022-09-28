@@ -19,7 +19,7 @@ export default function Navbar() {
       justify-content: space-around;
       align-items: center;
       height: 72px;
-      z-index: 2;
+      z-index: 1;
       a {
         opacity: 50%;
         color: #dc602a;

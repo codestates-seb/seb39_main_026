@@ -1,5 +1,4 @@
 export interface UserDogInfo {
-  id: number;
   petName: string;
   member: Array<petOwner>;
   petGender: string;

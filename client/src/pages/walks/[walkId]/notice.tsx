@@ -1,28 +1,17 @@
-import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import TabTitle from '../../../components/TabTitle';
 import DetailLayout from '../../../components/walks/walksDetail/DetailLayout';
 import MoimNotice from '../../../components/walks/walksDetail/MoimNotice';
-import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
 
-export default function Notice({ walkId }: { walkId: string }) {
-  const walkDetail = useWalksDetailQuery(walkId);
-
+export default function Notice() {
+  const router = useRouter();
+  const walkId = router.query.walkId as string;
   return (
     <>
       <TabTitle prefix={walkId} />
       <DetailLayout walkId={walkId}>
-        <MoimNotice walkDetail={walkDetail} />
+        <MoimNotice />
       </DetailLayout>
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { query } = context;
-  const { walkId } = query;
-  return {
-    props: {
-      walkId,
-    },
-  };
-};

@@ -70,8 +70,6 @@ export default function StickyInfo({
     return <LoadingStickyInfo />;
   }
 
-  const imgUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/community/img/${walkDetail.imgUrls[0]}`;
-
   return (
     <div
       css={css`
@@ -82,7 +80,7 @@ export default function StickyInfo({
       <aside css={infoContainer}>
         <div
           css={css`
-            background-image: url(${imgUrl});
+            background-image: url(${walkDetail.imgUrls[0]});
             background-size: cover;
             background-position: center;
             height: 200px;

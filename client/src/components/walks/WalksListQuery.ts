@@ -2,16 +2,9 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 import { API } from '../../apis/api';
 
-export const useGetWalksQuery = (query: string) => {
-  let url: string;
-  if (query) {
-    url = `${API.WALKS}/?name=${query}`;
-  } else {
-    url = API.WALKS;
-  }
-
+export function useGetWalksQuery() {
   const { status, data, error } = useQuery('walks', async () => {
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(API.WALKS);
     return data;
   });
   if (status === 'loading') {
@@ -23,4 +16,4 @@ export const useGetWalksQuery = (query: string) => {
   if (status === 'success') {
     return data;
   }
-};
+}

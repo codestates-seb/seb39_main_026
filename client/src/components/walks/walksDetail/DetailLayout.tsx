@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { useScrollTop } from '../../../hooks/Sroll';
 import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
 import UserState from '../../../states/UserState';
 import CommonButton from '../../CommonButton';
@@ -33,8 +32,6 @@ export default function DetailLayout({
     setPetInfoId(petId);
   };
 
-  const top = useScrollTop();
-  console.log(top);
   return (
     <>
       <section css={sancheckDetailLayout}>
@@ -53,7 +50,7 @@ export default function DetailLayout({
         <div className="sticky-info-container">
           <StickyInfo walkDetail={walkDetail} setIsModalOpen={setIsModalOpen} />
         </div>
-        <div css={mobileMoimJoin(top)}>
+        <div css={mobileMoimJoin}>
           <CommonButton
             type="button"
             onClick={() => {
@@ -93,7 +90,7 @@ const sancheckDetailLayout = css`
 
   @media screen and (max-width: 880px) {
     grid-template-columns: 1fr;
-    padding: 50px 36px 36px;
+    padding-bottom: 90px;
 
     .sticky-info-container {
       display: none;
@@ -113,37 +110,15 @@ const sancheckDetailLayout = css`
   }
 `;
 
-const mobileMoimJoin = (top: number) => css`
-  opacity: 0;
-
+const mobileMoimJoin = css`
+  display: none;
   @media screen and (max-width: 880px) {
-    opacity: ${top === 0 ? '1' : '0'};
+    display: block;
     position: fixed;
     bottom: 10px;
     left: 0;
     right: 0;
     padding: 0 20px;
-    animation: ${top === 0 ? 'fadeIn 0.3s' : 'fadeOut 0.3s'};
-
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-      }
-
-      100% {
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeOut {
-      0% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0;
-      }
-    }
   }
 
   @media screen and (max-width: 768px) {
