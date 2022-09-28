@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
+import Image from 'next/image';
 import { WalkDetail } from '../../../models/WalkDefault';
 import { Theme } from '../../../styles/Theme';
 import MoimState from '../../MoimState';
@@ -24,13 +25,13 @@ const postOwnerContainer = css`
   display: flex;
   align-items: center;
   margin: 25px 0 28px;
+  gap: 14px;
 
   img {
     width: 32px;
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 14px;
     cursor: pointer;
   }
 
@@ -87,9 +88,12 @@ export default function Title({ walkDetail }: { walkDetail?: WalkDetail }) {
         <h1>{walkDetail.name}</h1>
       </div>
       <div css={postOwnerContainer}>
-        <img
-          src={`${walkDetail.member.imgUrl}`}
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${walkDetail.member.id}`}
+          // src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/image/${walkDetail.member.id}`}
           alt={`작성자 ${walkDetail.member.username}의 사진`}
+          width="32px"
+          height="32px"
         />
         <p>{walkDetail.member.username}</p>
       </div>
