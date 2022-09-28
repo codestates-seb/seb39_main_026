@@ -73,6 +73,7 @@ public interface CommunityMapper {
             Comment comment = entity.getComments().get(i);
             MemberDto.Response responseDto = new MemberDto.Response(comment.getMember());
             comments.add(CommentDto.Response.builder()
+                    .commentId(comment.getId())
                     .body(comment.getBody())
                     .createdAt(comment.getCreatedAt())
                     .member(responseDto)
@@ -101,6 +102,7 @@ public interface CommunityMapper {
         if(entity.getNotice()!=null) {
             entity.getNotice();
             notice = NoticeDto.Response.builder()
+                    .noticeId(entity.getNotice().getId())
                     .title(entity.getNotice().getTitle())
                     .body(entity.getNotice().getBody())
                     .build();
