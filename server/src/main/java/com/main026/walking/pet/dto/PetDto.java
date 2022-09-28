@@ -22,10 +22,6 @@ public class PetDto {
         private String personality;
         private String breed;
         private String about;
-
-        public void setImgUrl(String imgUrl) {
-            this.imgUrl = imgUrl;
-        }
     }
 
     @Getter
@@ -37,18 +33,18 @@ public class PetDto {
         private String birthDay;
         private String personality;
         private String breed;
-        private String profileImg;
+        private String imgUrl;
         private String about;
 
         @Builder
-        public Patch(String perName, String petGender, String neuter,String birthDay, String personality, String breed, String profileImg, String about) {
+        public Patch(String perName, String petGender, String neuter,String birthDay, String personality, String breed, String imgUrl, String about) {
             this.perName = perName;
             this.petGender = petGender;
             this.neuter = neuter;
             this.birthDay = birthDay;
             this.personality = personality;
             this.breed = breed;
-            this.profileImg = profileImg;
+            this.imgUrl = imgUrl;
             this.about = about;
         }
     }

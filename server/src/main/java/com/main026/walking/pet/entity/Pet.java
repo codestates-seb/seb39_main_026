@@ -68,6 +68,6 @@ public class Pet {
         this.personality = patchDto.getPersonality();
         this.breed = patchDto.getBreed();
         this.about = patchDto.getAbout();
-        this.imgUrl = patchDto.getProfileImg();
+        this.imgUrl = patchDto.getImgUrl();
     }
 }

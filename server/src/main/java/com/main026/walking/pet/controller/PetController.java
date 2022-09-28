@@ -41,19 +41,12 @@ public class PetController {
 
     @PostMapping("/post")
     public PetDto.Response postPet(
-      @RequestPart PetDto.Post postDto,
-      @RequestPart MultipartFile imgFile,
+      @RequestBody PetDto.Post postDto,
       @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
         if(!principalDetails.getMember().getUsername().equals(username)){
             throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
         }
         Member member = principalDetails.getMember();
-        if(imgFile.isEmpty()){
-            postDto.setImgUrl("DEFAULT_PET_IMAGE.jpg");
-        } else {
-            String savedImage = awsS3Service.uploadImage(imgFile);
-            postDto.setImgUrl(savedImage);
-        }
         return petService.postPet(postDto,member);
     }
 
@@ -83,6 +76,15 @@ public class PetController {
 
 //    CRUD-IMAGE
     //  CREATE : DEFAULT_IMAGE 적용으로 메소드 삭제
+    @PostMapping("/post/image")
+    public String postImage(@RequestPart MultipartFile imgFile){
+        if(imgFile.isEmpty()) {
+            return "DEFAULT_PET_IMAGE.jpg";
+        } else {
+            return awsS3Service.uploadImage(imgFile);
+        }
+    }
+
     //  UPDATE
     @PatchMapping("/img/{petId}")
     public ResponseEntity patchImage(@PathVariable long petId,
