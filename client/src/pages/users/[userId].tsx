@@ -6,8 +6,8 @@ import TabTitle from '../../components/TabTitle';
 import LogoutButton from '../../components/users/LogoutButton';
 import PetInfo from '../../components/users/PetInfo';
 import UserInfo from '../../components/users/UserInfo';
-import { useGetUsersQuery } from '../../components/users/UsersQuery';
 import WalksInfo from '../../components/users/WalksInfo';
+import { useGetUsersQuery } from '../../hooks/UsersQuery';
 import { Theme } from '../../styles/Theme';
 
 export default function User({ userId }: { userId: string }) {

@@ -30,10 +30,26 @@ export default function UserInfo({
           {
             headers: {
               authorization: localStorage.getItem('accessToken') || '',
+              refresh_token: localStorage.getItem('refreshToken') || '',
             },
           }
         )
-        .then((res) => setName(res.data.username));
+        .then((res) => setName(res.data.username))
+        .catch((err) => {
+          if (
+            err.response.headers.authorization &&
+            err.response.headers.refresh_token
+          ) {
+            localStorage.setItem(
+              'accessToken',
+              err.response.headers.authorization
+            );
+            localStorage.setItem(
+              'refreshToken',
+              err.response.headers.refresh_token
+            );
+          }
+        });
     }
     setIsNameEditMode(!isNameEditMode);
   };
