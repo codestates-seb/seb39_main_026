@@ -5,6 +5,7 @@ import com.main026.walking.auth.filter.JwtAuthenticationFilter;
 import com.main026.walking.auth.filter.JwtAuthorizationFilter;
 import com.main026.walking.auth.filter.JwtExceptionFilter;
 import com.main026.walking.auth.jwt.JwtUtils;
+import com.main026.walking.auth.service.OAuth2SuccessHandler;
 import com.main026.walking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final MemberRepository memberRepository;
     private final JwtUtils jwtUtils;
+    private final OAuth2SuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -50,7 +52,8 @@ public class SecurityConfig {
                 .and()
                 .exceptionHandling()
                 .and()
-                .oauth2Login().loginPage("/members/login")
+                .oauth2Login()
+                .successHandler(successHandler)
                 .userInfoEndpoint()//코드를 받고, 토큰을 전달하는 과정을 알아서 해달라
                 .userService(customOAuth2UserService);
 
