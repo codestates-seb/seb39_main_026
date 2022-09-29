@@ -45,16 +45,14 @@ public class MemberDto {
         private String gu;
         private String dong;
 
-        private String profileImg;
 
         @Builder
-        public Patch(String password, String username, String si, String gu, String dong, String profileImg) {
+        public Patch(String password, String username, String si, String gu, String dong) {
             this.password = password;
             this.username = username;
             this.si = si;
             this.gu = gu;
             this.dong = dong;
-            this.profileImg = profileImg;
         }
     }
     @Getter

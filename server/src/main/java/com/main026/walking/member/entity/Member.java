@@ -53,7 +53,6 @@ public class Member {
         this.password = patchDto.getPassword();
         this.username = patchDto.getUsername();
         this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
-        this.imgUrl = patchDto.getProfileImg();
     }
 
     public void update(String name, String picture){
