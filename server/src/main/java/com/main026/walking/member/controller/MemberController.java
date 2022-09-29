@@ -55,7 +55,6 @@ public class MemberController {
                                           @RequestBody MemberDto.Patch patchDto,
                                           @AuthenticationPrincipal PrincipalDetails principalDetails){
         //인증로직
-
         return memberService.updateMember(memberId,patchDto);
     }
 

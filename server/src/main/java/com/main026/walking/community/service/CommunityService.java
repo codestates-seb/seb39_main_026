@@ -99,10 +99,6 @@ public class CommunityService {
         //참여가능 여부 검사
         isFull(community.getCapacity(),community.getCommunityPets().size(),petIdList.size());
 
-        //참여가능 여부 검사
-        isFull(community.getCapacity(),community.getCommunityPets().size(),petIdList.size());
-        //Todo 조회시 4개글만 보이게
-
         for (Long petId : petIdList) {
             Pet pet = petRepository.findById(petId).orElseThrow();
             CommunityPet communityPet = CommunityPet.builder()
