@@ -2,18 +2,22 @@ import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import TabTitle from '../../components/TabTitle';
 import LogoutButton from '../../components/users/LogoutButton';
 import PetInfo from '../../components/users/PetInfo';
 import UserInfo from '../../components/users/UserInfo';
 import WalksInfo from '../../components/users/WalksInfo';
 import { useGetUsersQuery } from '../../hooks/UsersQuery';
+import UserState from '../../states/UserState';
 import { Theme } from '../../styles/Theme';
 
 export default function User({ userId }: { userId: string }) {
   const [isValidated, setIsValidated] = useState(false);
-  const UserData = useGetUsersQuery(userId);
-  const user = css`
+  const [user] = useRecoilState(UserState);
+  const getUsersQuery = useGetUsersQuery(userId);
+
+  const userPage = css`
     margin: 15vw 20vw;
     display: flex;
     flex-direction: column;
@@ -34,31 +38,39 @@ export default function User({ userId }: { userId: string }) {
       }
     }
   `;
+
   useEffect(() => {
-    if (userId === localStorage.getItem('userId')) {
+    if (userId === user.id.toString()) {
       setIsValidated(true);
     } else {
       setIsValidated(false);
     }
-  }, [userId]);
+  }, [userId, user]);
 
   return (
-    <section css={user}>
-      <TabTitle prefix={userId} />
-      <UserInfo data={UserData} isValidated={isValidated} />
-      <PetInfo pets={UserData.petList} isValidated={isValidated} />
-      <div className="walks">
-        <Icon icon="fluent-emoji-flat:paw-prints" className="icon" />
-        {isValidated ? (
-          <p>내 산책 모임</p>
-        ) : (
-          <p>
-            <span>{UserData.username}</span>님의 산책 모임
-          </p>
-        )}
-      </div>
-      <WalksInfo walks={UserData?.memberCommunityList} />
-      <footer>{isValidated && <LogoutButton />}</footer>
+    <section css={userPage}>
+      {getUsersQuery.isSuccess && (
+        <>
+          <TabTitle prefix={userId} />
+          <UserInfo data={getUsersQuery.data} isValidated={isValidated} />
+          <PetInfo
+            pets={getUsersQuery.data.petList}
+            isValidated={isValidated}
+          />
+          <div className="walks">
+            <Icon icon="fluent-emoji-flat:paw-prints" className="icon" />
+            {isValidated ? (
+              <p>내 산책 모임</p>
+            ) : (
+              <p>
+                <span>{getUsersQuery.data.username}</span>님의 산책 모임
+              </p>
+            )}
+          </div>
+          <WalksInfo walks={getUsersQuery.data?.memberCommunityList} />
+          <footer>{isValidated && <LogoutButton />}</footer>
+        </>
+      )}
     </section>
   );
 }
