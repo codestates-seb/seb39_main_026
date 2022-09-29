@@ -8,13 +8,13 @@ import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
 import UserState from '../../../states/UserState';
 import CommonButton from '../../CommonButton';
 import DogChoiceModal from '../../DogChoiceModal';
-import Comments from './Comments';
 import DogInfoModal from './DogInfoModal';
 import Information from './Information';
 import PageNav from './PageNav';
 import ParticipantsInfo from './ParticipantsInfo';
 import StickyInfo from './StickyInfo';
 import Title from './Title';
+import Comments from './comment/Comments';
 
 export default function DetailLayout({
   walkId,
@@ -91,6 +91,7 @@ const sancheckDetailLayout = css`
   grid-template-columns: 1fr 310px;
   gap: 0 20px;
   padding: 80px 36px 50px;
+  min-height: calc(100vh - 75px);
 
   @media screen and (max-width: 880px) {
     grid-template-columns: 1fr;
@@ -118,18 +119,21 @@ const mobileMoimJoin = (top: number) => css`
   opacity: 0;
 
   @media screen and (max-width: 880px) {
-    opacity: ${top === 75 ? '1' : '0'};
     position: fixed;
     bottom: 10px;
     left: 0;
     right: 0;
     padding: 0 20px;
-    animation: ${top === 0 ? 'fadeIn 0.3s' : 'fadeOut 0.3s'};
+    opacity: ${top === 0 || top === 75 ? '1' : '0'};
+    animation: ${top === 0 || top === 75 ? 'fadeIn 0.3s' : 'fadeOut 0.3s'};
+    z-index: ${top === 0 || top === 75 ? '1' : '-1'};
   }
 
-  @media screen and (max-width: 768px) {
-    opacity: ${top === 0 ? '1' : '0'};
+  @media screen and (max-width: 769px) {
     bottom: 100px;
+    opacity: ${top === 0 ? '1' : '0'};
+    animation: ${top === 0 ? 'fadeIn 0.3s' : 'fadeOut 0.3s'};
+    z-index: ${top === 0 ? '1' : '-1'};
   }
 
   @keyframes fadeIn {
