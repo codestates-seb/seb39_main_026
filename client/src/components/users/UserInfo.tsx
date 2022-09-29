@@ -1,9 +1,11 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
-import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useUpdateUsernameMutation } from '../../hooks/UsersQuery';
+import {
+  useUpdateUserImgMutation,
+  useUpdateUsernameMutation,
+} from '../../hooks/UsersQuery';
 import { UserDefault } from '../../models/UserDefault';
 import { skeletonGradient } from '../../styles/GlobalStyle';
 import { Theme } from '../../styles/Theme';
@@ -16,6 +18,7 @@ export default function UserInfo({
   isValidated: boolean;
 }) {
   const { mutate: updateUsernameMutate } = useUpdateUsernameMutation();
+  const { mutate: updateUserImgMutate } = useUpdateUserImgMutation();
   const [isNameEditMode, setIsNameEditMode] = useState(false);
   const [name, setName] = useState(data.username);
   const [imgSrc, setImgSrc] = useState(data.imgUrl);
@@ -46,37 +49,9 @@ export default function UserInfo({
 
   const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (!e.target.files) {
-      return;
+    if (e.target.files) {
+      updateUserImgMutate({ id: data.id, file: e.target.files[0], setImgSrc });
     }
-    const uploadImg = e.target.files[0];
-    const formData = new FormData();
-    formData.append('imgFile', uploadImg);
-    axios
-      .patch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            authorization: localStorage.getItem('accessToken') || '',
-            refresh_token: localStorage.getItem('refreshToken') || '',
-          },
-        }
-      )
-      .then((response) => {
-        setImgSrc(URL.createObjectURL(uploadImg));
-        console.log(response.data);
-      })
-      .catch((err) => {
-        if (err.response.headers.authorization) {
-          localStorage.setItem(
-            'accessToken',
-            err.response.headers.authorization
-          );
-        }
-        console.error(err);
-      });
   };
 
   useEffect(() => {
@@ -165,7 +140,7 @@ export default function UserInfo({
 
   return (
     <>
-      {typeof data !== 'string' ? (
+      {data ? (
         <div css={userInfo}>
           <div className="imgWrapper" onClick={onUploadImgClick}>
             <Image
