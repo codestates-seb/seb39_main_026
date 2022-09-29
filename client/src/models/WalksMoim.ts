@@ -16,6 +16,9 @@ interface WalksMoimBase {
   description: string;
   personCount: number;
   plannedTime: Date;
+  si: string;
+  gu: string;
+  dong: string;
 }
 
 export const WalksMoimTypes = {
@@ -36,3 +39,15 @@ export interface WalksMoimEveryWeek extends WalksMoimBase {
 }
 
 export type WalksMoim = WalksMoimOneDay | WalksMoimEveryWeek;
+
+export interface EveryWeekMoimPost {
+  name: string;
+  body: string;
+  capacity: number;
+  place: string;
+  dates: Yoil[];
+  time: string;
+  si: string;
+  gu: string;
+  dong: string;
+}
