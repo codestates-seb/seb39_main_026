@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { useEffect } from 'react';
+import { useGetWalksQuery } from '../../hooks/WalksListQuery';
 import { WalkDefault } from '../../models/WalkDefault';
 import { Theme } from '../../styles/Theme';
 import WalkItem from './WalkItem';
-import { useGetWalksQuery } from './WalksListQuery';
 import LoadingWalkItem from './skeleton/LoadingWalkItem';
 
 export default function WalksList({ query }: { query: string }) {

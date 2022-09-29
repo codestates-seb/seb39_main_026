@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { API } from '../../apis/api';
+import { API } from '../apis/api';
 
 export const useGetWalksQuery = (query: string) => {
   let url: string;
