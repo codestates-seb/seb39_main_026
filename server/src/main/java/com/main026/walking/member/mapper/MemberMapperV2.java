@@ -7,6 +7,8 @@ import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.util.awsS3.AwsS3Service;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -19,7 +21,9 @@ public abstract class MemberMapperV2 {
   @Autowired
   AwsS3Service awsS3Service;
 
-  abstract MemberDto.compactResponse memberToMemberCompactResponseDto(Member member);
+  public abstract Member memberPostDtoToMember(MemberDto.Post postDto);
+  @Mapping(source = "imgUrl", target = "imgUrl", qualifiedByName = "convertImgUrl")
+  public abstract MemberDto.compactResponse memberToMemberCompactResponseDto(Member member);
 
   public MemberDto.Response memberToMemberResponseDto(Member member){
     if (member == null) {
@@ -61,5 +65,10 @@ public abstract class MemberMapperV2 {
     response.memberCommunityList(communityList);
 
     return response.build();
+  }
+
+  @Named("convertImgUrl")
+  String convertImgUrl(String imgurl) {
+    return awsS3Service.getFileURL(imgurl);
   }
 }

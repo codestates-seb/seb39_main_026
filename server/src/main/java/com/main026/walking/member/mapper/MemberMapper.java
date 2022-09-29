@@ -1,3 +1,4 @@
+/*
 package com.main026.walking.member.mapper;
 
 import com.main026.walking.community.dto.CommunityDto;
@@ -53,5 +54,5 @@ public interface MemberMapper {
 
         return response.build();
     }
-
 }
+*/

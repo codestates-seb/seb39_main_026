@@ -17,9 +17,7 @@ public interface NoticeMapper {
   void updateEntityFromDto(NoticeDto.Patch dto, @MappingTarget Notice entity);
 
   //  Response
-  /*
-  @Mapping(target = "representMember", expression = "java(notice.getCommunity().getRepresentMember())")
-  */
+//  @Mapping(target = "representMember", expression = "java(notice.getCommunity().getRepresentMember())")
   @Mapping(source = "id",target = "noticeId")
   NoticeDto.Response entityToDtoResponse(Notice entity);
 

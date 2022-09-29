@@ -5,7 +5,6 @@ import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.dto.CommunityListResponseDto;
 import com.main026.walking.community.dto.CommunitySearchCond;
 import com.main026.walking.community.entity.Community;
-import com.main026.walking.community.mapper.CommunityMapper;
 import com.main026.walking.community.mapper.CommunityMapperV2;
 import com.main026.walking.community.repository.CommunityRepository;
 import com.main026.walking.exception.BusinessLogicException;
@@ -77,8 +76,8 @@ public class CommunityService {
         }
 
         CommunityDto.Response dto = communityMapper.entityToDtoResponse(savedCommunity);
-        List<String> fileUrls = dto.getImgUrls().stream().map(awsS3Service::getFileURL).collect(Collectors.toList());
-        dto.setImgUrls(fileUrls);
+//        List<String> fileUrls = dto.getImgUrls().stream().map(awsS3Service::getFileURL).collect(Collectors.toList());
+//        dto.setImgUrls(fileUrls);
         return dto;
     }
 

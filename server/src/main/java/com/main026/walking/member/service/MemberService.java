@@ -7,7 +7,6 @@ import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.dto.FindPasswordForm;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
-import com.main026.walking.member.mapper.MemberMapper;
 import com.main026.walking.member.mapper.MemberMapperV2;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.util.awsS3.AwsS3Service;
@@ -18,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.PushBuilder;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
@@ -31,8 +29,7 @@ import java.util.UUID;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberMapper memberMapper;
-    private final MemberMapperV2 memberMapperV2;
+    private final MemberMapperV2 memberMapper;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AwsS3Service awsS3Service;
     private final FileStore fileStore;
@@ -41,7 +38,7 @@ public class MemberService {
     public MemberDto.Response loginMember(Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Member loginMember = memberRepository.findByEmail(principalDetails.getMember().getEmail()).orElseThrow();
-        return memberMapperV2.memberToMemberResponseDto(loginMember);
+        return memberMapper.memberToMemberResponseDto(loginMember);
     }
 
     //  CREATE
@@ -65,9 +62,8 @@ public class MemberService {
     public MemberDto.Response findMember(Long memberId,Boolean isOwner) throws IOException {
 
         MemberDto.Response response =
-                memberMapperV2.memberToMemberResponseDto(verifyExistMemberWithId(memberId));
+                memberMapper.memberToMemberResponseDto(verifyExistMemberWithId(memberId));
         response.setIsOwner(isOwner);
-//        response.setImgUrl(awsS3Service.getImageBin(response.getImgUrl()));
         return response;
     }
 
@@ -82,7 +78,7 @@ public class MemberService {
 
         memberRepository.save(member);
 
-        return memberMapperV2.memberToMemberResponseDto(member);
+        return memberMapper.memberToMemberResponseDto(member);
     }
 
     //  DELETE
