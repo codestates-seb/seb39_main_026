@@ -107,6 +107,9 @@ export default function UserInfo({
       position: relative;
     }
     .img {
+      border-radius: 50%;
+      width: 75px;
+      height: 75px;
       object-fit: cover;
     }
     .username {
