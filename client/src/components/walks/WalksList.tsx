@@ -22,11 +22,17 @@ export default function WalksList({ query }: { query: string }) {
   }, [url]);
 
   const walksList = css`
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 30% 30% 30%;
+    place-content: center;
     p.alert {
       margin: 2rem;
       color: ${Theme.disableColor};
+    }
+    @media screen and (max-width: 1020px) {
+      display: grid;
+      grid-template-columns: 45% 45%;
+      place-content: center;
     }
     @media screen and (max-width: 768px) {
       display: flex;

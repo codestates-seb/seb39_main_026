@@ -17,7 +17,7 @@ export default function SearchInput({
       if (event.currentTarget.value === '') {
         setQuery('');
       } else {
-        setQuery(`?name=${event.currentTarget.value}`);
+        setQuery(`&name=${event.currentTarget.value}`);
       }
     }
   };
