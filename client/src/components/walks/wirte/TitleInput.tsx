@@ -10,7 +10,7 @@ import { Theme } from '../../../styles/Theme';
 
 const titleInputContainer = css`
   width: 100%;
-  padding: 20px 10px;
+  padding: 20px 30px;
   background-color: ${Theme.inputBgColor};
   border: 1px solid ${Theme.inputBgColor};
   border-radius: 15px;

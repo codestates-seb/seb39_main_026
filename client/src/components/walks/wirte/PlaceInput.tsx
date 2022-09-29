@@ -5,7 +5,7 @@ import { Theme } from '../../../styles/Theme';
 
 const placeInputContainer = css`
   width: 100%;
-  padding: 20px 10px;
+  padding: 20px 30px;
   background-color: #f7f7f5;
   border: 1px solid #f7f7f5;
   border-radius: 15px;
