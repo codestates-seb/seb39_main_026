@@ -1,5 +1,5 @@
 export interface WalkDefault {
-  communityId: string;
+  communityId: number;
   name: string;
   dateInfo: string;
   dayInfo: (string | null)[];
@@ -19,6 +19,7 @@ export interface WalkDetail extends WalkDefault {
     }
   ];
   member: {
+    id: number;
     imgUrl: string;
     username: string;
     petList: [
@@ -34,10 +35,11 @@ export interface WalkDetail extends WalkDefault {
   };
   pets: Array<WalkDetailPets>;
   comments: Array<WalkDetailComment>;
-  notices: Array<WalkNotice>;
-  createdAt: string;
-  viewed: number;
-  liked: number;
+  notices: {
+    id: number;
+    title: string;
+    body: string;
+  };
   communityPetList: Array<CommunityPetList>;
 }
 
@@ -59,12 +61,6 @@ interface WalkDetailComment {
     memberCommunityList: [];
     petList: [];
   };
-  createdAt: string;
-}
-
-interface WalkNotice {
-  title: string;
-  body: string;
 }
 
 interface CommunityPetList {
@@ -87,4 +83,15 @@ interface WalkDetailMember {
   memberCommunityList: [];
   petList: [];
   username: string;
+}
+
+export interface CommentPost {
+  communityId: number;
+  body: string;
+}
+
+export interface WalkPostNotice {
+  id: number;
+  title?: string;
+  body?: string;
 }

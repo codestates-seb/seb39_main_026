@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
@@ -54,6 +55,12 @@ const infoContainer = css`
       }
     }
   }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 export default function StickyInfo({
@@ -66,6 +73,7 @@ export default function StickyInfo({
   const [user] = useRecoilState(UserState);
   const router = useRouter();
 
+  // 로딩중이거나, walkDetail이 없으면 로딩 스켈레톤 컴포넌트를 렌더링
   if (walkDetail == null || walkDetail.imgUrls == null) {
     return <LoadingStickyInfo />;
   }
@@ -80,22 +88,22 @@ export default function StickyInfo({
       <aside css={infoContainer}>
         <div
           css={css`
-            background-image: url(${walkDetail.imgUrls[0]});
-            background-size: cover;
-            background-position: center;
+            width: 100%;
             height: 200px;
           `}
-        ></div>
+        >
+          <img src={`${walkDetail.imgUrls[0]}`} alt="walk-img" />
+        </div>
         <div className="info-content">
           <h1>{walkDetail.name}</h1>
           <>
             {walkDetail.dateInfo != null ? (
-              format(new Date(walkDetail?.dateInfo), 'yyyy년 MM월 dd일')
+              format(new Date(walkDetail.dateInfo), 'yyyy년 MM월 dd일')
             ) : (
               <p className="everyweek-moim">
                 매주
-                {walkDetail?.dayInfo?.map((x) => (
-                  <span key={`${x}`}>{x}</span>
+                {walkDetail.dayInfo.map((yoil) => (
+                  <span key={`${yoil}`}>{yoil}</span>
                 ))}
               </p>
             )}

@@ -1,7 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
+import { useScrollTop } from '../../../hooks/Scroll';
 import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
 import UserState from '../../../states/UserState';
 import CommonButton from '../../CommonButton';
@@ -32,6 +34,7 @@ export default function DetailLayout({
     setPetInfoId(petId);
   };
 
+  const top = useScrollTop();
   return (
     <>
       <section css={sancheckDetailLayout}>
@@ -50,7 +53,7 @@ export default function DetailLayout({
         <div className="sticky-info-container">
           <StickyInfo walkDetail={walkDetail} setIsModalOpen={setIsModalOpen} />
         </div>
-        <div css={mobileMoimJoin}>
+        <div css={mobileMoimJoin(top)}>
           <CommonButton
             type="button"
             onClick={() => {
@@ -90,7 +93,7 @@ const sancheckDetailLayout = css`
 
   @media screen and (max-width: 880px) {
     grid-template-columns: 1fr;
-    padding-bottom: 90px;
+    padding: 28px 36px 36px;
 
     .sticky-info-container {
       display: none;
@@ -98,11 +101,11 @@ const sancheckDetailLayout = css`
   }
 
   @media screen and (max-width: 525px) {
-    padding: 60px 26px 50px;
+    padding: 28px 26px 50px;
   }
 
   @media screen and (max-width: 324px) {
-    padding: 40px 16px 50px;
+    padding: 28px 16px 50px;
   }
 
   ul {
@@ -110,18 +113,41 @@ const sancheckDetailLayout = css`
   }
 `;
 
-const mobileMoimJoin = css`
-  display: none;
+const mobileMoimJoin = (top: number) => css`
+  opacity: 0;
+
   @media screen and (max-width: 880px) {
-    display: block;
+    opacity: ${top === 75 ? '1' : '0'};
     position: fixed;
     bottom: 10px;
     left: 0;
     right: 0;
     padding: 0 20px;
+    animation: ${top === 0 ? 'fadeIn 0.3s' : 'fadeOut 0.3s'};
   }
 
   @media screen and (max-width: 768px) {
+    opacity: ${top === 0 ? '1' : '0'};
     bottom: 100px;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
   }
 `;
