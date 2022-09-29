@@ -57,7 +57,7 @@ public class PetDto {
     public static class Response{
         private Long id;
         private String petName;
-        private MemberDto.Response member;
+        private MemberDto.compactResponse member;
         private String petGender;
         private String neuter;
         private PetAge petAges;
@@ -77,7 +77,6 @@ public class PetDto {
     public static class compactResponse{
         private Long id;
         private String petName;
-        private MemberDto.Response member;
         private String petGender;
         private PetAge petAges;
         private String imgUrl;
@@ -86,10 +85,13 @@ public class PetDto {
         public compactResponse(Pet pet) {
             this.id = pet.getId();
             this.petName = pet.getPetName();
-            this.member = new MemberDto.Response(pet.getMember());
             this.petGender = pet.getPetGender();
             this.petAges = pet.getPetAges();
             this.imgUrl = pet.getImgUrl();
+        }
+
+        public void setImgUrl(String imgUrl) {
+            this.imgUrl = imgUrl;
         }
     }
 }

@@ -30,6 +30,6 @@ public class CommentDto {
     private Long commentId;
     private String body;
     private LocalDateTime createdAt;
-    private MemberDto.Response member;
+    private MemberDto.compactResponse member;
   }
 }
