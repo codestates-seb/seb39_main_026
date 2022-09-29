@@ -11,7 +11,7 @@ export default function WalksList({ query }: { query: string }) {
 
   useEffect(() => {
     getWalksQuery.refetch();
-  }, [getWalksQuery]);
+  }, [query]);
 
   const walksList = css`
     display: grid;
