@@ -133,6 +133,10 @@ public class CommunityDto {
         private String representImgUrls;
 
 
+        public void setRepresentImgUrls(String representImgUrls) {
+            this.representImgUrls = representImgUrls;
+        }
+
         public compactResponse(Community community) {
             this.communityId = community.getId();
             this.name = community.getName();
@@ -143,6 +147,4 @@ public class CommunityDto {
             }
         }
     }
-
-
 }

@@ -8,6 +8,7 @@ import com.main026.walking.member.dto.FindPasswordForm;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.mapper.MemberMapper;
+import com.main026.walking.member.mapper.MemberMapperV2;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.file.FileStore;
@@ -31,6 +32,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
+    private final MemberMapperV2 memberMapperV2;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AwsS3Service awsS3Service;
     private final FileStore fileStore;
@@ -39,7 +41,7 @@ public class MemberService {
     public MemberDto.Response loginMember(Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Member loginMember = memberRepository.findByEmail(principalDetails.getMember().getEmail()).orElseThrow();
-        return memberMapper.memberToMemberResponseDto(loginMember);
+        return memberMapperV2.memberToMemberResponseDto(loginMember);
     }
 
     //  CREATE
@@ -63,9 +65,9 @@ public class MemberService {
     public MemberDto.Response findMember(Long memberId,Boolean isOwner) throws IOException {
 
         MemberDto.Response response =
-                memberMapper.memberToMemberResponseDto(verifyExistMemberWithId(memberId));
+                memberMapperV2.memberToMemberResponseDto(verifyExistMemberWithId(memberId));
         response.setIsOwner(isOwner);
-        response.setImgUrl(awsS3Service.getImageBin(response.getImgUrl()));
+//        response.setImgUrl(awsS3Service.getImageBin(response.getImgUrl()));
         return response;
     }
 
@@ -80,7 +82,7 @@ public class MemberService {
 
         memberRepository.save(member);
 
-        return memberMapper.memberToMemberResponseDto(member);
+        return memberMapperV2.memberToMemberResponseDto(member);
     }
 
     //  DELETE
