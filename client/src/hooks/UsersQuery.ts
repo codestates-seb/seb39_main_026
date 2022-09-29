@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useMutation, useQuery } from 'react-query';
 import { API } from '../apis/api';
+import { UserDefault } from '../models/UserDefault';
 
 export function useGetUsersQuery(id: string) {
   return useQuery(
@@ -12,26 +13,22 @@ export function useGetUsersQuery(id: string) {
   );
 }
 
-export function useUpdateUsernameMutation() {
-  return useMutation(
-    async ({
-      id,
-      body,
-      accessToken,
-    }: {
-      id: number;
-      body: string;
-      accessToken: string;
-    }) => {
-      await axios.patch(
-        `${API.USERS}/${id}`,
-        { username: body },
+export const useUpdateUsernameMutation = () => {
+  return useMutation(async (body: UserDefault) => {
+    const { id, username } = body;
+    await axios
+      .patch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/members/${id}`,
+        {
+          username,
+        },
         {
           headers: {
-            Authorization: accessToken,
+            authorization: localStorage.getItem('accessToken') || '',
+            refresh_token: localStorage.getItem('refreshToken') || '',
           },
         }
-      );
-    }
-  );
-}
+      )
+      .then((res) => console.log(res));
+  });
+};

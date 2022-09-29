@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { useUpdateUsernameMutation } from '../../hooks/UsersQuery';
 import { UserDefault } from '../../models/UserDefault';
 import { skeletonGradient } from '../../styles/GlobalStyle';
 import { Theme } from '../../styles/Theme';
@@ -14,6 +15,7 @@ export default function UserInfo({
   data: UserDefault;
   isValidated: boolean;
 }) {
+  const { mutate: updateUsernameMutate } = useUpdateUsernameMutation();
   const [isNameEditMode, setIsNameEditMode] = useState(false);
   const [name, setName] = useState(data.username);
   const [imgSrc, setImgSrc] = useState(data.imgUrl);
@@ -21,26 +23,12 @@ export default function UserInfo({
 
   const handleNameEdit = async () => {
     if (isNameEditMode === true) {
-      axios
-        .patch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/members/${data.id}`,
-          { username: name },
-          {
-            headers: {
-              authorization: localStorage.getItem('accessToken') || '',
-              refresh_token: localStorage.getItem('refreshToken') || '',
-            },
-          }
-        )
-        .then((res) => setName(res.data.username))
-        .catch((err) => {
-          if (err.response.headers.authorization) {
-            localStorage.setItem(
-              'accessToken',
-              err.response.headers.authorization
-            );
-          }
-        });
+      updateUsernameMutate(
+        { id: data.id, username: name },
+        {
+          onSuccess: () => setIsNameEditMode(!isNameEditMode),
+        }
+      );
     }
     setIsNameEditMode(!isNameEditMode);
   };
@@ -182,7 +170,7 @@ export default function UserInfo({
           <div className="imgWrapper" onClick={onUploadImgClick}>
             <Image
               alt={`${name}'s profile`}
-              src={imgSrc}
+              src={imgSrc || ''}
               width="75px"
               height="75px"
               className="img"
