@@ -12,6 +12,7 @@ import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.util.awsS3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -85,6 +86,26 @@ public class CommunityController {
         return new ResponseEntity(communities, HttpStatus.OK);
     }
 
+    @GetMapping("/new")
+    public ResponseEntity getCommunitiesWithNew(CommunitySearchCond communitySearchCond) {
+        Sort sortNew = Sort.by("new").descending();
+        PageRequest pageRequest = PageRequest.of(0,4,sortNew);
+
+        CommunityListResponseDto communities = communityService.findCommunities(communitySearchCond, pageRequest);
+
+        return new ResponseEntity(communities, HttpStatus.OK);
+    }
+
+    @GetMapping("/hot")
+    public ResponseEntity getCommunitiesWithHot(CommunitySearchCond communitySearchCond) {
+        Sort sortHot = Sort.by("hot");
+        PageRequest pageRequest = PageRequest.of(0,4,sortHot);
+
+        CommunityListResponseDto communities = communityService.findCommunities(communitySearchCond, pageRequest);
+
+        return new ResponseEntity(communities, HttpStatus.OK);
+    }
+
     //TODO 기존 이미지를 보여주고 삭제할건 삭제하고, 변경할 수 있어야 한다. - 연관관계 때문
     //Update
     @PatchMapping("/{communityId}")
@@ -112,26 +133,13 @@ public class CommunityController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-//  CRUD - IMAGE
-    //  CREATE - ONE
-/*    @PostMapping("/img/{communityId}")
-    public ResponseEntity postImage(
-      @PathVariable long communityId,
-      @RequestPart MultipartFile imgFile,
-      @AuthenticationPrincipal PrincipalDetails principalDetails
-    ){
-        communityService.authorization(communityId,principalDetails);
-        communityService.saveImage(communityId, imgFile);
-
-        return new ResponseEntity(HttpStatus.CREATED);
-    }*/
 
     //  CREATE - MULTI
     @PostMapping("/img/{communityId}")
     public ResponseEntity postImage(
-      @PathVariable long communityId,
-      @RequestPart List<MultipartFile> imgFile,
-      @AuthenticationPrincipal PrincipalDetails principalDetails
+            @PathVariable long communityId,
+            @RequestPart List<MultipartFile> imgFile,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         communityService.authorization(communityId,principalDetails);
         List<String> savedImages = communityService.saveMultiImage(communityId, imgFile);

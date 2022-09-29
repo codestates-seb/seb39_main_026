@@ -12,6 +12,8 @@ public enum ExceptionCode {
     FILE_NOT_FOUND(404,"Can not found attached file"),
     FILE_UPLOAD_FAILED(400,"Can not upload file"),
     COMMUNITY_NOT_FOUND(404,"Community not found"),
+    CAPACITY_FULL(409,"Capacity has already been full"),
+    OVERBOOKED(409,"OVERBOOKED"),
     TOKEN_EXPIRED(401, "Token is expired");
 
     @Getter
