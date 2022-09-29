@@ -13,4 +13,8 @@ export interface MyPets {
   breed: string;
   about: string;
   birthday: string;
+  member: {
+    username: string;
+    id: string;
+  };
 }

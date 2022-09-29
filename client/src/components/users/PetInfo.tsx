@@ -97,7 +97,6 @@ export default function PetInfo({
       }
     }
   `;
-
   return (
     <>
       {pets ? (
@@ -113,8 +112,7 @@ export default function PetInfo({
                   }}
                 >
                   <Image
-                    // src={pet.imgUrl}
-                    src="https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80"
+                    src={pet.imgUrl}
                     height="50px"
                     width="50px"
                     alt={`${pet.petName}`}

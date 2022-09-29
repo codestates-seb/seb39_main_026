@@ -40,18 +40,20 @@ export default function User({ userId }: { userId: string }) {
   `;
 
   useEffect(() => {
-    if (userId === user.id.toString()) {
-      setIsValidated(true);
-    } else {
-      setIsValidated(false);
+    if (user) {
+      if (userId === user.id.toString()) {
+        setIsValidated(true);
+      } else {
+        setIsValidated(false);
+      }
     }
   }, [userId, user]);
 
   return (
     <section css={userPage}>
+      <TabTitle prefix={userId} />
       {getUsersQuery.isSuccess && (
         <>
-          <TabTitle prefix={userId} />
           <UserInfo data={getUsersQuery.data} isValidated={isValidated} />
           <PetInfo
             pets={getUsersQuery.data.petList}
@@ -68,9 +70,9 @@ export default function User({ userId }: { userId: string }) {
             )}
           </div>
           <WalksInfo walks={getUsersQuery.data?.memberCommunityList} />
-          <footer>{isValidated && <LogoutButton />}</footer>
         </>
       )}
+      <footer>{isValidated && <LogoutButton />}</footer>
     </section>
   );
 }
