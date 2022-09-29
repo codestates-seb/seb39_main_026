@@ -42,7 +42,7 @@ export default function UserInfo({
     inputRef.current.click();
   }, []);
 
-  const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files) {
       updateUserImgMutate({ id: data.id, file: e.target.files[0], setImgSrc });
