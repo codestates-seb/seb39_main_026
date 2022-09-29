@@ -7,7 +7,11 @@ import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.CommunityPet;
 import com.main026.walking.pet.entity.Pet;
+import com.main026.walking.util.awsS3.AwsS3Service;
 import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
