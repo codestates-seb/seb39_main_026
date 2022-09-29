@@ -12,6 +12,7 @@ import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.util.awsS3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -79,6 +80,32 @@ public class CommunityController {
             @RequestParam(value = "size", defaultValue = "10") int size,
             CommunitySearchCond communitySearchCond) {
         PageRequest pageRequest = PageRequest.of(page-1,size);
+
+        CommunityListResponseDto communities = communityService.findCommunities(communitySearchCond, pageRequest);
+
+        return new ResponseEntity(communities, HttpStatus.OK);
+    }
+
+    @GetMapping("/new")
+    public ResponseEntity getCommunitiesWithNew(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "4") int size,
+            CommunitySearchCond communitySearchCond) {
+        Sort sortNew = Sort.by("new").descending();
+        PageRequest pageRequest = PageRequest.of(page-1,size,sortNew);
+
+        CommunityListResponseDto communities = communityService.findCommunities(communitySearchCond, pageRequest);
+
+        return new ResponseEntity(communities, HttpStatus.OK);
+    }
+
+    @GetMapping("/hot")
+    public ResponseEntity getCommunitiesWithHot(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "4") int size,
+            CommunitySearchCond communitySearchCond) {
+        Sort sortHot = Sort.by("hot");
+        PageRequest pageRequest = PageRequest.of(page-1,size,sortHot);
 
         CommunityListResponseDto communities = communityService.findCommunities(communitySearchCond, pageRequest);
 

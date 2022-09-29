@@ -82,7 +82,11 @@ public class CommunityService {
     }
 
     public CommunityDto.Response joinPet(Long communityId, List<Long> petIdList) {
+
         Community community = communityRepository.findById(communityId).orElseThrow();
+
+        //참여가능 여부 검사
+        isFull(community.getCapacity(),community.getCommunityPets().size(),petIdList.size());
 
         for (Long petId : petIdList) {
             Pet pet = petRepository.findById(petId).orElseThrow();
@@ -229,5 +233,16 @@ public class CommunityService {
     private Community findVerifiedCommunity(Long communityId) {
         Community findCommunity = communityRepository.findById(communityId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMUNITY_NOT_FOUND));
         return findCommunity;
+    }
+
+    public void isFull(Integer capacity, Integer communityPets, Integer joinPet){
+        //이미 참여인원이 수용량과 같음
+        if(capacity==communityPets){
+            throw new BusinessLogicException(ExceptionCode.CAPACITY_FULL);
+        }
+        //참여하려는 인원을 추가하면 초과됨
+        if(communityPets+joinPet>capacity){
+            throw new BusinessLogicException(ExceptionCode.OVERBOOKED);
+        }
     }
 }

@@ -90,9 +90,9 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom{
     private OrderSpecifier<?> boardSort(Pageable page) {
         //서비스에서 보내준 Pageable 객체에 정렬조건 null 값 체크
         //TODO 연산을 변수화했는데 맞는지 모르겠다.
-        NumberExpression<Integer> limited = community.communityPets.size();
+        NumberExpression<Integer> hot = community.communityPets.size();
         NumberExpression<Integer> capacity = community.capacity.castToNum(Integer.class);
-        NumberExpression<Integer> subtract = capacity.subtract(limited);
+        NumberExpression<Integer> subtract = capacity.subtract(hot);
 
         if (!page.getSort().isEmpty()) {
             //정렬값이 들어 있으면 for 사용하여 값을 가져온다
@@ -105,7 +105,7 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom{
                     case "new":
                         return new OrderSpecifier(direction, community.id);
                     //TODO 마감임박 -> 수용인원-참여인원이 작은 순
-                    case "limited":
+                    case "hot":
                         return new OrderSpecifier(direction, subtract);
                 }
             }
