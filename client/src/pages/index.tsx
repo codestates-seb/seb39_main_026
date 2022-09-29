@@ -40,7 +40,7 @@ const Home: NextPage = () => {
         <h2 className="walks_title">✨ 동네 신규 산책</h2>
         {address ? (
           <WalksList
-            query={`?si=${address?.split(' ')[0]}&gu=${
+            query={`/new?si=${address?.split(' ')[0]}&gu=${
               address?.split(' ')[1]
             }&dong=${address?.split(' ')[2]}`}
           />
@@ -52,7 +52,7 @@ const Home: NextPage = () => {
         <h2 className="walks_title">🔥 마감 임박 산책 </h2>
         {address ? (
           <WalksList
-            query={`?si=${address?.split(' ')[0]}&gu=${
+            query={`/hot?si=${address?.split(' ')[0]}&gu=${
               address?.split(' ')[1]
             }&dong=${address?.split(' ')[2]}`}
           />
