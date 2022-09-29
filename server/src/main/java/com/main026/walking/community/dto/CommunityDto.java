@@ -96,7 +96,7 @@ public class CommunityDto {
         private String time;
 
         //private List<String> weeks;
-        private MemberDto.Response member;
+        private MemberDto.compactResponse member;
         private List<String> imgUrls;
         private List<PetDto.compactResponse> communityPetList;
         private List<PetDto.compactResponse> sessionMemberPetList;
@@ -136,6 +136,10 @@ public class CommunityDto {
         private String representImgUrls;
 
 
+        public void setRepresentImgUrls(String representImgUrls) {
+            this.representImgUrls = representImgUrls;
+        }
+
         public compactResponse(Community community) {
             this.communityId = community.getId();
             this.name = community.getName();
@@ -146,6 +150,4 @@ public class CommunityDto {
             }
         }
     }
-
-
 }

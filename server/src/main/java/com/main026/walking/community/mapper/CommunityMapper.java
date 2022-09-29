@@ -6,32 +6,34 @@ import com.main026.walking.community.dto.CommunityDto;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.image.entity.Image;
 import com.main026.walking.member.dto.MemberDto;
-import com.main026.walking.member.entity.Member;
 import com.main026.walking.notice.dto.NoticeDto;
-import com.main026.walking.notice.entity.Notice;
 import com.main026.walking.pet.dto.PetDto;
-import com.main026.walking.pet.entity.CommunityPet;
 import com.main026.walking.pet.entity.Pet;
+import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.enums.Weeks;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface CommunityMapper {
+public abstract class CommunityMapper {
+    @Autowired
+    AwsS3Service awsS3Service;
 
     //  Post
-    Community postDtoToEntity(CommunityDto.Post dto);
+    public abstract Community postDtoToEntity(CommunityDto.Post dto);
 
     // TODO 매퍼 최적화 필요
-    default CommunityDto.Response entityToDtoResponse(Community entity) {
+    public CommunityDto.Response entityToDtoResponse(Community entity) {
         if (entity == null) {
             return null;
         }
         CommunityDto.Response.ResponseBuilder response = CommunityDto.Response.builder();
 
-        MemberDto.Response responseMemberDto = new MemberDto.Response(entity.getRepresentMember());
+        MemberDto.compactResponse responseMemberDto = new MemberDto.compactResponse(entity.getRepresentMember());
+        responseMemberDto.setImgUrl(awsS3Service.getFileURL(responseMemberDto.getImgUrl()));
 
         response.communityId(entity.getId());
         response.name(entity.getName());
@@ -63,6 +65,7 @@ public interface CommunityMapper {
         for (int i = 0; i < entity.getCommunityPets().size(); i++) {
             Pet pet = entity.getCommunityPets().get(i).getPet();
             PetDto.compactResponse compactResponse = new PetDto.compactResponse(pet);
+            compactResponse.setImgUrl(awsS3Service.getFileURL(compactResponse.getImgUrl()));
             pets.add(compactResponse);
         }
 
@@ -71,7 +74,8 @@ public interface CommunityMapper {
         List<CommentDto.Response> comments = new ArrayList<>();
         for (int i = 0; i < entity.getComments().size(); i++) {
             Comment comment = entity.getComments().get(i);
-            MemberDto.Response responseDto = new MemberDto.Response(comment.getMember());
+            MemberDto.compactResponse responseDto = new MemberDto.compactResponse(comment.getMember());
+            responseDto.setImgUrl(awsS3Service.getFileURL(responseDto.getImgUrl()));
             comments.add(CommentDto.Response.builder()
                     .commentId(comment.getId())
                     .body(comment.getBody())
@@ -84,7 +88,7 @@ public interface CommunityMapper {
         List<String> imageList = new ArrayList<>();
         for (int i = 0; i < entity.getImages().size(); i++) {
             Image image = entity.getImages().get(i);
-            String storeFilename = image.getStoreFilename();
+            String storeFilename = awsS3Service.getFileURL(image.getStoreFilename());
             imageList.add(storeFilename);
         }
         response.imgUrls(imageList);
@@ -112,5 +116,5 @@ public interface CommunityMapper {
         return response.build();
     }
 
-    List<CommunityDto.Response> multiEntityToDtoInfo(List<Community> entities);
+    public abstract List<CommunityDto.Response> multiEntityToDtoInfo(List<Community> entities);
 }

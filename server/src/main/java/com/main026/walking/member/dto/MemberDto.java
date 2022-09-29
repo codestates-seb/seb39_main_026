@@ -93,4 +93,29 @@ public class MemberDto {
             this.imgUrl = imgUrl;
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class compactResponse{
+        private Long id;
+        private String email;
+        private String username;
+        private String imgUrl;
+        private Address address;
+
+        public compactResponse(Member member) {
+            this.id = member.getId();
+            this.email = member.getEmail();
+            this.username = member.getUsername();
+            this.imgUrl = member.getImgUrl();
+            this.address = member.getAddress();
+        }
+
+        public void setImgUrl(String imgUrl) {
+            this.imgUrl = imgUrl;
+        }
+    }
+
 }

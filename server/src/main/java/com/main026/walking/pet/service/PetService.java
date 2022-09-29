@@ -3,26 +3,19 @@ package com.main026.walking.pet.service;
 import com.main026.walking.exception.BusinessLogicException;
 import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.entity.Member;
-import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.pet.mapper.PetMapper;
 import com.main026.walking.pet.repository.PetRepository;
 import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.embedded.PetAge;
-import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.ap.shaded.freemarker.template.SimpleDate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,14 +44,12 @@ public class PetService {
         petRepository.save(pet);
 
         PetDto.Response dto = petMapper.petToPetResponseDto(pet);
-        dto.setImgUrl(awsS3Service.getImageBin(dto.getImgUrl()));
         return dto;
     }
 
     public PetDto.Response findPet(Long petId) throws IOException {
         Pet pet = petRepository.findById(petId).orElseThrow();
         PetDto.Response dto = petMapper.petToPetResponseDto(pet);
-        dto.setImgUrl(awsS3Service.getImageBin(dto.getImgUrl()));
         return dto;
     }
 

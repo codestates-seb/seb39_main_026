@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.PushBuilder;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
@@ -65,7 +64,6 @@ public class MemberService {
         MemberDto.Response response =
                 memberMapper.memberToMemberResponseDto(verifyExistMemberWithId(memberId));
         response.setIsOwner(isOwner);
-        response.setImgUrl(awsS3Service.getImageBin(response.getImgUrl()));
         return response;
     }
 

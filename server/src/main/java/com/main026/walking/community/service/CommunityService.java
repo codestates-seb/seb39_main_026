@@ -89,8 +89,8 @@ public class CommunityService {
         }
 
         CommunityDto.Response dto = communityMapper.entityToDtoResponse(savedCommunity);
-        List<String> fileUrls = dto.getImgUrls().stream().map(awsS3Service::getFileURL).collect(Collectors.toList());
-        dto.setImgUrls(fileUrls);
+//        List<String> fileUrls = dto.getImgUrls().stream().map(awsS3Service::getFileURL).collect(Collectors.toList());
+//        dto.setImgUrls(fileUrls);
         return dto;
     }
 

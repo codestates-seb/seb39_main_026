@@ -2,13 +2,13 @@ name: Deploy-Server on AWS [dev]
 
 on:
   push:
-    branches: [ "dev" ]
+   branches: [ "dev" ]
 
 permissions:
   contents: read
 
 env:
-  S3_BUCKET_NAME: main026-s3
+  S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
 
 jobs:
   build:
@@ -22,6 +22,24 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+
+#      - name: Set Properties
+#        uses: microsoft/variable-substitution@v1
+#        with:
+#          files: 'server/src/main/resources/application.yml'
+#        env:
+#          override.value: ${{ secrets.DI_APP_YML_SECRET }}
+#          cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
+#          cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          cloud.s3.bucket: ${{ secrets.AWS_S3_BUCKET_NAME }}
+#          jwt.refresh: ${{ secrets.JWT_REFRESH }}
+#          jwt.access: ${{ secrets.JWT_ACCESS }}
+
+      - name: Set Properties
+        run: |
+          cd server/src/main/resources
+          echo "${{ secrets.DI_APP_YML_SECRET }}" > ./application.yml
+        shell: bash
 
       - name: Server Build
         run: |                          # 개별 실행 옵션, 없으면 28 ~ 33줄까지 모두 한줄에 실행됨
