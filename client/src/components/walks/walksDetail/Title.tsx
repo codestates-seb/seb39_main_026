@@ -91,8 +91,7 @@ export default function Title({ walkDetail }: { walkDetail?: WalkDetail }) {
       </div>
       <div css={postOwnerContainer}>
         <Image
-          src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${walkDetail.member.id}`}
-          // src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/image/${walkDetail.member.id}`}
+          src={walkDetail.member.imgUrl}
           alt={`작성자 ${walkDetail.member.username}의 사진`}
           width="32px"
           height="32px"

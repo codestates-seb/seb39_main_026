@@ -166,8 +166,7 @@ export default function DogChoiceModal({
             `}
           >
             <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${dogInfoData.id}`}
-              // src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/image/${dogInfoData.id}`}
+              src={dogInfoData.imgUrl}
               alt={`${dogInfoData.petName}의 사진`}
               height="100px"
               width="100px"

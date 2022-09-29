@@ -158,7 +158,7 @@ export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
             <li key={`${comment.body}-${idx}`}>
               <div>
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/image/${comment.member.id}`}
+                  src={comment.member.imgUrl}
                   height="40px"
                   width="40px"
                   alt={`${comment.member.username}의 사진`}
