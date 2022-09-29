@@ -6,6 +6,7 @@ export interface MyPets {
     years: number;
     months: number;
     days: number;
+    birthDay: string;
   };
   petGender: string;
   personality: string;
@@ -13,7 +14,7 @@ export interface MyPets {
   breed: string;
   about: string;
   birthday: string;
-  member: {
+  member?: {
     username: string;
     id: string;
   };

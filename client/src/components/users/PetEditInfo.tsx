@@ -9,6 +9,7 @@ import React, {
   useCallback,
   Dispatch,
   SetStateAction,
+  useEffect,
 } from 'react';
 import { useRecoilState } from 'recoil';
 import { API } from '../../apis/api';
@@ -35,7 +36,7 @@ export default function PetEditInfo({
   const [petNeuter, setPetNeuter] = useState(pet.neuter);
   const [petPersonality, setPetPersonality] = useState(pet.personality);
   const [petAbout, setPetAbout] = useState(pet.about);
-  const [petBirthday, setPetBirthday] = useState(pet.birthday);
+  const [petBirthday, setPetBirthday] = useState(pet.petAges.birthDay);
   const [petImgUrl, setPetImgUrl] = useState('');
   const [imgSrc, setImgSrc] = useState(pet.imgUrl);
   const { mutate: updatePetImgMutate } = useUpdatePetImgMutation();
@@ -222,6 +223,10 @@ export default function PetEditInfo({
       }
     }
   `;
+
+  useEffect(() => {
+    console.log(pet);
+  }, []);
 
   return (
     <div css={petInfo}>

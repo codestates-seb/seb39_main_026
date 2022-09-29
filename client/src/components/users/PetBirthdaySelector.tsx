@@ -8,7 +8,9 @@ export default function PetBirthdaySelector({
   setPetBirthday: Dispatch<SetStateAction<string>>;
 }) {
   const [birthYear, setBirthyear] = useState(petBirthday?.split('-')[0]);
-  const [birthMonth, setBirthmonth] = useState(petBirthday?.split('-')[1]);
+  const [birthMonth, setBirthmonth] = useState(
+    `${parseInt(petBirthday?.split('-')[1]) - 1}`
+  );
   const [birthDay, setBirthDay] = useState(petBirthday?.split('-')[2]);
 
   useEffect(() => {
@@ -24,7 +26,7 @@ export default function PetBirthdaySelector({
   }, [birthYear, birthMonth, birthDay]);
 
   return (
-    <div>
+    <>
       <YearPicker
         defaultValue={'연도'}
         start={1990} // default is 1900
@@ -70,6 +72,6 @@ export default function PetBirthdaySelector({
         classes={'daySelect'}
         optionClasses={'dayOption'}
       />
-    </div>
+    </>
   );
 }
