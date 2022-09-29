@@ -200,10 +200,7 @@ export default function DogChoiceModal({
               onClick={() => handlePickPetClick(pet.petName)}
               className={pickPets.includes(pet.petName) ? 'pick' : ''}
             >
-              <img
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.imgUrl}`}
-                alt={`${pet.petName} 사진`}
-              />
+              <img src={pet.imgUrl} alt={`${pet.petName} 사진`} />
               <p>{pet.petName}</p>
             </li>
           ))}
