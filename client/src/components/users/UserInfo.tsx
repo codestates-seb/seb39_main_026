@@ -99,12 +99,15 @@ export default function UserInfo({
   const userInfo = css`
     display: flex;
     margin-bottom: 1.5rem;
-    .img {
+    .imgWrapper {
       border-radius: 50%;
-      object-fit: cover;
       width: 75px;
       height: 75px;
       background-color: ${Theme.disableBgColor};
+      position: relative;
+    }
+    .img {
+      object-fit: cover;
     }
     .username {
       margin-top: 0.4rem;
@@ -138,6 +141,13 @@ export default function UserInfo({
         color: inherit;
       }
     }
+    .camera {
+      color: ${Theme.disableColor};
+      position: absolute;
+      top: 65%;
+      left: 37%;
+      font-size: 1.3rem;
+    }
   `;
 
   const LoadingUserInfo = css`
@@ -166,7 +176,7 @@ export default function UserInfo({
     <>
       {typeof data !== 'string' ? (
         <div css={userInfo}>
-          <div className="img" onClick={onUploadImgClick}>
+          <div className="imgWrapper" onClick={onUploadImgClick}>
             <Image
               alt={`${name}'s profile`}
               src={imgSrc}
@@ -174,6 +184,9 @@ export default function UserInfo({
               height="75px"
               className="img"
             />
+            {isValidated && (
+              <Icon icon="ant-design:camera-twotone" className="camera" />
+            )}
           </div>
           {isNameEditMode ? (
             <input
@@ -210,4 +223,3 @@ export default function UserInfo({
     </>
   );
 }
-

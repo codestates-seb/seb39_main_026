@@ -1,4 +1,6 @@
 import { css } from '@emotion/react';
+import { Icon } from '@iconify/react';
+
 import axios from 'axios';
 import Image from 'next/image';
 import React, {
@@ -143,11 +145,19 @@ export default function PetEditInfo({
     justify-content: center;
     align-items: center;
     .img {
+      position: relative;
       width: 100px;
       height: 100px;
       border-radius: 50%;
       background-color: ${Theme.disableBgColor};
       object-fit: cover;
+    }
+    .camera {
+      color: #ffffff80;
+      position: absolute;
+      top: 35%;
+      left: 35%;
+      font-size: 2rem;
     }
     .preview {
       border-radius: 50%;
@@ -235,6 +245,7 @@ export default function PetEditInfo({
           height="100px"
           className="preview"
         />
+        <Icon icon="ant-design:camera-twotone" className="camera" />
         <input
           type="file"
           accept="image/*"
@@ -320,4 +331,3 @@ export default function PetEditInfo({
     </div>
   );
 }
-
