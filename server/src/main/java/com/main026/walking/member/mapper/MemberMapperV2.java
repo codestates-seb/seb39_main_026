@@ -19,6 +19,8 @@ public abstract class MemberMapperV2 {
   @Autowired
   AwsS3Service awsS3Service;
 
+  abstract MemberDto.compactResponse memberToMemberCompactResponseDto(Member member);
+
   public MemberDto.Response memberToMemberResponseDto(Member member){
     if (member == null) {
       return null;

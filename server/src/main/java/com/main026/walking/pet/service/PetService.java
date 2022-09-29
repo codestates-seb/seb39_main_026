@@ -7,6 +7,7 @@ import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.pet.mapper.PetMapper;
+import com.main026.walking.pet.mapper.PetMapperV2;
 import com.main026.walking.pet.repository.PetRepository;
 import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.embedded.PetAge;
@@ -33,10 +34,11 @@ public class PetService {
 
     private final PetRepository petRepository;
     private final PetMapper petMapper;
+    private final PetMapperV2 petMapperV2;
     private final AwsS3Service awsS3Service;
 
     public PetDto.Response postPet(PetDto.Post postDto,Member member) throws IOException {
-        Pet pet = petMapper.petPostDtoToPet(postDto);
+        Pet pet = petMapperV2.petPostDtoToPet(postDto);
 
         //나이 파싱 로직
         try {
@@ -50,15 +52,15 @@ public class PetService {
         if(pet.getImgUrl().isEmpty()) pet.setImgUrl("DEFAULT_PET_IMAGE.jpg");
         petRepository.save(pet);
 
-        PetDto.Response dto = petMapper.petToPetResponseDto(pet);
-        dto.setImgUrl(awsS3Service.getImageBin(dto.getImgUrl()));
+        PetDto.Response dto = petMapperV2.petToPetResponseDto(pet);
+//        dto.setImgUrl(awsS3Service.getImageBin(dto.getImgUrl()));
         return dto;
     }
 
     public PetDto.Response findPet(Long petId) throws IOException {
         Pet pet = petRepository.findById(petId).orElseThrow();
-        PetDto.Response dto = petMapper.petToPetResponseDto(pet);
-        dto.setImgUrl(awsS3Service.getImageBin(dto.getImgUrl()));
+        PetDto.Response dto = petMapperV2.petToPetResponseDto(pet);
+//        dto.setImgUrl(awsS3Service.getImageBin(dto.getImgUrl()));
         return dto;
     }
 
@@ -66,7 +68,7 @@ public class PetService {
     public List<PetDto.Response> findAllByUsername(String username){
         List<PetDto.Response> allPets = petRepository.findAllByMember_username(username)
                 .stream()
-                .map(pet -> petMapper.petToPetResponseDto(pet))
+                .map(pet -> petMapperV2.petToPetResponseDto(pet))
                 .collect(Collectors.toList());
         return allPets;
     }
@@ -77,7 +79,7 @@ public class PetService {
         parseAge(patchDto.getBirthDay(),pet);
 
         Pet savedPet = petRepository.save(pet);
-        return petMapper.petToPetResponseDto(savedPet);
+        return petMapperV2.petToPetResponseDto(savedPet);
     }
 
     public void deletePet(Long petId){

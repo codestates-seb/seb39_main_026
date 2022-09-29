@@ -57,7 +57,7 @@ public class PetDto {
     public static class Response{
         private Long id;
         private String petName;
-        private MemberDto.Response member;
+        private MemberDto.compactResponse member;
         private String petGender;
         private String neuter;
         private PetAge petAges;
