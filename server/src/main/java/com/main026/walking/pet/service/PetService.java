@@ -5,7 +5,7 @@ import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.Pet;
-import com.main026.walking.pet.mapper.PetMapperV2;
+import com.main026.walking.pet.mapper.PetMapper;
 import com.main026.walking.pet.repository.PetRepository;
 import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.embedded.PetAge;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class PetService {
 
     private final PetRepository petRepository;
-    private final PetMapperV2 petMapper;
+    private final PetMapper petMapper;
     private final AwsS3Service awsS3Service;
 
     public PetDto.Response postPet(PetDto.Post postDto,Member member) throws IOException {

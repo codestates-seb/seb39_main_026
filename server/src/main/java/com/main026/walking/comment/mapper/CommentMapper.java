@@ -2,12 +2,12 @@ package com.main026.walking.comment.mapper;
 
 import com.main026.walking.comment.dto.CommentDto;
 import com.main026.walking.comment.entity.Comment;
-import com.main026.walking.member.mapper.MemberMapperV2;
+import com.main026.walking.member.mapper.MemberMapper;
 import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE,uses = MemberMapperV2.class)
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE,uses = MemberMapper.class)
 public abstract class CommentMapper {
   
 //  Post

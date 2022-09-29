@@ -7,7 +7,7 @@ import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.dto.FindPasswordForm;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
-import com.main026.walking.member.mapper.MemberMapperV2;
+import com.main026.walking.member.mapper.MemberMapper;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.file.FileStore;
@@ -29,7 +29,7 @@ import java.util.UUID;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberMapperV2 memberMapper;
+    private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AwsS3Service awsS3Service;
     private final FileStore fileStore;
