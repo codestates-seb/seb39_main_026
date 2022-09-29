@@ -49,6 +49,19 @@ public class CommunityService {
     public CommunityDto.Response createCommunity(CommunityDto.Post postDto,Member member) {
         Community community = communityMapper.postDtoToEntity(postDto);
 
+        //모임장의 강아지 save
+        if(postDto.getJoinnedPetList()!=null) {
+            Long[] joinnedPetList = postDto.getJoinnedPetList();
+            for (Long petId : joinnedPetList) {
+                Pet pet = petRepository.findById(petId).orElseThrow();
+                CommunityPet communityPet = CommunityPet.builder()
+                        .pet(pet)
+                        .community(community)
+                        .build();
+                communityPetRepository.save(communityPet);
+            }
+        }
+
         String[] dayInfo = postDto.getDates();
         List<String> dayList = null;
 
@@ -83,6 +96,12 @@ public class CommunityService {
 
     public CommunityDto.Response joinPet(Long communityId, List<Long> petIdList) {
         Community community = communityRepository.findById(communityId).orElseThrow();
+        //참여가능 여부 검사
+        isFull(community.getCapacity(),community.getCommunityPets().size(),petIdList.size());
+
+        //참여가능 여부 검사
+        isFull(community.getCapacity(),community.getCommunityPets().size(),petIdList.size());
+        //Todo 조회시 4개글만 보이게
 
         for (Long petId : petIdList) {
             Pet pet = petRepository.findById(petId).orElseThrow();
@@ -112,6 +131,7 @@ public class CommunityService {
     public CommunityListResponseDto findCommunities(CommunitySearchCond searchCond, Pageable pageable) {
         Page<Community> communityPage = communityRepository.findAllWithCond(searchCond, pageable);
         List<Community> communityList = communityPage.getContent();
+        System.out.println(communityList.size());
 
         List<CommunityDto.Response> responseList = new ArrayList<>();
         for (Community community : communityList) {
@@ -229,5 +249,16 @@ public class CommunityService {
     private Community findVerifiedCommunity(Long communityId) {
         Community findCommunity = communityRepository.findById(communityId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMUNITY_NOT_FOUND));
         return findCommunity;
+    }
+
+    public void isFull(Integer capacity, Integer communityPets, Integer joinPet){
+        //이미 참여인원이 수용량과 같음
+        if(capacity==communityPets){
+            throw new BusinessLogicException(ExceptionCode.CAPACITY_FULL);
+        }
+        //참여하려는 인원을 추가하면 초과됨
+        if(communityPets+joinPet>capacity){
+            throw new BusinessLogicException(ExceptionCode.OVERBOOKED);
+        }
     }
 }

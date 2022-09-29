@@ -40,6 +40,9 @@ public class CommunityDto {
         private String body;
         private Integer capacity;
 
+        //TODO 모임장의 강아지 정보
+        private Long[] joinnedPetList;
+
         //날짜로 받는 경우
         private String date;
         //요일로 받는 경우
