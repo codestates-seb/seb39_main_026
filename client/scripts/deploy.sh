@@ -15,8 +15,8 @@ rm -rf .next
 # nextjs 빌드
 yarn build
 
-# 기존 프로세스 종료
-kill -9 $(ps -ef | grep "next start" | awk '{print $2;}' | head -n 1)
+# 기존 프로세스 종료 (grep 프로세스는 제거)
+kill -9 $(ps -ef | grep "next start" | grep -v "grep" | awk '{print $2;}' | head -n 1)
 
 # 새 프로세스 실행
 yarn start
