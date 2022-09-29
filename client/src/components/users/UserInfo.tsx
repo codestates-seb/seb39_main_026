@@ -24,7 +24,7 @@ export default function UserInfo({
   const [imgSrc, setImgSrc] = useState(data.imgUrl);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleNameEdit = async () => {
+  const handleNameEdit = () => {
     if (isNameEditMode === true) {
       updateUsernameMutate({ id: data.id, username: name });
     }
