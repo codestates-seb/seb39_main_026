@@ -26,12 +26,7 @@ export default function UserInfo({
 
   const handleNameEdit = async () => {
     if (isNameEditMode === true) {
-      updateUsernameMutate(
-        { id: data.id, username: name },
-        {
-          onSuccess: () => setIsNameEditMode(!isNameEditMode),
-        }
-      );
+      updateUsernameMutate({ id: data.id, username: name });
     }
     setIsNameEditMode(!isNameEditMode);
   };
