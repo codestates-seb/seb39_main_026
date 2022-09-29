@@ -6,5 +6,5 @@ export const API = {
   USERS: `${BASE_URL}/members`,
   LOGIN: `${BASE_URL}/members/login`,
   SINGUP: `${BASE_URL}/members/signup`,
-  COMMENT: `${BASE_URL}/comment/post`,
+  COMMENT: `${BASE_URL}/comment`,
 };
