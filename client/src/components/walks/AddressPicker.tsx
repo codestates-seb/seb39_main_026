@@ -1,10 +1,14 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { Theme } from '../../styles/Theme';
 import AddressModal from './AddressModal';
 
-export default function AddressPicker() {
+export default function AddressPicker({
+  setAddress,
+}: {
+  setAddress: Dispatch<SetStateAction<string>>;
+}) {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [selectedVillage, setSelectedVillage] = useState<string | null>(
     '산책할 동네를 골라주세요'
@@ -50,6 +54,7 @@ export default function AddressPicker() {
         <AddressModal
           isModalOpen={isAddressModalOpen}
           setIsModalOpen={setIsAddressModalOpen}
+          setAddress={setAddress}
         />
       ) : (
         ''

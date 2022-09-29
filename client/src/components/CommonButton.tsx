@@ -1,15 +1,21 @@
 import { css } from '@emotion/react';
 import { Theme } from '../styles/Theme';
 
-const commonbuttonContainer = (buttonColor: string, disabled: boolean) => css`
+const commonbuttonContainer = (
+  buttonColor: string,
+  disabled: boolean,
+  padding: string,
+  fontSize: string,
+  borderRadius: string
+) => css`
   padding: 24px;
   width: 100%;
   border: none;
-  border-radius: 20px;
+  border-radius: ${borderRadius};
   background: ${disabled ? Theme.disableBgColor : buttonColor};
   color: #fff;
   cursor: ${disabled ? `not-allowed` : `pointer`};
-  font-weight: 600;
+  font-size: ${fontSize};
   font-size: 1rem;
   word-break: keep-all;
   letter-spacing: 0.02rem;
@@ -27,6 +33,9 @@ export default function CommonButton({
   onClick,
   className,
   disabled = false,
+  padding = '24px',
+  fontSize = '1rem',
+  borderRadius = '20px',
 }: {
   type: 'button' | 'submit' | 'reset' | undefined;
   children: React.ReactNode;
@@ -34,11 +43,20 @@ export default function CommonButton({
   onClick: () => void;
   className?: string;
   disabled?: boolean;
+  padding?: string;
+  fontSize?: string;
+  borderRadius?: string;
 }) {
   return (
     <button
       type={type}
-      css={commonbuttonContainer(buttonColor, disabled)}
+      css={commonbuttonContainer(
+        buttonColor,
+        disabled,
+        padding,
+        fontSize,
+        borderRadius
+      )}
       onClick={() => {
         onClick();
       }}

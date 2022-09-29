@@ -4,7 +4,7 @@ import { UserSignup } from '../models/UserSignup';
 
 export default function useSignup() {
   const handleSignup = async (data: UserSignup) => {
-    const res = await axios.post(API.Signup, {
+    const res = await axios.post(API.SINGUP, {
       ...data,
     });
     return res;

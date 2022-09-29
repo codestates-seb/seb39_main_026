@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
+import Image from 'next/image';
 import React, { Dispatch, SetStateAction } from 'react';
 import { WalkDetail } from '../../../models/WalkDefault';
 import { Theme } from '../../../styles/Theme';
@@ -22,6 +22,8 @@ const participantContainer = css`
       width: 40px;
       height: 40px;
       border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
     }
   }
 `;
@@ -75,14 +77,11 @@ export default function ParticipantsInfo({
               getPetId(pet.id);
             }}
           >
-            <img
-              src={pet.imgUrl}
-              css={css`
-                width: 35px;
-                height: 35px;
-                object-fit: cover;
-                cursor: pointer;
-              `}
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`}
+              // src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/image/${pet.id}`}
+              width="35px"
+              height="35px"
               alt={`${pet.petName} 의 사진`}
             />
           </li>

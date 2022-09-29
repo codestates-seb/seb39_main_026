@@ -19,6 +19,7 @@ export default function PetEditOverlay({
 
   const overlay = css`
     position: absolute;
+    z-index: 1;
     max-width: 1200px;
     margin: 75px auto 0;
     min-height: calc(100vh - 75px);

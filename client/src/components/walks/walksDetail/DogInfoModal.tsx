@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { css, keyframes } from '@emotion/react';
 import axios from 'axios';
+import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { API } from '../../../apis/api';
 import { UserDogInfo } from '../../../models/UserDogInfo';
@@ -15,7 +16,7 @@ const modalContainer = (isModalOpen: boolean) => css`
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    z-index: 2;
     display: flex;
     align-items: end;
   }
@@ -31,9 +32,15 @@ const modalContainer = (isModalOpen: boolean) => css`
     z-index: 1;
 
     @media screen and (max-width: 305px) {
+      padding: 32px 21px 12px;
       font-size: 1.1rem;
       word-break: keep-all;
     }
+  }
+
+  img {
+    object-fit: cover;
+    border-radius: 50%;
   }
 
   section.modal {
@@ -158,15 +165,12 @@ export default function DogChoiceModal({
               border-bottom: none !important;
             `}
           >
-            <img
-              src={dogInfoData.imgUrl}
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${dogInfoData.id}`}
+              // src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/image/${dogInfoData.id}`}
               alt={`${dogInfoData.petName}의 사진`}
-              css={css`
-                width: 100px;
-                height: 100px;
-                object-fit: cover;
-                border-radius: 50%;
-              `}
+              height="100px"
+              width="100px"
             />
           </li>
           <li>이름</li>
@@ -178,7 +182,7 @@ export default function DogChoiceModal({
           css={css`
             li:nth-of-type(2n - 1) {
               border-bottom: 1px solid ${Theme.divisionLineColor};
-              padding: 10px 6px;
+              padding: 10px 23px;
               margin-top: 20px;
               color: ${Theme.mainColor};
               text-align: center;
@@ -193,7 +197,7 @@ export default function DogChoiceModal({
 
             li:nth-of-type(2n) {
               border-radius: 20px;
-              padding: 10px 6px;
+              padding: 10px 23px;
               text-align: center;
               font-size: 1.1rem;
               font-weight: 600;

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import DogChoiceModal from '../../components/DogChoiceModal';
 import SearchInput from '../../components/SearchInput';
@@ -9,9 +9,37 @@ import AddButton from '../../components/walks/AddButton';
 import AddressPicker from '../../components/walks/AddressPicker';
 import WalksList from '../../components/walks/WalksList';
 import UserState from '../../states/UserState';
+import { Theme } from '../../styles/Theme';
+
+const header = css`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 2rem;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const walksWrapper = css`
+  h2 {
+    font-weight: 500;
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .alert {
+    text-align: center;
+    margin: 2rem;
+    color: ${Theme.disableColor};
+  }
+`;
+
 export default function Walks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user] = useRecoilState(UserState);
+  const [query, setQuery] = useState('');
+  const [address, setAddress] = useState('');
   const router = useRouter();
 
   const handleModalClick = () => {
@@ -23,23 +51,9 @@ export default function Walks() {
     setIsModalOpen(!isModalOpen);
   };
 
-  const header = css`
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 2rem;
-    @media screen and (max-width: 768px) {
-      flex-direction: column;
-    }
-  `;
-
-  const walksWrapper = css`
-    h2 {
-      font-weight: 500;
-      font-size: 22px;
-      text-align: center;
-    }
-  `;
+  useEffect(() => {
+    setAddress(localStorage.getItem('currentAddress') || '');
+  }, []);
 
   return (
     <>
@@ -61,12 +75,20 @@ export default function Walks() {
       <section>
         <TabTitle prefix="모임 둘러보기" />
         <div css={header}>
-          <SearchInput />
-          <AddressPicker />
+          <SearchInput setQuery={setQuery} />
+          <AddressPicker setAddress={setAddress} />
         </div>
         <div css={walksWrapper}>
           <h2>🐕 모든 산책 보기</h2>
-          <WalksList />
+          {address ? (
+            <WalksList
+              query={`?si=${address?.split(' ')[0]}&gu=${
+                address?.split(' ')[1]
+              }&dong=${address?.split(' ')[2]}${query}`}
+            />
+          ) : (
+            <p className="alert">동네를 선택하세요</p>
+          )}
           <AddButton onClick={handleModalClick} />
         </div>
       </section>

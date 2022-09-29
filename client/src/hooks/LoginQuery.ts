@@ -5,7 +5,7 @@ import { UserLogin } from '../models/UserLogin';
 
 export default function useLogin() {
   const handleLogin = async ({ email, password }: UserLogin) => {
-    const res = await axios.post<UserInfo>(API.Login, {
+    const res = await axios.post<UserInfo>(API.LOGIN, {
       email,
       password,
     });
