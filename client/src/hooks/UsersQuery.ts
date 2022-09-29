@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useMutation, useQuery } from 'react-query';
-import { API } from '../../apis/api';
+import { API } from '../apis/api';
 
 export function useGetUsersQuery(id: string) {
   const { status, data, error } = useQuery('users', async () => {

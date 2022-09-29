@@ -16,6 +16,7 @@ export default function UserInfo({
 }) {
   const [isNameEditMode, setIsNameEditMode] = useState(false);
   const [name, setName] = useState(data.username);
+  const [imgSrc, setImgSrc] = useState(data.imgUrl);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleNameEdit = async () => {
@@ -27,10 +28,19 @@ export default function UserInfo({
           {
             headers: {
               authorization: localStorage.getItem('accessToken') || '',
+              refresh_token: localStorage.getItem('refreshToken') || '',
             },
           }
         )
-        .then((res) => setName(res.data.username));
+        .then((res) => setName(res.data.username))
+        .catch((err) => {
+          if (err.response.headers.authorization) {
+            localStorage.setItem(
+              'accessToken',
+              err.response.headers.authorization
+            );
+          }
+        });
     }
     setIsNameEditMode(!isNameEditMode);
   };
@@ -46,18 +56,44 @@ export default function UserInfo({
     inputRef.current.click();
   }, []);
 
-  const onUploadImage = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) {
-        return;
-      }
-      console.log(e.target.files[0].name);
-    },
-    []
-  );
+  const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (!e.target.files) {
+      return;
+    }
+    const uploadImg = e.target.files[0];
+    const formData = new FormData();
+    formData.append('imgFile', uploadImg);
+    axios
+      .patch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: localStorage.getItem('accessToken') || '',
+            refresh_token: localStorage.getItem('refreshToken') || '',
+          },
+        }
+      )
+      .then((response) => {
+        setImgSrc(URL.createObjectURL(uploadImg));
+        console.log(response.data);
+      })
+      .catch((err) => {
+        if (err.response.headers.authorization) {
+          localStorage.setItem(
+            'accessToken',
+            err.response.headers.authorization
+          );
+        }
+        console.error(err);
+      });
+  };
 
   useEffect(() => {
     setName(data.username);
+    setImgSrc(data.imgUrl);
   }, [data]);
 
   const userInfo = css`
@@ -125,6 +161,7 @@ export default function UserInfo({
       color: transparent;
     }
   `;
+
   return (
     <>
       {typeof data !== 'string' ? (
@@ -132,7 +169,7 @@ export default function UserInfo({
           <div className="img" onClick={onUploadImgClick}>
             <Image
               alt={`${name}'s profile`}
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.imgUrl}`}
+              src={imgSrc}
               width="75px"
               height="75px"
               className="img"
@@ -173,3 +210,4 @@ export default function UserInfo({
     </>
   );
 }
+

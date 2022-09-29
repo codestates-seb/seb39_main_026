@@ -102,7 +102,7 @@ export default function PetInfo({
     <>
       {pets ? (
         <div css={mypet}>
-          {pets?.map((pet: MyPets) => {
+          {pets.map((pet: MyPets) => {
             return (
               <React.Fragment key={pet.id}>
                 <button
@@ -113,7 +113,8 @@ export default function PetInfo({
                   }}
                 >
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.imgUrl}`}
+                    // src={pet.imgUrl}
+                    src="https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80"
                     height="50px"
                     width="50px"
                     alt={`${pet.petName}`}
@@ -125,7 +126,13 @@ export default function PetInfo({
             );
           })}
           {isValidated && pets.length > 0 && (
-            <button type="button" className="addButton">
+            <button
+              type="button"
+              className="addButton"
+              onClick={() => {
+                setIsPetAddMode(true);
+              }}
+            >
               <Icon icon="akar-icons:plus" className="icon" />
             </button>
           )}
