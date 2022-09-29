@@ -17,7 +17,7 @@ export default function PetInfo({
 }) {
   const [isPetEditMode, setIsPetEditMode] = useState(false);
   const [isPetAddMode, setIsPetAddMode] = useState(false);
-  const [petId, setPetId] = useState(0);
+  const [petId, setPetId] = useState(-1);
 
   const mypet = css`
     margin-bottom: 1.2rem;

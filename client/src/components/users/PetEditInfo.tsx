@@ -12,6 +12,7 @@ import React, {
 } from 'react';
 import { useRecoilState } from 'recoil';
 import { API } from '../../apis/api';
+import { useUpdatePetImgMutation } from '../../hooks/PetsQuery';
 import { MyPets } from '../../models/MyPets';
 import UserState from '../../states/UserState';
 import { Theme } from '../../styles/Theme';
@@ -37,6 +38,7 @@ export default function PetEditInfo({
   const [petBirthday, setPetBirthday] = useState(pet.birthday);
   const [petImgUrl, setPetImgUrl] = useState('');
   const [imgSrc, setImgSrc] = useState(pet.imgUrl);
+  const { mutate: updatePetImgMutate } = useUpdatePetImgMutation();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const onUploadImgClick = useCallback(() => {
@@ -48,28 +50,14 @@ export default function PetEditInfo({
 
   const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (!e.target.files) {
-      return;
-    }
-    const uploadImg = e.target.files[0];
-    const formData = new FormData();
-    formData.append('imgFile', uploadImg);
-    axios
-      .post(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/post/image`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          authorization: localStorage.getItem('accessToken') || '',
-          refresh_token: localStorage.getItem('refreshToken') || '',
-        },
-      })
-      .then((response) => {
-        setImgSrc(URL.createObjectURL(uploadImg));
-        setPetImgUrl(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
+    if (e.target.files) {
+      updatePetImgMutate({
+        id: pet.id,
+        file: e.target.files[0],
+        setImgSrc,
+        setPetImgUrl,
       });
+    }
   };
 
   const handleSubmitClick = () => {
