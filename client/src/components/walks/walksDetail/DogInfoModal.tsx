@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { css, keyframes } from '@emotion/react';
 import axios from 'axios';
-import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { API } from '../../../apis/api';
 import { UserDogInfo } from '../../../models/UserDogInfo';
@@ -16,7 +15,7 @@ const modalContainer = (isModalOpen: boolean) => css`
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 2;
+    z-index: 1;
     display: flex;
     align-items: end;
   }
@@ -30,10 +29,6 @@ const modalContainer = (isModalOpen: boolean) => css`
     background-color: #fff;
     overflow-y: scroll;
     z-index: 1;
-
-    @media screen and (max-width: 350px) {
-      padding: 32px 21px 12px;
-    }
 
     @media screen and (max-width: 305px) {
       font-size: 1.1rem;
@@ -61,11 +56,6 @@ const modalContainer = (isModalOpen: boolean) => css`
     ul {
       list-style: none;
     }
-  }
-
-  img {
-    object-fit: cover;
-    border-radius: 50%;
   }
 `;
 
@@ -168,12 +158,15 @@ export default function DogChoiceModal({
               border-bottom: none !important;
             `}
           >
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${dogInfoData.id}`}
-              // src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/image/${dogInfoData.id}`}
+            <img
+              src={dogInfoData.imgUrl}
               alt={`${dogInfoData.petName}의 사진`}
-              height="100px"
-              width="100px"
+              css={css`
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                border-radius: 50%;
+              `}
             />
           </li>
           <li>이름</li>
@@ -185,9 +178,10 @@ export default function DogChoiceModal({
           css={css`
             li:nth-of-type(2n - 1) {
               border-bottom: 1px solid ${Theme.divisionLineColor};
-              padding: 10px 23px;
+              padding: 10px 6px;
               margin-top: 20px;
               color: ${Theme.mainColor};
+              text-align: center;
               font-size: 1.1rem;
               font-weight: 600;
 
@@ -199,7 +193,8 @@ export default function DogChoiceModal({
 
             li:nth-of-type(2n) {
               border-radius: 20px;
-              padding: 10px 23px;
+              padding: 10px 6px;
+              text-align: center;
               font-size: 1.1rem;
               font-weight: 600;
             }

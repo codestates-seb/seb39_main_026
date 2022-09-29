@@ -35,10 +35,11 @@ export interface WalkDetail extends WalkDefault {
   };
   pets: Array<WalkDetailPets>;
   comments: Array<WalkDetailComment>;
-  notices: Array<WalkNotice>;
-  createdAt: string;
-  viewed: number;
-  liked: number;
+  notices: {
+    id: number;
+    title: string;
+    body: string;
+  };
   communityPetList: Array<CommunityPetList>;
 }
 
@@ -60,12 +61,6 @@ interface WalkDetailComment {
     memberCommunityList: [];
     petList: [];
   };
-  createdAt: string;
-}
-
-interface WalkNotice {
-  title: string;
-  body: string;
 }
 
 interface CommunityPetList {
@@ -93,4 +88,10 @@ interface WalkDetailMember {
 export interface CommentPost {
   communityId: number;
   body: string;
+}
+
+export interface WalkPostNotice {
+  id: number;
+  title?: string;
+  body?: string;
 }

@@ -6,15 +6,15 @@ import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.service.PetService;
-import com.main026.walking.util.file.FileStore;
+import com.main026.walking.util.awsS3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
 public class PetController {
 
     private final PetService petService;
-    private final FileStore fileStore;
+    private final AwsS3Service awsS3Service;
 
     // TODO 미리 데이터를 넣어두는 방식 변경 필요
     @GetMapping("/post")
@@ -39,7 +39,9 @@ public class PetController {
     }
 
     @PostMapping("/post")
-    public PetDto.Response postPet(@RequestBody PetDto.Post postDto, @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public PetDto.Response postPet(
+      @RequestBody PetDto.Post postDto,
+      @RequestParam String username, @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
         if(!principalDetails.getMember().getUsername().equals(username)){
             throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
         }
@@ -47,15 +49,10 @@ public class PetController {
         return petService.postPet(postDto,member);
     }
 
-    @PostMapping("/post/image")
-    public String postImage(@RequestPart MultipartFile imgFile){
-        return petService.saveImage(imgFile);
-    }
-
     //이름이 괴상한데 그냥하는 이유 : requestMapping 의 이름 통일성을 지키는게 더 낫다고 생각해서,
     //하지만 괴상하긴 해서 애초에 네이밍컨벤션에 대한 고민을 더 해야할것같다.
     @GetMapping("/{petId}")
-    public PetDto.Response getPet(@PathVariable Long petId){
+    public PetDto.Response getPet(@PathVariable Long petId) throws IOException {
         return petService.findPet(petId);
     }
 
@@ -76,9 +73,47 @@ public class PetController {
         return "삭제완료";
     }
 
-    @ResponseBody
-    @GetMapping("/img/{filename}")
-    public Resource showImage(@PathVariable String filename) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(filename));
+//    CRUD-IMAGE
+    //  CREATE : DEFAULT_IMAGE 적용으로 메소드 삭제
+    @PostMapping("/post/image")
+    public String postImage(@RequestPart MultipartFile imgFile){
+        if(imgFile.isEmpty()) {
+            return "DEFAULT_PET_IMAGE.jpg";
+        } else {
+            return awsS3Service.uploadImage(imgFile);
+        }
+    }
+
+    //  UPDATE
+    @PatchMapping("/img/{petId}")
+    public ResponseEntity patchImage(@PathVariable long petId,
+                                     @RequestPart MultipartFile imgFile,
+                                     @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
+        authorization(petId,principalDetails);
+        return new ResponseEntity(petService.updateImage(imgFile,petId),HttpStatus.OK);
+    }
+
+    //  READ
+    @GetMapping("/img/{petId}")
+    public ResponseEntity showImage(@PathVariable long petId) throws IOException {
+        String findImage = petService.findImageById(petId);
+        return new ResponseEntity(awsS3Service.getImageBin(findImage), HttpStatus.OK);
+    }
+
+    //  DELETE
+    @DeleteMapping("/img/{petId}")
+    public ResponseEntity deleteImage(
+      @PathVariable long petId,
+      @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
+        authorization(petId,principalDetails);
+        petService.deleteImage(petId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+//  VALID
+    private void authorization(long petId, PrincipalDetails principalDetails) throws IOException {
+        Long memberId = petService.findPet(petId).getMember().getId();
+        if(!memberId.equals(principalDetails.getMember().getId()))
+            throw new BusinessLogicException(ExceptionCode.INVALID_AUTHORIZATION);
     }
 }

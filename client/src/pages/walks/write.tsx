@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { dateToYYYYMMDD, dateToHMM } from '../../../util/transformDate';
+import { useRecoilState } from 'recoil';
 import CommonButton from '../../components/CommonButton';
 import TabTitle from '../../components/TabTitle';
 import DescriptionInput from '../../components/walks/wirte/DescriptionInput';
@@ -11,12 +12,17 @@ import PersonCountInput from '../../components/walks/wirte/PersonCountInput';
 import PlaceInput from '../../components/walks/wirte/PlaceInput';
 import TitleInput from '../../components/walks/wirte/TitleInput';
 import {
+  useAddEveryWeekMoim,
+  useAddOneDayMoim,
+} from '../../hooks/AddMoimQuery';
+import {
   WalksMoim,
   WalksMoimEveryWeek,
   WalksMoimOneDay,
   WalksMoimType,
   WalksMoimTypes,
 } from '../../models/WalksMoim';
+import UserState from '../../states/UserState';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Theme } from '../../styles/Theme';
 
@@ -28,6 +34,12 @@ export default function Write() {
       personCount: 2,
     },
   });
+
+  const [user] = useRecoilState(UserState);
+  const { handleAddOneDayMoim } = useAddOneDayMoim();
+  const { handleAddEveryWeekMoim } = useAddEveryWeekMoim();
+
+  const router = useRouter();
 
   const {
     register,
@@ -46,19 +58,30 @@ export default function Write() {
   ];
 
   const onSubmitOneDay = (data: WalksMoimOneDay) => {
-    const { title, place, description, personCount, plannedDate, plannedTime } =
-      data;
-
-    const oneDayMoim = {
+    const {
       title,
       place,
       description,
       personCount,
-      plannedDate: dateToYYYYMMDD(plannedDate),
-      plannedTime: dateToHMM(plannedTime),
+      plannedDate,
+      plannedTime,
+      type,
+    } = data;
+
+    const oneDayMoim = {
+      type,
+      title,
+      place,
+      description,
+      personCount,
+      plannedDate,
+      plannedTime,
+      si: user.address.si,
+      gu: user.address.gu,
+      dong: user.address.dong,
     };
 
-    console.log(oneDayMoim, 'oneDayMoim');
+    return oneDayMoim;
   };
 
   const onSubmitEveryWeek = (data: WalksMoimEveryWeek) => {
@@ -69,25 +92,39 @@ export default function Write() {
       personCount,
       plannedDates,
       plannedTime,
+      type,
     } = data;
 
     const everyWeekMoim = {
+      type,
       title,
       place,
       description,
       personCount,
       plannedDates,
-      plannedTime: dateToHMM(plannedTime),
+      plannedTime,
+      si: user.address.si,
+      gu: user.address.gu,
+      dong: user.address.dong,
     };
 
-    console.log(everyWeekMoim, 'everyWeekMoim');
+    return everyWeekMoim;
   };
 
-  const onSubmit = (data: WalksMoim) => {
-    if (data.type === WalksMoimTypes.매주모임) {
-      onSubmitEveryWeek(data);
-    } else {
-      onSubmitOneDay(data);
+  const onSubmit = async (data: WalksMoim) => {
+    try {
+      if (data.type === WalksMoimTypes.매주모임) {
+        const everyWeekMoimData = onSubmitEveryWeek(data);
+        await handleAddEveryWeekMoim(everyWeekMoimData);
+        router.push('/walks');
+      } else {
+        const oneDayMoimData = onSubmitOneDay(data);
+        await handleAddOneDayMoim(oneDayMoimData);
+        router.push('/walks');
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error);
     }
   };
 

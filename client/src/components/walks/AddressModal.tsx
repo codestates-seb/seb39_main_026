@@ -11,11 +11,9 @@ interface Address {
 export default function AddressModal({
   isModalOpen,
   setIsModalOpen,
-  setAddress,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-  setAddress: Dispatch<SetStateAction<string>>;
 }) {
   const [allcities, setAllCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
@@ -34,7 +32,6 @@ export default function AddressModal({
 
   const handleRegion3Select = (event: React.ChangeEvent<HTMLSelectElement>) => {
     localStorage.setItem('currentAddress', event.target.value);
-    setAddress(event.target.value);
     setIsModalOpen(false);
   };
 
@@ -77,13 +74,13 @@ export default function AddressModal({
       display: flex;
       align-items: end;
       justify-content: center;
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.5);
-      z-index: 2;
+      z-index: 1;
     }
 
     &.modal-wrapper section.modal {
@@ -93,12 +90,12 @@ export default function AddressModal({
       padding: 42px 41px 22px;
       background-color: #fff;
       z-index: 1;
-      position: fixed;
 
       h1 {
         font-size: 1.3rem;
         font-weight: 600;
         margin-bottom: 1.5rem;
+
         @media screen and (max-width: 305px) {
           font-size: 1.1rem;
           word-break: keep-all;

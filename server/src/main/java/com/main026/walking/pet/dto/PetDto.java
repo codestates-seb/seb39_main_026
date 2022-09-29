@@ -5,7 +5,6 @@ import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.embedded.PetAge;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class PetDto {
     public static class Post{
         private String petName;
         private String petGender;
-        private String profileImg;
+        private String imgUrl;
         private String neuter;
         private String birthDay;
         private String personality;
@@ -28,24 +27,24 @@ public class PetDto {
     @Getter
     @NoArgsConstructor
     public static class Patch{
-        private String perName;
+        private String petName;
         private String petGender;
         private String neuter;
         private String birthDay;
         private String personality;
         private String breed;
-        private String profileImg;
+        private String imgUrl;
         private String about;
 
         @Builder
-        public Patch(String perName, String petGender, String neuter,String birthDay, String personality, String breed, String profileImg, String about) {
-            this.perName = perName;
+        public Patch(String petName, String petGender, String neuter,String birthDay, String personality, String breed, String imgUrl, String about) {
+            this.petName = petName;
             this.petGender = petGender;
             this.neuter = neuter;
             this.birthDay = birthDay;
             this.personality = personality;
             this.breed = breed;
-            this.profileImg = profileImg;
+            this.imgUrl = imgUrl;
             this.about = about;
         }
     }
@@ -68,6 +67,9 @@ public class PetDto {
         private String imgUrl;
         private String about;
 
+        public void setImgUrl(String imgUrl) {
+            this.imgUrl = imgUrl;
+        }
     }
 
     @Getter
@@ -90,5 +92,4 @@ public class PetDto {
             this.imgUrl = pet.getImgUrl();
         }
     }
-
 }

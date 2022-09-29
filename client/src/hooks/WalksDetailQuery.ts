@@ -5,9 +5,7 @@ import { WalkDetail } from '../models/WalkDefault';
 
 export function useWalksDetailQuery(communityId: string) {
   const { data, error } = useQuery('communityDetail', async () => {
-    const { data } = await axios.get<WalkDetail>(
-      `${API.COMMUNITYDETAIL}/${communityId}`
-    );
+    const { data } = await axios.get<WalkDetail>(`${API.WALKS}/${communityId}`);
     return data;
   });
 
