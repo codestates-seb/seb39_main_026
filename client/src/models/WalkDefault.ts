@@ -51,6 +51,7 @@ interface WalkDetailPets {
 }
 
 interface WalkDetailComment {
+  commentId: number;
   body: string;
   member: {
     id: number;

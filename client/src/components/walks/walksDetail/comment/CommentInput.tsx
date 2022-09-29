@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { usePostComment } from '../../../hooks/CommentQuery';
-import { WalkDetail } from '../../../models/WalkDefault';
-import { Theme } from '../../../styles/Theme';
+import { usePostComment } from '../../../../hooks/CommentQuery';
+import { WalkDetail } from '../../../../models/WalkDefault';
+import { Theme } from '../../../../styles/Theme';
 
 const inputContainer = css`
   display: grid;
@@ -35,6 +35,7 @@ const inputContainer = css`
     }
   }
 `;
+
 export default function CommentInput({
   walkDetail,
 }: {
@@ -54,26 +55,12 @@ export default function CommentInput({
     router.reload();
   };
 
-  // const handleRegisterEnter = async (
-  //   event: React.KeyboardEvent<HTMLInputElement>
-  // ) => {
-  //   if (event.key === 'Enter') {
-  //     if (body.length === 0) {
-  //       alert('댓글을 입력해주세요.');
-  //       return;
-  //     }
-  //     await handlePostComment(id, body);
-  //     router.reload();
-  //   }
-  // };
-
   return (
     <article css={inputContainer}>
       <input
         type="text"
         placeholder="댓글을 작성해주세요"
         onChange={(e) => setBody(e.target.value)}
-        // onKeyUp={handleRegisterEnter}
       ></input>
       <button type="button" onClick={handleRegisterClick}>
         등록
