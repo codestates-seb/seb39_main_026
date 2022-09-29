@@ -6,6 +6,7 @@ import com.main026.walking.community.dto.CommunityListResponseDto;
 import com.main026.walking.community.dto.CommunitySearchCond;
 import com.main026.walking.community.entity.Community;
 import com.main026.walking.community.mapper.CommunityMapper;
+import com.main026.walking.community.mapper.CommunityMapperV2;
 import com.main026.walking.community.repository.CommunityRepository;
 import com.main026.walking.exception.BusinessLogicException;
 import com.main026.walking.exception.ExceptionCode;
@@ -41,7 +42,7 @@ public class CommunityService {
     private final ImageRepository imageRepository;
     private final PetRepository petRepository;
     private final CommunityPetRepository communityPetRepository;
-    private final CommunityMapper communityMapper;
+    private final CommunityMapperV2 communityMapper;
     private final AwsS3Service awsS3Service;
 
 

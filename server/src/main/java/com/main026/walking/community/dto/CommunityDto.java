@@ -93,7 +93,7 @@ public class CommunityDto {
         private String time;
 
         //private List<String> weeks;
-        private MemberDto.Response member;
+        private MemberDto.compactResponse member;
         private List<String> imgUrls;
         private List<PetDto.compactResponse> communityPetList;
         private List<PetDto.compactResponse> sessionMemberPetList;
