@@ -2,11 +2,15 @@ import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
 import CommonButton from '../components/CommonButton';
 import RegionPick from '../components/RegionPick';
 import TabTitle from '../components/TabTitle';
+import useLogin from '../hooks/LoginQuery';
 import useSignup from '../hooks/SignupQuery';
 import { UserSignup } from '../models/UserSignup';
+import { LoginState } from '../states/LoginState';
+import UserState from '../states/UserState';
 import { Theme } from '../styles/Theme';
 
 const signUpContainer = css`
@@ -79,17 +83,34 @@ export default function Signup() {
     handleSubmit,
     setFocus,
     reset,
+    getValues,
     formState: { errors, isValid },
   } = methods;
 
+  const [, setUser] = useRecoilState(UserState);
+  const [, setIsLoggedIn] = useRecoilState(LoginState);
+
   const { handleSignup } = useSignup();
+  const { handleLogin } = useLogin();
 
   const onClickSignup = async (value: UserSignup) => {
     try {
       await handleSignup(value);
+      const data = await handleLogin({
+        email: value.email,
+        password: value.password,
+      });
+      setUser(data);
 
-      console.log(value.email, value.password);
-      router.push('/login');
+      // TODO: localStorage.getItem하는 곳이 있다면, user recoil 에서 id 뽑아쓰게 바꾸고 아래 코드는 지우기
+      localStorage.setItem('userId', String(data.id));
+      localStorage.setItem(
+        'currentAddress',
+        `${data.address.si} ${data.address.gu} ${data.address.dong}`
+      );
+
+      setIsLoggedIn(true);
+      router.push('/');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.response.data.status === 409) {
@@ -155,6 +176,31 @@ export default function Signup() {
               </dd>
               <dd className="error-area">
                 {errors.password && errors.password.message}
+              </dd>
+              <dt>비밀번호 확인</dt>
+              <dd>
+                <input
+                  id="user-password-check"
+                  type="password"
+                  placeholder="비밀번호를 한 번 더 입력해주세요"
+                  {...register('passwordCheck', {
+                    validate: {
+                      empty: (v) =>
+                        (v != null && v !== '') || '비밀번호를 입력해주세요.',
+                      match: (v) =>
+                        v === getValues('password') ||
+                        '비밀번호가 일치하지 않습니다.',
+                    },
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/,
+                      message:
+                        '비밀번호는 8~16자 영문, 숫자 조합만 가능합니다.',
+                    },
+                  })}
+                />
+              </dd>
+              <dd className="error-area">
+                {errors.passwordCheck && errors.passwordCheck.message}
               </dd>
               <dt>닉네임</dt>
               <dd>

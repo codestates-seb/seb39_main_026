@@ -35,6 +35,7 @@ export default function DetailLayout({
   };
 
   const top = useScrollTop();
+
   return (
     <>
       <section css={sancheckDetailLayout}>
