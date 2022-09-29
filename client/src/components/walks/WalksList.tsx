@@ -1,25 +1,17 @@
 import { css } from '@emotion/react';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { WalkDefault } from '../../models/WalkDefault';
 import { Theme } from '../../styles/Theme';
 import WalkItem from './WalkItem';
+import { useGetWalksQuery } from './WalksListQuery';
 import LoadingWalkItem from './skeleton/LoadingWalkItem';
 
 export default function WalksList({ query }: { query: string }) {
-  const [walks, setWalks] = useState<WalkDefault[]>();
-  let url: string;
-  if (query) {
-    url = `${process.env.NEXT_PUBLIC_BASE_URL}/community${query}`;
-  } else {
-    url = `${process.env.NEXT_PUBLIC_BASE_URL}/community`;
-  }
+  const getWalksQuery = useGetWalksQuery(query);
 
   useEffect(() => {
-    axios.get(url).then((res) => {
-      setWalks(res.data.communityList);
-    });
-  }, [url]);
+    getWalksQuery.refetch();
+  }, [getWalksQuery]);
 
   const walksList = css`
     display: grid;
@@ -29,7 +21,7 @@ export default function WalksList({ query }: { query: string }) {
       margin: 2rem;
       color: ${Theme.disableColor};
     }
-    @media screen and (max-width: 1020px) {
+    @media screen and (max-width: 1200px) {
       display: grid;
       grid-template-columns: 45% 45%;
       place-content: center;
@@ -43,13 +35,12 @@ export default function WalksList({ query }: { query: string }) {
 
   return (
     <section css={walksList}>
-      {walks === undefined && <LoadingWalkItem />}
-      {walks &&
-        walks.length > 0 &&
-        walks.map((walk: WalkDefault) => {
+      {getWalksQuery.isLoading && <LoadingWalkItem />}
+      {getWalksQuery.isSuccess &&
+        getWalksQuery.data.map((walk: WalkDefault) => {
           return <WalkItem key={walk.communityId} walk={walk} />;
         })}
-      {walks && walks.length === 0 && (
+      {getWalksQuery.isSuccess && getWalksQuery.data.length === 0 && (
         <p className="alert">아직 등록된 산책 모임이 없어요!</p>
       )}
     </section>
