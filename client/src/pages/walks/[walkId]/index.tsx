@@ -9,7 +9,7 @@ export default function Index({ walkId }: { walkId: string }) {
 
   return (
     <>
-      <TabTitle prefix={walkId} />
+      <TabTitle prefix={walkDetail?.name} />
       <DetailLayout walkId={walkId}>
         <Introduce walkDetail={walkDetail} />
       </DetailLayout>
@@ -20,6 +20,7 @@ export default function Index({ walkId }: { walkId: string }) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
   const { walkId } = query;
+
   return {
     props: {
       walkId,

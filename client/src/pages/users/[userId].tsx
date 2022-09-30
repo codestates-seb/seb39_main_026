@@ -52,7 +52,7 @@ export default function User({ userId }: { userId: string }) {
 
   return (
     <section css={userPage}>
-      <TabTitle prefix={userId} />
+      <TabTitle prefix={getUsersQuery?.data?.username} />
       {getUsersQuery.isSuccess && (
         <>
           <UserInfo data={getUsersQuery.data} isValidated={isValidated} />
