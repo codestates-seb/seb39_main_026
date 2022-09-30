@@ -1,6 +1,7 @@
 package com.main026.walking.auth.config;
 
-import com.main026.walking.auth.service.CustomOAuth2UserService;
+import com.main026.walking.auth.oauth.CustomOAuth2SuccessHandler;
+import com.main026.walking.auth.oauth.CustomOAuth2UserService;
 import com.main026.walking.auth.filter.JwtAuthenticationFilter;
 import com.main026.walking.auth.filter.JwtAuthorizationFilter;
 import com.main026.walking.auth.filter.JwtExceptionFilter;
@@ -31,6 +32,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final MemberRepository memberRepository;
     private final JwtUtils jwtUtils;
+    private final CustomOAuth2UserService oAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -50,7 +52,8 @@ public class SecurityConfig {
                 .and()
                 .exceptionHandling()
                 .and()
-                .oauth2Login().loginPage("/members/login")
+                .oauth2Login()
+                .successHandler(oAuth2SuccessHandler())
                 .userInfoEndpoint()//코드를 받고, 토큰을 전달하는 과정을 알아서 해달라
                 .userService(customOAuth2UserService);
 
@@ -87,5 +90,10 @@ public class SecurityConfig {
         config.addExposedHeader("Email");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
+    }
+
+    @Bean
+    public CustomOAuth2SuccessHandler oAuth2SuccessHandler(){
+        return new CustomOAuth2SuccessHandler(jwtUtils,memberRepository);
     }
 }

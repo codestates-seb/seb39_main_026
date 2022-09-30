@@ -1,0 +1,40 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAT2EAWRHGXQBKEZFG
+      secretKey: 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
+    s3:
+      bucket: main026-s3
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+spring:
+  servlet:
+    multipart:
+      maxFileSize: 20MB
+      maxRequestSize: 20MB
+    h2:
+      console:
+        enabled: true
+        settings:
+          web-allow-others: true
+        path: /h2
+    datasource:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:mem:test
+      username: sa
+      password:
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  profiles:
+    include:
+      - mail
+      - oauth
+
+
+jwt:
+  refresh: main 026 refresh
+  access: main 026 jwt
