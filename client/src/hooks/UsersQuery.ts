@@ -1,43 +1,63 @@
 import axios from 'axios';
+import { Dispatch, SetStateAction } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { API } from '../apis/api';
+import { UserDefault } from '../models/UserDefault';
 
 export function useGetUsersQuery(id: string) {
-  const { status, data, error } = useQuery('users', async () => {
-    const { data } = await axios.get(`${API.USERS}/${id}`);
-    return data;
-  });
-  if (status === 'loading') {
-    return 'loading';
-  }
-  if (status === 'error') {
-    return error;
-  }
-  if (status === 'success') {
-    return data;
-  }
-}
-
-export function useUpdateUsernameMutation() {
-  return useMutation(
-    async ({
-      id,
-      body,
-      accessToken,
-    }: {
-      id: number;
-      body: string;
-      accessToken: string;
-    }) => {
-      await axios.patch(
-        `${API.USERS}/${id}`,
-        { username: body },
-        {
-          headers: {
-            Authorization: accessToken,
-          },
-        }
-      );
-    }
+  return useQuery(
+    'users',
+    async () =>
+      await axios.get(`${API.USERS}/${id}`).then(async (res) => {
+        return res.data;
+      })
   );
 }
+
+export const useUpdateUsernameMutation = () => {
+  return useMutation(async (body: UserDefault) => {
+    const { id, username } = body;
+    await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/members/${id}`,
+      {
+        username,
+      },
+      {
+        headers: {
+          authorization: localStorage.getItem('accessToken') || '',
+          refresh_token: localStorage.getItem('refreshToken') || '',
+        },
+      }
+    );
+  });
+};
+
+export const useUpdateUserImgMutation = () => {
+  return useMutation(
+    async (body: {
+      id: number;
+      file: File;
+      setImgSrc: Dispatch<SetStateAction<string | undefined>>;
+    }) => {
+      const { id, file, setImgSrc } = body;
+      const uploadImg = file;
+      const formData = new FormData();
+      formData.append('imgFile', uploadImg);
+      axios
+        .patch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${id}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              authorization: localStorage.getItem('accessToken') || '',
+              refresh_token: localStorage.getItem('refreshToken') || '',
+            },
+          }
+        )
+        .then(() => {
+          setImgSrc(URL.createObjectURL(uploadImg));
+        });
+    }
+  );
+};

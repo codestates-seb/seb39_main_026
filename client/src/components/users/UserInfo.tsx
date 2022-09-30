@@ -1,8 +1,11 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
-import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState, useCallback, useRef } from 'react';
+import {
+  useUpdateUserImgMutation,
+  useUpdateUsernameMutation,
+} from '../../hooks/UsersQuery';
 import { UserDefault } from '../../models/UserDefault';
 import { skeletonGradient } from '../../styles/GlobalStyle';
 import { Theme } from '../../styles/Theme';
@@ -14,33 +17,16 @@ export default function UserInfo({
   data: UserDefault;
   isValidated: boolean;
 }) {
+  const { mutate: updateUsernameMutate } = useUpdateUsernameMutation();
+  const { mutate: updateUserImgMutate } = useUpdateUserImgMutation();
   const [isNameEditMode, setIsNameEditMode] = useState(false);
   const [name, setName] = useState(data.username);
   const [imgSrc, setImgSrc] = useState(data.imgUrl);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleNameEdit = async () => {
+  const handleNameEdit = () => {
     if (isNameEditMode === true) {
-      axios
-        .patch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/members/${data.id}`,
-          { username: name },
-          {
-            headers: {
-              authorization: localStorage.getItem('accessToken') || '',
-              refresh_token: localStorage.getItem('refreshToken') || '',
-            },
-          }
-        )
-        .then((res) => setName(res.data.username))
-        .catch((err) => {
-          if (err.response.headers.authorization) {
-            localStorage.setItem(
-              'accessToken',
-              err.response.headers.authorization
-            );
-          }
-        });
+      updateUsernameMutate({ id: data.id, username: name });
     }
     setIsNameEditMode(!isNameEditMode);
   };
@@ -56,39 +42,11 @@ export default function UserInfo({
     inputRef.current.click();
   }, []);
 
-  const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (!e.target.files) {
-      return;
+    if (e.target.files) {
+      updateUserImgMutate({ id: data.id, file: e.target.files[0], setImgSrc });
     }
-    const uploadImg = e.target.files[0];
-    const formData = new FormData();
-    formData.append('imgFile', uploadImg);
-    axios
-      .patch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${data.id}`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            authorization: localStorage.getItem('accessToken') || '',
-            refresh_token: localStorage.getItem('refreshToken') || '',
-          },
-        }
-      )
-      .then((response) => {
-        setImgSrc(URL.createObjectURL(uploadImg));
-        console.log(response.data);
-      })
-      .catch((err) => {
-        if (err.response.headers.authorization) {
-          localStorage.setItem(
-            'accessToken',
-            err.response.headers.authorization
-          );
-        }
-        console.error(err);
-      });
   };
 
   useEffect(() => {
@@ -99,12 +57,18 @@ export default function UserInfo({
   const userInfo = css`
     display: flex;
     margin-bottom: 1.5rem;
-    .img {
+    .imgWrapper {
       border-radius: 50%;
-      object-fit: cover;
       width: 75px;
       height: 75px;
       background-color: ${Theme.disableBgColor};
+      position: relative;
+    }
+    .img {
+      border-radius: 50%;
+      width: 75px;
+      height: 75px;
+      object-fit: cover;
     }
     .username {
       margin-top: 0.4rem;
@@ -138,6 +102,13 @@ export default function UserInfo({
         color: inherit;
       }
     }
+    .camera {
+      color: ${Theme.disableColor};
+      position: absolute;
+      top: 65%;
+      left: 37%;
+      font-size: 1.3rem;
+    }
   `;
 
   const LoadingUserInfo = css`
@@ -164,16 +135,19 @@ export default function UserInfo({
 
   return (
     <>
-      {typeof data !== 'string' ? (
+      {data ? (
         <div css={userInfo}>
-          <div className="img" onClick={onUploadImgClick}>
+          <div className="imgWrapper" onClick={onUploadImgClick}>
             <Image
               alt={`${name}'s profile`}
-              src={imgSrc}
+              src={imgSrc || ''}
               width="75px"
               height="75px"
               className="img"
             />
+            {isValidated && (
+              <Icon icon="ant-design:camera-twotone" className="camera" />
+            )}
           </div>
           {isNameEditMode ? (
             <input
@@ -210,4 +184,3 @@ export default function UserInfo({
     </>
   );
 }
-

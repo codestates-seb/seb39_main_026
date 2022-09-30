@@ -4,9 +4,11 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { LoginState } from '../states/LoginState';
+import UserState from '../states/UserState';
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
+  const [user] = useRecoilState(UserState);
 
   const mobile_navbar = css`
     @media screen and (max-width: 768px) {
@@ -103,7 +105,7 @@ export default function Navbar() {
           </a>
         </Link>
         {isLoggedIn ? (
-          <Link href={`/users/${localStorage.getItem('userId')}`}>
+          <Link href={`/users/${user.id}`}>
             <a>
               <Icon
                 icon="fluent-emoji-high-contrast:paw-prints"
@@ -134,9 +136,7 @@ export default function Navbar() {
             <Link href="/walks">산책 찾기</Link>
           </div>
           {isLoggedIn ? (
-            <Link href={`/users/${localStorage.getItem('userId')}`}>
-              마이페이지
-            </Link>
+            <Link href={`/users/${user.id}`}>마이페이지</Link>
           ) : (
             <Link href="/login">로그인/회원가입</Link>
           )}

@@ -1,4 +1,6 @@
 import { css } from '@emotion/react';
+import { Icon } from '@iconify/react';
+
 import axios from 'axios';
 import Image from 'next/image';
 import React, {
@@ -7,9 +9,11 @@ import React, {
   useCallback,
   Dispatch,
   SetStateAction,
+  useEffect,
 } from 'react';
 import { useRecoilState } from 'recoil';
 import { API } from '../../apis/api';
+import { useUpdatePetImgMutation } from '../../hooks/PetsQuery';
 import { MyPets } from '../../models/MyPets';
 import UserState from '../../states/UserState';
 import { Theme } from '../../styles/Theme';
@@ -32,9 +36,10 @@ export default function PetEditInfo({
   const [petNeuter, setPetNeuter] = useState(pet.neuter);
   const [petPersonality, setPetPersonality] = useState(pet.personality);
   const [petAbout, setPetAbout] = useState(pet.about);
-  const [petBirthday, setPetBirthday] = useState(pet.birthday);
+  const [petBirthday, setPetBirthday] = useState(pet.petAges.birthDay);
   const [petImgUrl, setPetImgUrl] = useState('');
   const [imgSrc, setImgSrc] = useState(pet.imgUrl);
+  const { mutate: updatePetImgMutate } = useUpdatePetImgMutation();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const onUploadImgClick = useCallback(() => {
@@ -46,28 +51,14 @@ export default function PetEditInfo({
 
   const onUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (!e.target.files) {
-      return;
-    }
-    const uploadImg = e.target.files[0];
-    const formData = new FormData();
-    formData.append('imgFile', uploadImg);
-    axios
-      .post(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/post/image`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          authorization: localStorage.getItem('accessToken') || '',
-          refresh_token: localStorage.getItem('refreshToken') || '',
-        },
-      })
-      .then((response) => {
-        setImgSrc(URL.createObjectURL(uploadImg));
-        setPetImgUrl(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
+    if (e.target.files) {
+      updatePetImgMutate({
+        id: pet.id,
+        file: e.target.files[0],
+        setImgSrc,
+        setPetImgUrl,
       });
+    }
   };
 
   const handleSubmitClick = () => {
@@ -143,11 +134,19 @@ export default function PetEditInfo({
     justify-content: center;
     align-items: center;
     .img {
+      position: relative;
       width: 100px;
       height: 100px;
       border-radius: 50%;
       background-color: ${Theme.disableBgColor};
       object-fit: cover;
+    }
+    .camera {
+      color: #ffffff80;
+      position: absolute;
+      top: 35%;
+      left: 35%;
+      font-size: 2rem;
     }
     .preview {
       border-radius: 50%;
@@ -225,6 +224,10 @@ export default function PetEditInfo({
     }
   `;
 
+  useEffect(() => {
+    console.log(pet);
+  }, []);
+
   return (
     <div css={petInfo}>
       <div className="img" onClick={onUploadImgClick}>
@@ -235,6 +238,7 @@ export default function PetEditInfo({
           height="100px"
           className="preview"
         />
+        <Icon icon="ant-design:camera-twotone" className="camera" />
         <input
           type="file"
           accept="image/*"
@@ -320,4 +324,3 @@ export default function PetEditInfo({
     </div>
   );
 }
-

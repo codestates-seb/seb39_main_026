@@ -92,7 +92,7 @@ export default function StickyInfo({
             height: 200px;
           `}
         >
-          <img src={`${walkDetail.imgUrls[0]}`} alt="walk-img" />
+          <img src={walkDetail.imgUrls[0]} alt="walk-img" />
         </div>
         <div className="info-content">
           <h1>{walkDetail.name}</h1>

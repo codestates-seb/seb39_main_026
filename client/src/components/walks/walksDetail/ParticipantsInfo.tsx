@@ -78,8 +78,7 @@ export default function ParticipantsInfo({
             }}
           >
             <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/img/${pet.id}`}
-              // src={`${process.env.NEXT_PUBLIC_BASE_URL}/pets/image/${pet.id}`}
+              src={pet.imgUrl}
               width="35px"
               height="35px"
               alt={`${pet.petName} 의 사진`}
