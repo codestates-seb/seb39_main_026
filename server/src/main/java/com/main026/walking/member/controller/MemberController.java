@@ -70,7 +70,7 @@ public class MemberController {
     @GetMapping("/img/{memberId}")
     public ResponseEntity showImage(@PathVariable long memberId) throws IOException {
         String findImage = memberService.findImage(memberId);
-        return new ResponseEntity(awsS3Service.getImageBin(findImage),HttpStatus.OK);
+        return new ResponseEntity(awsS3Service.getFileURL(findImage),HttpStatus.OK);
     }
 
     //  UPDATE

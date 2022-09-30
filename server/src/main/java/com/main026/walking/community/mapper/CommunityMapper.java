@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class CommunityMapper {
@@ -65,7 +66,14 @@ public abstract class CommunityMapper {
         for (int i = 0; i < entity.getCommunityPets().size(); i++) {
             Pet pet = entity.getCommunityPets().get(i).getPet();
             PetDto.compactResponse compactResponse = new PetDto.compactResponse(pet);
-            compactResponse.setImgUrl(awsS3Service.getFileURL(compactResponse.getImgUrl()));
+
+            String findImgUrl;
+            if(compactResponse.getImgUrl().isEmpty()){
+                findImgUrl = "DEFAULT_PET_IMAGE.jpg";
+            } else {
+                findImgUrl = compactResponse.getImgUrl();
+            }
+            compactResponse.setImgUrl(awsS3Service.getFileURL(findImgUrl));
             pets.add(compactResponse);
         }
 
@@ -75,7 +83,15 @@ public abstract class CommunityMapper {
         for (int i = 0; i < entity.getComments().size(); i++) {
             Comment comment = entity.getComments().get(i);
             MemberDto.compactResponse responseDto = new MemberDto.compactResponse(comment.getMember());
-            responseDto.setImgUrl(awsS3Service.getFileURL(responseDto.getImgUrl()));
+
+            String findMemberImgUrl;
+            if(responseDto.getImgUrl().isEmpty()){
+                findMemberImgUrl = "DEFAULT_MEMBER_IMAGE.jpg";
+            } else {
+                findMemberImgUrl = responseDto.getImgUrl();
+            }
+
+            responseDto.setImgUrl(awsS3Service.getFileURL(findMemberImgUrl));
             comments.add(CommentDto.Response.builder()
                     .commentId(comment.getId())
                     .body(comment.getBody())
@@ -86,12 +102,17 @@ public abstract class CommunityMapper {
         response.comments(comments);
 
         List<String> imageList = new ArrayList<>();
-        for (int i = 0; i < entity.getImages().size(); i++) {
-            Image image = entity.getImages().get(i);
-            String storeFilename = awsS3Service.getFileURL(image.getStoreFilename());
-            imageList.add(storeFilename);
+        if(entity.getImages().isEmpty()){
+            imageList.add("DEFAULT_COMMUNITY_IMAGE.jpg");
+        } else {
+            for (int i = 0; i < entity.getImages().size(); i++) {
+                Image image = entity.getImages().get(i);
+                String storeFilename = awsS3Service.getFileURL(image.getStoreFilename());
+                imageList.add(storeFilename);
+            }
         }
-        response.imgUrls(imageList);
+
+        response.imgUrls(imageList.stream().map(awsS3Service::getFileURL).collect(Collectors.toList()));
 
 
 //        List<NoticeDto.Response> notices = new ArrayList<>();

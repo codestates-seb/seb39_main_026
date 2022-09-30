@@ -97,7 +97,7 @@ public class PetController {
     @GetMapping("/img/{petId}")
     public ResponseEntity showImage(@PathVariable long petId) throws IOException {
         String findImage = petService.findImageById(petId);
-        return new ResponseEntity(awsS3Service.getImageBin(findImage), HttpStatus.OK);
+        return new ResponseEntity(awsS3Service.getFileURL(findImage), HttpStatus.OK);
     }
 
     //  DELETE
