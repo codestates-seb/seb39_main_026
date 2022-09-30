@@ -46,9 +46,6 @@ export default function LoginModal({
       const user = await handleLogin(value);
 
       setUser(user);
-      // TODO: localStorage.getItem하는 곳이 있다면, user recoil 에서 id 뽑아쓰게 바꾸고 아래 코드는 지우기
-      localStorage.setItem('userId', String(user.id));
-      // TODO: 로그아웃 만들 때, 아래 정보도 지워줘야 합니다.
       localStorage.setItem(
         'currentAddress',
         `${user.address.si} ${user.address.gu} ${user.address.dong}`

@@ -102,8 +102,6 @@ export default function Signup() {
       });
       setUser(data);
 
-      // TODO: localStorage.getItem하는 곳이 있다면, user recoil 에서 id 뽑아쓰게 바꾸고 아래 코드는 지우기
-      localStorage.setItem('userId', String(data.id));
       localStorage.setItem(
         'currentAddress',
         `${data.address.si} ${data.address.gu} ${data.address.dong}`

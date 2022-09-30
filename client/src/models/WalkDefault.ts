@@ -36,7 +36,7 @@ export interface WalkDetail extends WalkDefault {
   pets: Array<WalkDetailPets>;
   comments: Array<WalkDetailComment>;
   notices: {
-    id: number;
+    noticeId: number;
     title: string;
     body: string;
   };
@@ -95,4 +95,10 @@ export interface WalkPostNotice {
   id: number;
   title?: string;
   body?: string;
+}
+
+export interface NoticePost {
+  id: number;
+  title: string;
+  body: string;
 }
