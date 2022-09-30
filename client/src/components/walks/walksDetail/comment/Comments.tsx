@@ -91,7 +91,7 @@ export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
 
   const handleDeleteClick = (commentId: number) => {
     handlDeleteComment(commentId);
-    // router.reload();
+    router.reload();
   };
 
   const handleModifyButtonClick = (commentId: number) => {
@@ -103,12 +103,9 @@ export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
     commentId: number,
     commentContent: string
   ) => {
-    const res = await handlePatchComment(commentId, commentContent);
-    setIsCommentModify(false);
+    await handlePatchComment(commentId, commentContent);
 
-    if (res.status === 200) {
-      router.reload();
-    }
+    router.reload();
   };
 
   // NOTE: 로딩중이면 로딩 컴포넌트 렌더링
@@ -183,7 +180,7 @@ export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
                   )}
 
                   {/* NOTE: 수정 / 삭제 버튼 */}
-                  {comment.member.id === user.id && !isCommentModify && (
+                  {user && comment.member.id === user.id && !isCommentModify && (
                     <>
                       <CommentMenu
                         handleModifyButtonClick={handleModifyButtonClick}

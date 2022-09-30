@@ -6,9 +6,10 @@ const commonbuttonContainer = (
   disabled: boolean,
   padding: string,
   fontSize: string,
-  borderRadius: string
+  borderRadius: string,
+  fontWeight: string
 ) => css`
-  padding: 24px;
+  padding: ${padding};
   width: 100%;
   border: none;
   border-radius: ${borderRadius};
@@ -16,7 +17,7 @@ const commonbuttonContainer = (
   color: #fff;
   cursor: ${disabled ? `not-allowed` : `pointer`};
   font-size: ${fontSize};
-  font-size: 1rem;
+  font-weight: ${fontWeight};
   word-break: keep-all;
   letter-spacing: 0.02rem;
   box-shadow: rgb(127 135 144 / 28%) 1px 1px 2px 0px,
@@ -36,6 +37,7 @@ export default function CommonButton({
   padding = '24px',
   fontSize = '1rem',
   borderRadius = '20px',
+  fontWeight = '600',
 }: {
   type: 'button' | 'submit' | 'reset' | undefined;
   children: React.ReactNode;
@@ -46,6 +48,7 @@ export default function CommonButton({
   padding?: string;
   fontSize?: string;
   borderRadius?: string;
+  fontWeight?: string;
 }) {
   return (
     <button
@@ -55,7 +58,8 @@ export default function CommonButton({
         disabled,
         padding,
         fontSize,
-        borderRadius
+        borderRadius,
+        fontWeight
       )}
       onClick={() => {
         onClick();

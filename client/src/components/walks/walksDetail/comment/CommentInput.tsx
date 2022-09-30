@@ -61,7 +61,7 @@ export default function CommentInput({
         type="text"
         placeholder="댓글을 작성해주세요"
         onChange={(e) => setBody(e.target.value)}
-      ></input>
+      />
       <button type="button" onClick={handleRegisterClick}>
         등록
       </button>
