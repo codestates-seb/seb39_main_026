@@ -74,7 +74,7 @@ public class PetController {
     }
 
 //    CRUD-IMAGE
-    //  CREATE : DEFAULT_IMAGE 적용으로 메소드 삭제
+    //  CREATE
     @PostMapping("/post/image")
     public String postImage(@RequestPart MultipartFile imgFile){
         if(imgFile.isEmpty()) {
@@ -85,7 +85,7 @@ public class PetController {
     }
 
     //  UPDATE
-    @PatchMapping("/img/{petId}")
+    @PatchMapping("/image/{petId}")
     public ResponseEntity patchImage(@PathVariable long petId,
                                      @RequestPart MultipartFile imgFile,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
@@ -94,14 +94,14 @@ public class PetController {
     }
 
     //  READ
-    @GetMapping("/img/{petId}")
+    @GetMapping("/image/{petId}")
     public ResponseEntity showImage(@PathVariable long petId) throws IOException {
         String findImage = petService.findImageById(petId);
-        return new ResponseEntity(awsS3Service.getImageBin(findImage), HttpStatus.OK);
+        return new ResponseEntity(awsS3Service.getFileURL(findImage), HttpStatus.OK);
     }
 
     //  DELETE
-    @DeleteMapping("/img/{petId}")
+    @DeleteMapping("/image/{petId}")
     public ResponseEntity deleteImage(
       @PathVariable long petId,
       @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {

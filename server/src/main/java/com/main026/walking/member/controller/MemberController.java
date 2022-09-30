@@ -65,16 +65,16 @@ public class MemberController {
     }
 
 // CRUD-IMAGE
-    // CREATE : Default Image 적용으로 해당 메소드 삭제
+    // CREATE
     // READ
-    @GetMapping("/img/{memberId}")
+    @GetMapping("/image/{memberId}")
     public ResponseEntity showImage(@PathVariable long memberId) throws IOException {
         String findImage = memberService.findImage(memberId);
-        return new ResponseEntity(awsS3Service.getImageBin(findImage),HttpStatus.OK);
+        return new ResponseEntity(awsS3Service.getFileURL(findImage),HttpStatus.OK);
     }
 
     //  UPDATE
-    @PatchMapping("/img/{memberId}")
+    @PatchMapping("/image/{memberId}")
     public ResponseEntity patchImage(@PathVariable long memberId,
                              @RequestPart MultipartFile imgFile,
                              @AuthenticationPrincipal PrincipalDetails principalDetails){
@@ -90,7 +90,7 @@ public class MemberController {
 
 
     //  DELETE
-    @DeleteMapping("/img/{memberId}")
+    @DeleteMapping("/image/{memberId}")
     public ResponseEntity deleteImage(@PathVariable long memberId,
                                       @AuthenticationPrincipal PrincipalDetails principalDetails){
         authorization(memberId,principalDetails);

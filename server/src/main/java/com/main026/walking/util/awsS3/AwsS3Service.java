@@ -77,15 +77,13 @@ public class AwsS3Service {
       new GeneratePresignedUrlRequest(bucket, (fileName).replace(File.separatorChar, '/'))
         .withMethod(HttpMethod.GET)
         .withExpiration(expiration);
-
+    log.info(" [S3-Get] Read-File-Name : " + fileName);
     return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
   }
 
   public String getImageBin(String fileName) throws IOException {
-//    S3Object findObject = amazonS3.getObject(bucket,fileName);
+    S3Object findObject = amazonS3.getObject(bucket,fileName);
     log.info(" [S3-Get] Read-File-Name : " + fileName);
-//    return Base64.encodeAsString(findObject.getObjectContent().readAllBytes());
-//    return IOUtils.toByteArray(findObject.getObjectContent());
-    return getFileURL(fileName);
+    return Base64.encodeAsString(findObject.getObjectContent().readAllBytes());
   }
 }

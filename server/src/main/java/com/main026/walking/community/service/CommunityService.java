@@ -181,7 +181,7 @@ public class CommunityService {
                              .build();
         imageRepository.save(savedImage);
 
-        return uploadImage;
+        return awsS3Service.getFileURL(uploadImage);
         }
 
     //  CREATE - MULTI
@@ -199,9 +199,14 @@ public class CommunityService {
         List<String> findImageNames = findCommunity.getImages().stream().map(Image::getStoreFilename).collect(Collectors.toList());
 
         List<String> findImages = new ArrayList<>();
-        for (String filename : findImageNames) {
-            String imageBin = awsS3Service.getImageBin(filename);
-            findImages.add(imageBin);
+
+        if(!findImageNames.isEmpty()){
+            for (String filename : findImageNames) {
+                String imageBin = awsS3Service.getFileURL(filename);
+                findImages.add(imageBin);
+            }
+        } else {
+            findImages.add(awsS3Service.getFileURL("DEFAULT_COMMUNITY_IMAGE.jpg"));
         }
         return findImages;
     }
