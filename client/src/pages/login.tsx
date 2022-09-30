@@ -5,6 +5,7 @@ import { MouseEvent, useState } from 'react';
 import TabTitle from '../components/TabTitle';
 import LoginButton from '../components/login/LoginButton';
 import LoginModal from '../components/login/LoginModal';
+import PasswordModal from '../components/login/PasswordModal';
 
 const signupButtonContainer = css`
   display: grid;
@@ -54,7 +55,13 @@ export default function Login() {
     console.log('login button clicked');
   };
 
+  const handlePasswordButtonClick = (event: MouseEvent) => {
+    event.preventDefault();
+    setIsPasswordModalOpen(!isPasswordModalOpen);
+  };
+
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
   return (
     <>
@@ -63,6 +70,12 @@ export default function Login() {
         <LoginModal
           isLoginModalOpen={isLoginModalOpen}
           setIsLoginModalOpen={setIsLoginModalOpen}
+        />
+      )}
+      {isPasswordModalOpen && (
+        <PasswordModal
+          isPasswordModalOpen={isPasswordModalOpen}
+          setIsPasswordModalOpen={setIsPasswordModalOpen}
         />
       )}
       <section
@@ -118,7 +131,7 @@ export default function Login() {
           </button>
           <button
             type="submit"
-            onClick={handleLoginButtonClick}
+            onClick={handlePasswordButtonClick}
             css={loginButton('3/4')}
           >
             비밀번호 찾기

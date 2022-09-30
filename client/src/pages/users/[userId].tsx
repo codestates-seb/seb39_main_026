@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import TabTitle from '../../components/TabTitle';
+import DeleteUserButton from '../../components/users/DeleteUserButton';
 import LogoutButton from '../../components/users/LogoutButton';
 import PetInfo from '../../components/users/PetInfo';
 import UserInfo from '../../components/users/UserInfo';
@@ -72,7 +73,19 @@ export default function User({ userId }: { userId: string }) {
           <WalksInfo walks={getUsersQuery.data?.memberCommunityList} />
         </>
       )}
-      <footer>{isValidated && <LogoutButton />}</footer>
+      <footer
+        css={css`
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+        `}
+      >
+        {isValidated && (
+          <>
+            <LogoutButton /> <DeleteUserButton id={userId} />
+          </>
+        )}
+      </footer>
     </section>
   );
 }

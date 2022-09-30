@@ -3,13 +3,13 @@ import { Icon } from '@iconify/react';
 
 import axios from 'axios';
 import Image from 'next/image';
+import Router from 'next/router';
 import React, {
   useState,
   useRef,
   useCallback,
   Dispatch,
   SetStateAction,
-  useEffect,
 } from 'react';
 import { useRecoilState } from 'recoil';
 import { API } from '../../apis/api';
@@ -72,7 +72,6 @@ export default function PetEditInfo({
       birthDay: petBirthday,
       imgUrl: petImgUrl,
     };
-    console.log(editedData);
     if (pet.id === 909090) {
       axios.post(`${API.PETS}/post/?username=${user.username}`, editedData, {
         headers: {
@@ -89,6 +88,7 @@ export default function PetEditInfo({
       });
     }
     setIsPetEditMode(false);
+    Router.reload();
   };
 
   const handleDeleteClick = () => {
@@ -223,10 +223,6 @@ export default function PetEditInfo({
       }
     }
   `;
-
-  useEffect(() => {
-    console.log(pet);
-  }, []);
 
   return (
     <div css={petInfo}>
