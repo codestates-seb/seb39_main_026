@@ -149,8 +149,7 @@ public class CommunityController {
 
     @PostMapping("/post/image")
     public List<String> postImages(@RequestPart List<MultipartFile> imgFile){
-        imgFile.forEach(awsS3Service::uploadImage);
-        return imgFile.stream().map(MultipartFile::getOriginalFilename).collect(Collectors.toList());
+        return imgFile.stream().map(awsS3Service::uploadImage).collect(Collectors.toList());
     }
 
     //  READ
