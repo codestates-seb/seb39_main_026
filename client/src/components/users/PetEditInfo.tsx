@@ -10,7 +10,6 @@ import React, {
   useCallback,
   Dispatch,
   SetStateAction,
-  useEffect,
 } from 'react';
 import { useRecoilState } from 'recoil';
 import { API } from '../../apis/api';
@@ -224,10 +223,6 @@ export default function PetEditInfo({
       }
     }
   `;
-
-  useEffect(() => {
-    console.log(pet);
-  }, []);
 
   return (
     <div css={petInfo}>
