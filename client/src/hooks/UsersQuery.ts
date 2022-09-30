@@ -40,7 +40,10 @@ export function useGetUsersQuery(id: string) {
     async () =>
       await axios.get(`${API.USERS}/${id}`).then(async (res) => {
         return res.data;
-      })
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
   );
 }
 

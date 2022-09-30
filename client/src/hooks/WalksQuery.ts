@@ -17,7 +17,10 @@ export function useGetWalksQuery(query: string) {
     async () =>
       await axios.get(url).then(async (res) => {
         return res.data.communityList;
-      })
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
   );
 }
 
