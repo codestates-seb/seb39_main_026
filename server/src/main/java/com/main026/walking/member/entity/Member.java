@@ -55,9 +55,9 @@ public class Member {
         this.address = new Address(patchDto.getSi(), patchDto.getGu(), patchDto.getDong());
     }
 
-    public void update(String name, String picture){
+    public Member updateOAuth(String name){
         this.username = name;
-        this.imgUrl = picture;
+        return this;
     }
 
     public void setPassword(String password){
