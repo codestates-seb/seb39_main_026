@@ -18,9 +18,13 @@ export default function PetBirthdaySelector({
     if (parseInt(birthMonth) + 1 < 10 && parseInt(birthDay) >= 10) {
       setPetBirthday(`${birthYear}-0${parseInt(birthMonth) + 1}-${birthDay}`);
     } else if (parseInt(birthMonth) + 1 < 10 && parseInt(birthDay) < 10) {
-      setPetBirthday(`${birthYear}-0${parseInt(birthMonth) + 1}-0${birthDay}`);
+      setPetBirthday(
+        `${birthYear}-0${parseInt(birthMonth) + 1}-0${parseInt(birthDay)}`
+      );
     } else if (parseInt(birthMonth) + 1 >= 10 && parseInt(birthDay) < 10) {
-      setPetBirthday(`${birthYear}-${parseInt(birthMonth) + 1}-0${birthDay}`);
+      setPetBirthday(
+        `${birthYear}-${parseInt(birthMonth) + 1}-0${parseInt(birthDay)}`
+      );
     } else {
       setPetBirthday(`${birthYear}-${parseInt(birthMonth) + 1}-${birthDay}`);
     }

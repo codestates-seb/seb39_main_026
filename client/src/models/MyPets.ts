@@ -13,9 +13,19 @@ export interface MyPets {
   neuter: string;
   breed: string;
   about: string;
-  birthday: string;
   member?: {
     username: string;
     id: string;
   };
+}
+
+export interface MyPetsPost {
+  petName: string;
+  petGender: string;
+  breed: string;
+  neuter: string;
+  personality: string;
+  about: string;
+  birthDay: string;
+  imgUrl?: string;
 }
