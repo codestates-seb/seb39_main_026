@@ -2,7 +2,7 @@
 import { css, keyframes } from '@emotion/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useFindPasswordMutation } from '../../hooks/FindPasswordquery';
+import { useFindPasswordMutation } from '../../hooks/UsersQuery';
 import { Theme } from '../../styles/Theme';
 import CommonButton from '../CommonButton';
 

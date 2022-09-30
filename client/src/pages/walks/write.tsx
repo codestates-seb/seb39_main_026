@@ -15,7 +15,7 @@ import {
   useAddEveryWeekMoim,
   useAddOneDayMoim,
   usePostMoimImage,
-} from '../../hooks/AddMoimQuery';
+} from '../../hooks/WriteQuery';
 import {
   WalksMoim,
   WalksMoimEveryWeek,

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import useLogin from '../../hooks/LoginQuery';
+import { useLogin } from '../../hooks/UsersQuery';
 import { UserLogin } from '../../models/UserLogin';
 import { LoginState } from '../../states/LoginState';
 import UserState from '../../states/UserState';

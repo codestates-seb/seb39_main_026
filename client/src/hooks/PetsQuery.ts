@@ -1,8 +1,23 @@
 import axios from 'axios';
 import { Dispatch, SetStateAction } from 'react';
-import { useMutation } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
+import { API } from '../apis/api';
+import { UserInfo } from '../models/UserInfo';
 
-export const useUpdatePetImgMutation = () => {
+export function useMyDogsListQuery({ id }: { id: number }) {
+  const { data, error } = useQuery('pets', async () => {
+    const { data } = await axios.get<UserInfo>(`${API.USERS}/${id}`);
+    return data;
+  });
+
+  if (error != null) {
+    throw error;
+  }
+
+  return data;
+}
+
+export function useUpdatePetImgMutation() {
   return useMutation(
     async (body: {
       id: number;
@@ -28,4 +43,4 @@ export const useUpdatePetImgMutation = () => {
         });
     }
   );
-};
+}

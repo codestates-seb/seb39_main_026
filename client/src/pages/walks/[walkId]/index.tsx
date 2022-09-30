@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next';
 import TabTitle from '../../../components/TabTitle';
 import DetailLayout from '../../../components/walks/walksDetail/DetailLayout';
 import Introduce from '../../../components/walks/walksDetail/Introduce';
-import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
+import { useWalksDetailQuery } from '../../../hooks/WalksQuery';
 
 export default function Index({ walkId }: { walkId: string }) {
   const walkDetail = useWalksDetailQuery(walkId);

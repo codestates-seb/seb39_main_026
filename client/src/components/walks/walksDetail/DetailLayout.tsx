@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { useScrollTop } from '../../../hooks/Scroll';
-import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
+import { useWalksDetailQuery } from '../../../hooks/WalksQuery';
 import UserState from '../../../states/UserState';
 import CommonButton from '../../CommonButton';
 import DogChoiceModal from '../../DogChoiceModal';

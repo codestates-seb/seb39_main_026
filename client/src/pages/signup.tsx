@@ -7,7 +7,7 @@ import CommonButton from '../components/CommonButton';
 import RegionPick from '../components/RegionPick';
 import TabTitle from '../components/TabTitle';
 import useLogin from '../hooks/LoginQuery';
-import useSignup from '../hooks/SignupQuery';
+import { useSignup } from '../hooks/UsersQuery';
 import { UserSignup } from '../models/UserSignup';
 import { LoginState } from '../states/LoginState';
 import UserState from '../states/UserState';

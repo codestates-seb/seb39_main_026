@@ -3,6 +3,36 @@ import { Dispatch, SetStateAction } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { API } from '../apis/api';
 import { UserDefault } from '../models/UserDefault';
+import { UserInfo } from '../models/UserInfo';
+import { UserLogin } from '../models/UserLogin';
+import { UserSignup } from '../models/UserSignup';
+
+export function useSignup() {
+  const handleSignup = async (data: UserSignup) => {
+    const res = await axios.post(API.SINGUP, {
+      ...data,
+    });
+    return res;
+  };
+
+  return { handleSignup } as const;
+}
+
+export function useLogin() {
+  const handleLogin = async ({ email, password }: UserLogin) => {
+    const res = await axios.post<UserInfo>(API.LOGIN, {
+      email,
+      password,
+    });
+
+    localStorage.setItem('accessToken', res.headers.authorization);
+    localStorage.setItem('refreshToken', res.headers.refresh_token);
+
+    return res.data;
+  };
+
+  return { handleLogin } as const;
+}
 
 export function useGetUsersQuery(id: string) {
   return useQuery(
@@ -14,7 +44,7 @@ export function useGetUsersQuery(id: string) {
   );
 }
 
-export const useUpdateUsernameMutation = () => {
+export function useUpdateUsernameMutation() {
   return useMutation(async (body: UserDefault) => {
     const { id, username } = body;
     await axios.patch(
@@ -30,9 +60,9 @@ export const useUpdateUsernameMutation = () => {
       }
     );
   });
-};
+}
 
-export const useUpdateUserImgMutation = () => {
+export function useUpdateUserImgMutation() {
   return useMutation(
     async (body: {
       id: number;
@@ -60,9 +90,18 @@ export const useUpdateUserImgMutation = () => {
         });
     }
   );
+}
+
+export const useFindPasswordMutation = () => {
+  return useMutation(async (email: { email: string }) => {
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/members/findpassword`,
+      email
+    );
+  });
 };
 
-export const useDeleteUserMutation = () => {
+export function useDeleteUserMutation() {
   return useMutation(async (id: string) => {
     await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/members/${id}`, {
       headers: {
@@ -71,4 +110,4 @@ export const useDeleteUserMutation = () => {
       },
     });
   });
-};
+}
