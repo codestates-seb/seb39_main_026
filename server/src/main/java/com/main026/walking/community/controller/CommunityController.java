@@ -35,7 +35,7 @@ public class CommunityController {
     // TODO 모임 등록시 모임하는 사람의 펫도 등록
     // TODO 리프레시 토큰 쿠키에다 저장(일단 테스트할때는)
 
-    @PostMapping
+    @PostMapping("/post")
     public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         if(principalDetails==null){
@@ -135,8 +135,8 @@ public class CommunityController {
 
 
     //  CREATE - MULTI
-    @PostMapping("/img/{communityId}")
-    public ResponseEntity postImage(
+    @PostMapping("/image/{communityId}")
+    public ResponseEntity postImageById(
             @PathVariable long communityId,
             @RequestPart List<MultipartFile> imgFile,
             @AuthenticationPrincipal PrincipalDetails principalDetails
@@ -147,8 +147,14 @@ public class CommunityController {
         return new ResponseEntity(savedImages,HttpStatus.CREATED);
     }
 
+    @PostMapping("/post/image")
+    public List<String> postImages(@RequestPart List<MultipartFile> imgFile){
+        imgFile.forEach(awsS3Service::uploadImage);
+        return imgFile.stream().map(MultipartFile::getOriginalFilename).collect(Collectors.toList());
+    }
+
     //  READ
-    @GetMapping("/img/{filename}")
+    @GetMapping("/image/{filename}")
     public ResponseEntity showImage(@PathVariable String filename) throws IOException {
         return new ResponseEntity(awsS3Service.getFileURL(filename),HttpStatus.OK);
     }
@@ -159,7 +165,7 @@ public class CommunityController {
     }
 
     //  UPDATE
-    @PatchMapping("/img/{filename}")
+    @PatchMapping("/image/{filename}")
     public ResponseEntity updateImage(@PathVariable String filename, @RequestPart MultipartFile imgFile, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         String updatedImage = communityService.updateImage(filename, principalDetails, imgFile);
@@ -168,7 +174,7 @@ public class CommunityController {
     }
 
     //  DELETE
-    @DeleteMapping("/img/{filename}")
+    @DeleteMapping("/image/{filename}")
     public ResponseEntity deleteImage(@PathVariable String filename, @AuthenticationPrincipal PrincipalDetails principalDetails){
         communityService.deleteImage(filename,principalDetails);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
