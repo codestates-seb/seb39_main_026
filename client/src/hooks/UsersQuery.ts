@@ -61,3 +61,14 @@ export const useUpdateUserImgMutation = () => {
     }
   );
 };
+
+export const useDeleteUserMutation = () => {
+  return useMutation(async (id: string) => {
+    await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/members/${id}`, {
+      headers: {
+        authorization: localStorage.getItem('accessToken') || '',
+        refresh_token: localStorage.getItem('refreshToken') || '',
+      },
+    });
+  });
+};
