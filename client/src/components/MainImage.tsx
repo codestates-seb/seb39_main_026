@@ -3,7 +3,9 @@ import { css } from '@emotion/react';
 export default function MainImage() {
   const img = css`
     width: 100%;
-    background-color: #dc602a;
+    background-size: cover;
+    background-position-y: 30%;
+    background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80');
     height: 30vh;
     .text {
       height: 100%;
