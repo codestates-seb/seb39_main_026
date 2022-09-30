@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import CommonButton from '../../components/CommonButton';
@@ -14,6 +14,7 @@ import TitleInput from '../../components/walks/wirte/TitleInput';
 import {
   useAddEveryWeekMoim,
   useAddOneDayMoim,
+  usePostMoimImage,
 } from '../../hooks/AddMoimQuery';
 import {
   WalksMoim,
@@ -27,6 +28,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Theme } from '../../styles/Theme';
 
 export default function Write() {
+  const router = useRouter();
+
+  const [user] = useRecoilState(UserState);
   const methods = useForm<WalksMoim>({
     mode: 'onChange',
     defaultValues: {
@@ -35,11 +39,23 @@ export default function Write() {
     },
   });
 
-  const [user] = useRecoilState(UserState);
   const { handleAddOneDayMoim } = useAddOneDayMoim();
   const { handleAddEveryWeekMoim } = useAddEveryWeekMoim();
+  const { handlePostMoimImage } = usePostMoimImage();
 
-  const router = useRouter();
+  // 이미지 관련
+  const [moimImages, setMoimImages] = useState<File[]>([]);
+
+  const handleMoimImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files) {
+      console.log(event);
+      const imageFile = event.target.files;
+      setMoimImages([...moimImages, ...Array.from(imageFile)]);
+    }
+  };
+  console.log(moimImages);
 
   const {
     register,
@@ -59,13 +75,13 @@ export default function Write() {
 
   const onSubmitOneDay = (data: WalksMoimOneDay) => {
     const {
+      type,
       title,
       place,
       description,
       personCount,
       plannedDate,
       plannedTime,
-      type,
     } = data;
 
     const oneDayMoim = {
@@ -86,13 +102,13 @@ export default function Write() {
 
   const onSubmitEveryWeek = (data: WalksMoimEveryWeek) => {
     const {
+      type,
       title,
       place,
       description,
       personCount,
       plannedDates,
       plannedTime,
-      type,
     } = data;
 
     const everyWeekMoim = {
@@ -114,13 +130,23 @@ export default function Write() {
   const onSubmit = async (data: WalksMoim) => {
     try {
       if (data.type === WalksMoimTypes.매주모임) {
+        const moimImageResponse = await handlePostMoimImage(moimImages);
         const everyWeekMoimData = onSubmitEveryWeek(data);
-        await handleAddEveryWeekMoim(everyWeekMoimData);
-        router.push('/walks');
+        const moimResponse = await handleAddEveryWeekMoim(
+          everyWeekMoimData,
+          moimImageResponse
+        );
+        const communityId = await moimResponse.data.communityId;
+        await router.push(`/walks/${communityId}`);
       } else {
+        const moimImageResponse = await handlePostMoimImage(moimImages);
         const oneDayMoimData = onSubmitOneDay(data);
-        await handleAddOneDayMoim(oneDayMoimData);
-        router.push('/walks');
+        const moimResponse = await handleAddOneDayMoim(
+          oneDayMoimData,
+          moimImageResponse
+        );
+        const communityId = await moimResponse.data.communityId;
+        await router.push(`/walks/${communityId}`);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -142,6 +168,17 @@ export default function Write() {
 
         <FormProvider {...methods}>
           <form>
+            <ul>
+              <li>
+                <input
+                  multiple
+                  type="file"
+                  accept="image/*"
+                  onChange={handleMoimImageChange}
+                />
+              </li>
+              <li>미리보기</li>
+            </ul>
             <ul>
               <li>
                 <label htmlFor="moim-name">모임의 이름을 지어주세요.</label>
