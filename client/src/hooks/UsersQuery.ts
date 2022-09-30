@@ -45,7 +45,7 @@ export const useUpdateUserImgMutation = () => {
       formData.append('imgFile', uploadImg);
       axios
         .patch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/members/img/${id}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/members/image/${id}`,
           formData,
           {
             headers: {
