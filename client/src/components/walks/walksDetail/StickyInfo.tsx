@@ -110,18 +110,22 @@ export default function StickyInfo({
           </>
           <p>{walkDetail.place}</p>
           <p>{walkDetail.capacity - walkDetail.participant}자리 남았어요!</p>
-          <CommonButton
-            type="button"
-            onClick={() => {
-              if (user == null) {
-                router.push('/login');
-                return;
-              }
-              return setIsModalOpen(true);
-            }}
-          >
-            모임 참여하기
-          </CommonButton>
+          {user && walkDetail.member.id === user.id ? (
+            <></>
+          ) : (
+            <CommonButton
+              type="button"
+              onClick={() => {
+                if (user == null) {
+                  router.push('/login');
+                  return;
+                }
+                return setIsModalOpen(true);
+              }}
+            >
+              모임 참여하기
+            </CommonButton>
+          )}
         </div>
       </aside>
     </div>

@@ -55,24 +55,29 @@ export default function DetailLayout({
           <StickyInfo walkDetail={walkDetail} setIsModalOpen={setIsModalOpen} />
         </div>
         <div css={mobileMoimJoin(top)}>
-          <CommonButton
-            type="button"
-            onClick={() => {
-              if (user == null) {
-                router.push('/login');
-                return;
-              }
-              return setIsModalOpen(true);
-            }}
-          >
-            모임 참여하기
-          </CommonButton>
+          {user && walkDetail?.member.id === user.id ? (
+            <></>
+          ) : (
+            <CommonButton
+              type="button"
+              onClick={() => {
+                if (user == null) {
+                  router.push('/login');
+                  return;
+                }
+                return setIsModalOpen(true);
+              }}
+            >
+              모임 참여하기
+            </CommonButton>
+          )}
         </div>
       </section>
       {isModalOpen && (
         <DogChoiceModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          goToWalksWrite={false}
         />
       )}
       {isDogInfoModalOpen && (
