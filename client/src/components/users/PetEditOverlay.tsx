@@ -51,10 +51,9 @@ export default function PetEditOverlay({
     setDogInfoData(response.data);
   };
   useEffect(() => {
-    if (id === 909090) {
+    if (id === -1) {
       setDogInfoData({
-        id: 909090,
-        birthday: '',
+        id: -1,
         petName: '',
         breed: '',
         about: '',
@@ -66,6 +65,7 @@ export default function PetEditOverlay({
           years: 0,
           months: 0,
           days: 0,
+          birthDay: '연도-월-일',
         },
       });
       return;

@@ -1,9 +1,6 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
-
-import axios from 'axios';
 import Image from 'next/image';
-import Router from 'next/router';
 import React, {
   useState,
   useRef,
@@ -12,8 +9,12 @@ import React, {
   SetStateAction,
 } from 'react';
 import { useRecoilState } from 'recoil';
-import { API } from '../../apis/api';
-import { useUpdatePetImgMutation } from '../../hooks/PetsQuery';
+import {
+  useDeletePetMutation,
+  usePostPetMutation,
+  useUpdatePetImgMutation,
+  useUpdatePetMutation,
+} from '../../hooks/PetsQuery';
 import { MyPets } from '../../models/MyPets';
 import UserState from '../../states/UserState';
 import { Theme } from '../../styles/Theme';
@@ -30,6 +31,8 @@ export default function PetEditInfo({
   setIsPetEditMode: Dispatch<SetStateAction<boolean>>;
 }) {
   const [user] = useRecoilState(UserState);
+  const { username } = user;
+  const { id } = pet;
   const [petName, setPetName] = useState(pet.petName);
   const [petGender, setPetGender] = useState(pet.petGender);
   const [petBreed, setPetBreed] = useState(pet.breed);
@@ -40,6 +43,9 @@ export default function PetEditInfo({
   const [petImgUrl, setPetImgUrl] = useState('');
   const [imgSrc, setImgSrc] = useState(pet.imgUrl);
   const { mutate: updatePetImgMutate } = useUpdatePetImgMutation();
+  const { mutate: updatePetMutation } = useUpdatePetMutation();
+  const { mutate: postPetMutation } = usePostPetMutation();
+  const { mutate: deletePetMutation } = useDeletePetMutation();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const onUploadImgClick = useCallback(() => {
@@ -63,7 +69,7 @@ export default function PetEditInfo({
 
   const handleSubmitClick = () => {
     const editedData = {
-      petName,
+      petName: petName,
       petGender: petGender,
       breed: petBreed,
       neuter: petNeuter,
@@ -72,33 +78,15 @@ export default function PetEditInfo({
       birthDay: petBirthday,
       imgUrl: petImgUrl,
     };
-    if (pet.id === 909090) {
-      axios.post(`${API.PETS}/post/?username=${user.username}`, editedData, {
-        headers: {
-          authorization: localStorage.getItem('accessToken') || '',
-          refresh_token: localStorage.getItem('refreshToken') || '',
-        },
-      });
+    if (pet.id === -1) {
+      postPetMutation({ username, editedData, setIsPetEditMode });
     } else {
-      axios.patch(`${API.PETS}/${pet.id}`, editedData, {
-        headers: {
-          authorization: localStorage.getItem('accessToken') || '',
-          refresh_token: localStorage.getItem('refreshToken') || '',
-        },
-      });
+      updatePetMutation({ id, editedData, setIsPetEditMode });
     }
-    setIsPetEditMode(false);
-    Router.reload();
   };
 
   const handleDeleteClick = () => {
-    axios.delete(`${API.PETS}/${pet.id}`, {
-      headers: {
-        authorization: localStorage.getItem('accessToken') || '',
-        refresh_token: localStorage.getItem('refreshToken') || '',
-      },
-    });
-    setIsPetEditMode(false);
+    deletePetMutation({id, setIsPetEditMode});
   };
 
   const handlePetNameEdit = (event: React.FormEvent<HTMLInputElement>) => {
@@ -133,6 +121,7 @@ export default function PetEditInfo({
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: white;
     .img {
       position: relative;
       width: 100px;

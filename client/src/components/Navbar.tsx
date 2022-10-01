@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
@@ -60,6 +61,7 @@ export default function Navbar() {
     width: 100%;
     top: 0;
     z-index: 1;
+
     a {
       text-decoration: none;
       color: black;
@@ -71,6 +73,7 @@ export default function Navbar() {
     .logo {
       color: #dc602a;
       font-weight: 700;
+      font-size: 2rem;
     }
     .menus {
       display: flex;
@@ -79,6 +82,8 @@ export default function Navbar() {
       height: 100%;
     }
     .tabs {
+      display: flex;
+      align-items: center;
       a {
         margin-right: 2rem;
       }
@@ -130,7 +135,7 @@ export default function Navbar() {
         <div className="menus">
           <div className="tabs">
             <Link href="/">
-              <a className="logo">로고</a>
+              <a className="logo">ㅅㅊ</a>
             </Link>
             <Link href="/">메인</Link>
             <Link href="/walks">산책 찾기</Link>

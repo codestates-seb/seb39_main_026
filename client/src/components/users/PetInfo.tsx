@@ -155,7 +155,7 @@ export default function PetInfo({
             ''
           )}
           {isValidated && isPetAddMode ? (
-            <PetEditOverlay setIsPetEditMode={setIsPetAddMode} id={909090} />
+            <PetEditOverlay setIsPetEditMode={setIsPetAddMode} id={-1} />
           ) : (
             ''
           )}

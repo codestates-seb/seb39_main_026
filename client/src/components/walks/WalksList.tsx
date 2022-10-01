@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { css } from '@emotion/react';
 import { useEffect } from 'react';
-import { useGetWalksQuery } from '../../hooks/WalksListQuery';
+import { useGetWalksQuery } from '../../hooks/WalksQuery';
 import { WalkDefault } from '../../models/WalkDefault';
 import { Theme } from '../../styles/Theme';
 import WalkItem from './WalkItem';

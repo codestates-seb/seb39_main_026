@@ -65,6 +65,7 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
       }
     }
   `;
+
   return (
     <>
       {walk && (

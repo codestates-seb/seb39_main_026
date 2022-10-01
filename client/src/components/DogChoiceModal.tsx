@@ -3,7 +3,7 @@ import { css, keyframes } from '@emotion/react';
 import Link from 'next/link';
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { useMyDogsListQuery } from '../hooks/MyDogsListQuery';
+import { useMyDogsListQuery } from '../hooks/PetsQuery';
 import { Pet } from '../models/UserInfo';
 import UserState from '../states/UserState';
 import { Theme } from '../styles/Theme';

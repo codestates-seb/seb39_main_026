@@ -2,14 +2,14 @@ import { GetServerSideProps } from 'next';
 import TabTitle from '../../../components/TabTitle';
 import DetailLayout from '../../../components/walks/walksDetail/DetailLayout';
 import Introduce from '../../../components/walks/walksDetail/Introduce';
-import { useWalksDetailQuery } from '../../../hooks/WalksDetailQuery';
+import { useWalksDetailQuery } from '../../../hooks/WalksQuery';
 
 export default function Index({ walkId }: { walkId: string }) {
   const walkDetail = useWalksDetailQuery(walkId);
 
   return (
     <>
-      <TabTitle prefix={walkId} />
+      <TabTitle prefix={walkDetail?.name} />
       <DetailLayout walkId={walkId}>
         <Introduce walkDetail={walkDetail} />
       </DetailLayout>
@@ -20,6 +20,7 @@ export default function Index({ walkId }: { walkId: string }) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
   const { walkId } = query;
+
   return {
     props: {
       walkId,

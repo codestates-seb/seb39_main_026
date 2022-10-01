@@ -1,8 +1,71 @@
 import axios from 'axios';
+import Router from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
-import { useMutation } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
+import { API } from '../apis/api';
+import { MyPetsPost } from '../models/MyPets';
+import { UserInfo } from '../models/UserInfo';
 
-export const useUpdatePetImgMutation = () => {
+export function useMyDogsListQuery({ id }: { id: number }) {
+  const { data, error } = useQuery('pets', async () => {
+    const { data } = await axios.get<UserInfo>(`${API.USERS}/${id}`);
+    return data;
+  });
+
+  if (error != null) {
+    throw error;
+  }
+
+  return data;
+}
+
+export function usePostPetMutation() {
+  return useMutation(
+    async (body: {
+      username: string;
+      editedData: MyPetsPost;
+      setIsPetEditMode: Dispatch<SetStateAction<boolean>>;
+    }) => {
+      const { username, editedData, setIsPetEditMode } = body;
+      await axios
+        .post(`${API.PETS}/post/?username=${username}`, editedData, {
+          headers: {
+            authorization: localStorage.getItem('accessToken') || '',
+            refresh_token: localStorage.getItem('refreshToken') || '',
+          },
+        })
+        .then(() => {
+          setIsPetEditMode(false);
+          Router.reload();
+        });
+    }
+  );
+}
+
+export function useUpdatePetMutation() {
+  return useMutation(
+    async (body: {
+      id: number;
+      editedData: MyPetsPost;
+      setIsPetEditMode: Dispatch<SetStateAction<boolean>>;
+    }) => {
+      const { id, editedData, setIsPetEditMode } = body;
+      await axios
+        .patch(`${API.PETS}/${id}`, editedData, {
+          headers: {
+            authorization: localStorage.getItem('accessToken') || '',
+            refresh_token: localStorage.getItem('refreshToken') || '',
+          },
+        })
+        .then(() => {
+          setIsPetEditMode(false);
+          Router.reload();
+        });
+    }
+  );
+}
+
+export function useUpdatePetImgMutation() {
   return useMutation(
     async (body: {
       id: number;
@@ -14,7 +77,7 @@ export const useUpdatePetImgMutation = () => {
       const uploadImg = file;
       const formData = new FormData();
       formData.append('imgFile', uploadImg);
-      axios
+      await axios
         .post(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/post/image`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -28,4 +91,26 @@ export const useUpdatePetImgMutation = () => {
         });
     }
   );
-};
+}
+
+export function useDeletePetMutation() {
+  return useMutation(
+    async (body: {
+      id: number;
+      setIsPetEditMode: Dispatch<SetStateAction<boolean>>;
+    }) => {
+      const { id, setIsPetEditMode } = body;
+      await axios
+        .delete(`${API.PETS}/${id}`, {
+          headers: {
+            authorization: localStorage.getItem('accessToken') || '',
+            refresh_token: localStorage.getItem('refreshToken') || '',
+          },
+        })
+        .then(() => {
+          setIsPetEditMode(false);
+          Router.reload();
+        });
+    }
+  );
+}
