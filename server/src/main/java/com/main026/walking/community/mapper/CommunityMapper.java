@@ -107,7 +107,7 @@ public abstract class CommunityMapper {
         } else {
             for (int i = 0; i < entity.getImages().size(); i++) {
                 Image image = entity.getImages().get(i);
-                String storeFilename = awsS3Service.getFileURL(image.getStoreFilename());
+                String storeFilename = image.getStoreFilename();
                 imageList.add(storeFilename);
             }
         }

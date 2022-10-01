@@ -117,11 +117,7 @@ public class CommunityService {
         Community community = communityRepository.findById(communityId).orElseThrow();
         community.countView();
 
-        CommunityDto.Response dto = communityMapper.entityToDtoResponse(community);
-        List<String> fileUrls = dto.getImgUrls().stream().map(awsS3Service::getFileURL).collect(Collectors.toList());
-        dto.setImgUrls(fileUrls);
-
-        return dto;
+        return communityMapper.entityToDtoResponse(community);
     }
 
     public CommunityListResponseDto findCommunities(CommunitySearchCond searchCond, Pageable pageable) {
