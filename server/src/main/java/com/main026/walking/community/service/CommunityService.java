@@ -87,10 +87,15 @@ public class CommunityService {
                     .build();
             imageRepository.save(image);
         }
+//        TODO
+        /* id로 모임조회시에는 등록한 Image 객체가 잘 딸려오는데 Post할때는 딸려오지 않음
+        * 일단 POST할때 setImages로 엔티티에 저장한 Image를 set해서 해결했지만
+        * 이게 맞는 방법인지는 생각해봐야할듯
+        * ALT1) Mapper에서 ImageRepository를 DI해서 조회해서 담아줄 수 있지만 너무 복잡해짐
+        * ALT2) Cascade로 이미지 저장시 Persist해보았지만 Data init 할때 오류가 났음*/
+        community.setImages(imageRepository.findByCommunityId(community.getId()));
 
         CommunityDto.Response dto = communityMapper.entityToDtoResponse(savedCommunity);
-//        List<String> fileUrls = dto.getImgUrls().stream().map(awsS3Service::getFileURL).collect(Collectors.toList());
-//        dto.setImgUrls(fileUrls);
         return dto;
     }
 

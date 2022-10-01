@@ -11,6 +11,7 @@ import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.pet.entity.Pet;
 import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.enums.Weeks;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Mapper(componentModel = "spring")
 public abstract class CommunityMapper {
     @Autowired
@@ -102,6 +104,7 @@ public abstract class CommunityMapper {
         response.comments(comments);
 
         List<String> imageList = new ArrayList<>();
+        log.info("Community Response : entity.getImages() : " + entity.getImages().stream().map(Image::getStoreFilename).collect(Collectors.toList()));
         if(entity.getImages().isEmpty()){
             imageList.add("DEFAULT_COMMUNITY_IMAGE.jpg");
         } else {
