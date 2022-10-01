@@ -36,3 +36,23 @@ export function useWalksDetailQuery(communityId: string) {
 
   return data;
 }
+
+export function useJoinWalksMoim() {
+  const handleJoinWalksMoim = async (communityId: string, petId: number[]) => {
+    const res = await axios.post(`${API.WALKS}/${communityId}`, [...petId], {
+      headers: {
+        authorization: localStorage.getItem('accessToken') || '',
+        refresh_token: localStorage.getItem('refreshToken') || '',
+      },
+    });
+
+    if (res.headers.authorization && res.headers.refresh_token) {
+      localStorage.setItem('accessToken', res.headers.authorization);
+      localStorage.setItem('refreshToken', res.headers.refresh_token);
+    }
+
+    console.log(res, 'JoinWalksMoi');
+    return res;
+  };
+  return { handleJoinWalksMoim } as const;
+}

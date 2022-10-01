@@ -61,6 +61,7 @@ export default function Walks() {
         <DogChoiceModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          goToWalksWrite={true}
         />
       )}
       <h1

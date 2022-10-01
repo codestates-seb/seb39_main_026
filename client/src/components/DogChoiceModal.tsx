@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { css, keyframes } from '@emotion/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { useMyDogsListQuery } from '../hooks/PetsQuery';
+import { useJoinWalksMoim } from '../hooks/WalksQuery';
 import { Pet } from '../models/UserInfo';
 import UserState from '../states/UserState';
 import { Theme } from '../styles/Theme';
@@ -124,24 +126,41 @@ const fadeOut = keyframes`
 export default function DogChoiceModal({
   isModalOpen,
   setIsModalOpen,
+  goToWalksWrite,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  goToWalksWrite: boolean;
 }) {
+  const router = useRouter();
+  const { walkId } = router.query as { walkId: string };
+
   const [user] = useRecoilState(UserState);
+  const [pickPetsId, setPickPetsId] = useState<number[]>([]);
 
   const userData = useMyDogsListQuery(user);
 
-  const [pickPets, setPickPets] = useState<string[]>([]);
+  const { handleJoinWalksMoim } = useJoinWalksMoim();
 
   // NOTE: type 에러로 일단은 이렇게 해결해놓았습니다. 추후에 수정해야합니다.
   const { petList } = userData || {};
 
-  const handlePickPetClick = (pet: string) => {
-    if (pickPets.includes(pet)) {
-      setPickPets(pickPets.filter((item) => item !== pet));
+  const handlePickPetClick = (petId: number) => {
+    if (pickPetsId.includes(petId)) {
+      setPickPetsId(pickPetsId.filter((item) => item !== petId));
     } else {
-      setPickPets([...pickPets, pet]);
+      setPickPetsId([...pickPetsId, petId]);
+    }
+  };
+
+  const handleGoTowalkClick = () => {
+    if (goToWalksWrite) {
+      console.log(pickPetsId);
+      router.push('/walks/write');
+    } else if (!goToWalksWrite) {
+      console.log(pickPetsId);
+      handleJoinWalksMoim(walkId, pickPetsId);
+      router.reload();
     }
   };
 
@@ -197,38 +216,28 @@ export default function DogChoiceModal({
           {petList?.map((pet: Pet) => (
             <li
               key={pet.id}
-              onClick={() => handlePickPetClick(pet.petName)}
-              className={pickPets.includes(pet.petName) ? 'pick' : ''}
+              onClick={() => handlePickPetClick(pet.id)}
+              className={pickPetsId.includes(pet.id) ? 'pick' : ''}
             >
               <img src={pet.imgUrl} alt={`${pet.petName} 사진`} />
               <p>{pet.petName}</p>
             </li>
           ))}
         </ul>
-        {pickPets.length > 0 ? (
-          <Link href="/walks/write">
-            <a
-              css={css`
-                display: block;
-              `}
-            >
-              <CommonButton
-                type="button"
-                buttonColor={`${Theme.mainColor}`}
-                onClick={() =>
-                  localStorage.setItem('pickPets', JSON.stringify(pickPets))
-                }
-              >
-                산책하러 가기!
-              </CommonButton>
-            </a>
-          </Link>
+        {pickPetsId.length > 0 ? (
+          <CommonButton
+            type="button"
+            buttonColor={`${Theme.mainColor}`}
+            onClick={handleGoTowalkClick}
+          >
+            산책하러 가기!
+          </CommonButton>
         ) : (
           <>
             <CommonButton
               type="button"
               buttonColor={`${Theme.disableColor}`}
-              onClick={() => console.log('강아지랑 산책해주세요!')}
+              onClick={() => alert('산책할 강아지를 선택해주세요!')}
             >
               산책하러 가기!
             </CommonButton>
