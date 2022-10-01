@@ -160,6 +160,7 @@ export default function DogChoiceModal({
     } else if (!goToWalksWrite) {
       console.log(pickPetsId);
       handleJoinWalksMoim(walkId, pickPetsId);
+      router.reload();
     }
   };
 
