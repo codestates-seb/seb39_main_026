@@ -54,7 +54,6 @@ public class MemberService {
         memberRepository.save(member);
 
         MemberDto.Response dto = memberMapper.memberToMemberResponseDto(member);
-        dto.setImgUrl(awsS3Service.getFileURL(dto.getImgUrl()));
         return dto;
     }
 
