@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, KeyboardEvent } from 'react';
 import { usePostComment } from '../../../../hooks/CommentQuery';
 import { WalkDetail } from '../../../../models/WalkDefault';
 import { Theme } from '../../../../styles/Theme';
@@ -55,12 +55,23 @@ export default function CommentInput({
     router.reload();
   };
 
+  const handleRejsterEnterKeyUP = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === 'Enter') {
+      if (body.length === 0) {
+        return;
+      }
+      handlePostComment(id, body);
+      router.reload();
+    }
+  };
+
   return (
     <article css={inputContainer}>
       <input
         type="text"
         placeholder="댓글을 작성해주세요"
         onChange={(e) => setBody(e.target.value)}
+        onKeyUp={handleRejsterEnterKeyUP}
       />
       <button type="button" onClick={handleRegisterClick}>
         등록
