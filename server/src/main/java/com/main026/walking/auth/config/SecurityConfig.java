@@ -32,7 +32,6 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final MemberRepository memberRepository;
     private final JwtUtils jwtUtils;
-    private final CustomOAuth2UserService oAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
