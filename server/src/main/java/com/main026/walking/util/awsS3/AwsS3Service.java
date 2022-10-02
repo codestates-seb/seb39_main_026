@@ -48,8 +48,11 @@ public class AwsS3Service {
   }
 
   public void deleteImage(String fileName) {
-    amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
-    log.info(" [S3-Delete] Deleted-File-Name : " + fileName);  }
+//    TODO
+//    IAM 유저 권한 : S3FullAccess + S3 버킷 : S3:* 권한으로도 삭제만 안됨
+//    Patch 구동을 위해 S3 Delete 메소드 비활성화
+//    amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
+    log.info(" [S3-Delete] Deleted-File-Name : " + fileName + " [Not Implement]");  }
 
   private String createFileName(String fileName) {
     return UUID.randomUUID().toString().concat(getFileExtension(fileName));
