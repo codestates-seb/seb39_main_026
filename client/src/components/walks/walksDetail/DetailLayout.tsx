@@ -8,6 +8,7 @@ import { useWalksDetailQuery } from '../../../hooks/WalksQuery';
 import UserState from '../../../states/UserState';
 import CommonButton from '../../CommonButton';
 import DogChoiceModal from '../../DogChoiceModal';
+import Carousel from '../Carousel';
 import DogInfoModal from './DogInfoModal';
 import Information from './Information';
 import PageNav from './PageNav';
@@ -23,24 +24,65 @@ export default function DetailLayout({
   walkId: string;
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+
   const walkDetail = useWalksDetailQuery(walkId);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDogInfoModalOpen, setIsDogInfoModalOpen] = useState(false);
   const [petInfoId, setPetInfoId] = useState(1);
   const [user] = useRecoilState(UserState);
-  const router = useRouter();
+
+  const top = useScrollTop();
 
   const getPetId = (petId: number) => {
     setPetInfoId(petId);
   };
 
-  const top = useScrollTop();
+  function getMoimState() {
+    // 시간이 지남 => 모집마감
+    // 참여자 >= 모집인원 => 모집마감
+
+    if (walkDetail == null) {
+      return;
+    }
+
+    if (walkDetail?.dateInfo != null) {
+      const year = Number(walkDetail.dateInfo.split('.')[0]);
+      const month = Number(walkDetail.dateInfo.split('.')[1]);
+      const day = Number(walkDetail.dateInfo.split('.')[2]);
+      const moimDate = new Date(year, month, day);
+
+      if (new Date() > moimDate) {
+        return '모집마감';
+      }
+    }
+
+    if (walkDetail.capacity <= walkDetail.participant) {
+      return '모집마감';
+    }
+
+    return '모집중';
+  }
+
+  if (walkDetail == null) {
+    return;
+  }
 
   return (
     <>
+      <div
+        css={css`
+          @media screen and (min-width: 881px) {
+            display: none;
+          }
+        `}
+      >
+        <Carousel carouselDefaultHeight={'400px'} walkDetail={walkDetail} />
+      </div>
       <section css={sancheckDetailLayout}>
         <div>
-          <Title walkDetail={walkDetail} />
+          <Title walkDetail={walkDetail} getMoimState={getMoimState()} />
           <Information walkDetail={walkDetail} />
           <PageNav />
           {children}
@@ -52,7 +94,11 @@ export default function DetailLayout({
           <Comments walkDetail={walkDetail} />
         </div>
         <div className="sticky-info-container">
-          <StickyInfo walkDetail={walkDetail} setIsModalOpen={setIsModalOpen} />
+          <StickyInfo
+            walkDetail={walkDetail}
+            setIsModalOpen={setIsModalOpen}
+            getMoimState={getMoimState()}
+          />
         </div>
         <div css={mobileMoimJoin(top)}>
           {user && walkDetail?.member.id === user.id ? (
@@ -67,8 +113,11 @@ export default function DetailLayout({
                 }
                 return setIsModalOpen(true);
               }}
+              className={
+                getMoimState() === '모집마감' ? 'disabled-join-button' : ''
+              }
             >
-              모임 참여하기
+              {getMoimState() === '모집중' ? '모임 참여하기' : '다음 기회에...'}
             </CommonButton>
           )}
         </div>
@@ -97,6 +146,11 @@ const sancheckDetailLayout = css`
   gap: 0 20px;
   padding: 80px 36px 50px;
   min-height: calc(100vh - 75px);
+
+  .disabled-join-button {
+    background-color: #969696;
+    pointer-events: none;
+  }
 
   @media screen and (max-width: 880px) {
     grid-template-columns: 1fr;
