@@ -66,7 +66,7 @@ export default function DetailLayout({
   }
 
   if (walkDetail == null) {
-    return;
+    return null;
   }
 
   return (
