@@ -8,9 +8,10 @@ import { WalkDetail } from '../../../models/WalkDefault';
 import UserState from '../../../states/UserState';
 import { Theme } from '../../../styles/Theme';
 import CommonButton from '../../CommonButton';
+import Carousel from '../Carousel';
 import LoadingStickyInfo from '../skeleton/walksDetail/LoadingStickyInfo';
 
-const infoContainer = css`
+const infoContainer = (getMoimState: string | undefined) => css`
   position: sticky;
   top: 100px;
   right: 0;
@@ -61,14 +62,23 @@ const infoContainer = css`
     height: 100%;
     object-fit: cover;
   }
+
+  button.join-button {
+    background-color: ${getMoimState === '모집중'
+      ? Theme.mainColor
+      : '#969696'};
+    pointer-events: ${getMoimState === '모집중' ? '' : 'none'};
+  }
 `;
 
 export default function StickyInfo({
   walkDetail,
   setIsModalOpen,
+  getMoimState,
 }: {
   walkDetail?: WalkDetail;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  getMoimState: string | undefined;
 }) {
   const [user] = useRecoilState(UserState);
   const router = useRouter();
@@ -85,14 +95,15 @@ export default function StickyInfo({
         height: 100%;
       `}
     >
-      <aside css={infoContainer}>
+      <aside css={infoContainer(getMoimState)}>
         <div
           css={css`
             width: 100%;
             height: 200px;
+            overflow: hidden;
           `}
         >
-          <img src={walkDetail.imgUrls[0]} alt="walk-img" />
+          <Carousel walkDetail={walkDetail} />
         </div>
         <div className="info-content">
           <h1>{walkDetail.name}</h1>
@@ -122,8 +133,9 @@ export default function StickyInfo({
                 }
                 return setIsModalOpen(true);
               }}
+              className="join-button"
             >
-              모임 참여하기
+              {getMoimState === '모집중' ? '모임 참여하기' : '다음 기회에 ...'}
             </CommonButton>
           )}
         </div>

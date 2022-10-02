@@ -41,33 +41,14 @@ const postOwnerContainer = css`
   }
 `;
 
-export default function Title({ walkDetail }: { walkDetail?: WalkDetail }) {
+export default function Title({
+  walkDetail,
+  getMoimState,
+}: {
+  walkDetail?: WalkDetail;
+  getMoimState: string | undefined;
+}) {
   const router = useRouter();
-
-  function getMoimState() {
-    // 시간이 지남 => 모집마감
-    // 참여자 >= 모집인원 => 모집마감
-    if (walkDetail == null) {
-      return;
-    }
-
-    if (walkDetail?.dateInfo != null) {
-      const year = Number(walkDetail.dateInfo.split('.')[0]);
-      const month = Number(walkDetail.dateInfo.split('.')[1]);
-      const day = Number(walkDetail.dateInfo.split('.')[2]);
-      const moimDate = new Date(year, month, day);
-
-      if (new Date() > moimDate) {
-        return '모집마감';
-      }
-    }
-
-    if (walkDetail.capacity <= walkDetail.participant) {
-      return '모집마감';
-    }
-
-    return '모집중';
-  }
 
   if (walkDetail == null) {
     return (
@@ -86,7 +67,7 @@ export default function Title({ walkDetail }: { walkDetail?: WalkDetail }) {
           align-items: center;
         `}
       >
-        <MoimState status={getMoimState()}>{getMoimState()}</MoimState>
+        <MoimState status={getMoimState}>{getMoimState}</MoimState>
         <h1>{walkDetail.name}</h1>
       </div>
       <div css={postOwnerContainer}>
