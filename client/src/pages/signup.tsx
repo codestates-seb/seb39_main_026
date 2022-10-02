@@ -81,7 +81,6 @@ export default function Signup() {
     register,
     handleSubmit,
     setFocus,
-    reset,
     getValues,
     formState: { errors, isValid },
   } = methods;
@@ -110,9 +109,13 @@ export default function Signup() {
       router.push('/');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error.response.data.status === 409) {
-        reset();
-        alert('이미 가입한 사용자 입니다!');
+      if (error.response.data.error === 'Email already exists') {
+        alert('이미 가입한 이메일 입니다!');
+        setFocus('email');
+        return;
+      } else if (error.response.data.error === 'Username already exists') {
+        alert('이미 사용중인 닉네임입니다!');
+        setFocus('username');
         return;
       }
     }

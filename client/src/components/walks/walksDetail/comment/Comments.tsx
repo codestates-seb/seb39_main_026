@@ -27,10 +27,10 @@ const commentContainer = css`
   }
 
   ul {
-    margin: 18px 0 30px;
+    margin: 18px 0 50px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 30px;
   }
 
   li > div {
