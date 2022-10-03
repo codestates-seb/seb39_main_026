@@ -40,7 +40,7 @@ public class Community {
 
     private String place;
 
-    @OneToMany(mappedBy = "community")
+    @OneToMany(mappedBy = "community",cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
     //요일로 받았을때
@@ -56,7 +56,7 @@ public class Community {
     @OneToOne
     private Member representMember;
 
-    @OneToMany(mappedBy = "community")
+    @OneToMany(mappedBy = "community",cascade = CascadeType.ALL)
     private List<CommunityPet> communityPets = new ArrayList<>();
 
     @Column(nullable = false)
@@ -73,7 +73,7 @@ public class Community {
     @OneToOne(mappedBy = "community")
     private Notice notice;
 
-    @OneToMany(mappedBy = "community")
+    @OneToMany(mappedBy = "community",cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     public void setComment(Comment comment) {
