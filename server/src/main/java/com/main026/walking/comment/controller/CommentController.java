@@ -69,7 +69,7 @@ public class CommentController {
     }
 
     //  Delete
-    @DeleteMapping("{comment-id}")
+    @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(
             @PathVariable("comment-id") long commentId) {
         commentService.deleteComment(commentId);

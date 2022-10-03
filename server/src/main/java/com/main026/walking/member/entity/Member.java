@@ -29,9 +29,9 @@ public class Member {
     private String imgUrl;
     @Enumerated(value = EnumType.STRING)
     private Role roles;
-    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Pet> petList = new ArrayList<>();
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
     private String provider;
     private String providerId;

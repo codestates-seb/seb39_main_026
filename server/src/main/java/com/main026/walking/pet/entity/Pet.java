@@ -31,7 +31,7 @@ public class Pet {
     private String about;
     private String imgUrl;
 
-    @OneToMany(mappedBy = "pet")
+    @OneToMany(mappedBy = "pet",cascade = CascadeType.ALL)
     private List<CommunityPet> communityPets = new ArrayList<>();
 
     @Builder
