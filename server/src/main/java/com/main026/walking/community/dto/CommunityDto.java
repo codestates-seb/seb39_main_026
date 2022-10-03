@@ -25,7 +25,7 @@ public class CommunityDto {
     public static class Post {
         private String name;
 
-        private List<String> images = new ArrayList<>();
+        private List<String> imgUrls = new ArrayList<>();
 
         /**
          * 시,구,동을 받아야하는데 나눠서 받는 방법 외에 또 있을까?

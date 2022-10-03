@@ -78,7 +78,7 @@ public class CommunityService {
 
         //이미지 세팅
         Community savedCommunity = communityRepository.save(community);
-        List<String> imagePaths = postDto.getImages();
+        List<String> imagePaths = postDto.getImgUrls();
 
         for (String imagePath : imagePaths) {
             Image image = Image.builder()
