@@ -100,11 +100,21 @@ public class CommunityService {
     }
 
     public CommunityDto.Response joinPet(Long communityId, List<Long> petIdList) {
+        //일단 커뮤니티 소환
         Community community = communityRepository.findById(communityId).orElseThrow();
         //참여가능 여부 검사
         isFull(community.getCapacity(),community.getCommunityPets().size(),petIdList.size());
+        //커뮤니티에 이미 속해있는 강아지 id 리스트 소환
+        List<Long> communityPetIdList = community.getCommunityPets()
+                .stream().map(p -> p.getPet().getId()).collect(Collectors.toList());
 
+        //TODO 같은애들이 계속가입됨
         for (Long petId : petIdList) {
+            //가입하려는 애가 이미 있으면 건너뛰기
+            if(communityPetIdList.contains(petId)){
+                continue;
+//                new BusinessLogicException(ExceptionCode.PET_EXISTS);
+            }
             Pet pet = petRepository.findById(petId).orElseThrow();
             CommunityPet communityPet = CommunityPet.builder()
                     .pet(pet)

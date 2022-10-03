@@ -49,7 +49,6 @@ public abstract class MemberMapper {
     // TODO
     //  멤버의 펫이 가입한 모임 정보를 출력
     //이..게...맞나...?
-    //펫을 조회해서 모임도 함께보여주는것이 더 간단하긴하다.
     List<CommunityDto.compactResponse> communityList = new ArrayList<>();
     for (int i = 0; i < member.getPetList().size(); i++) {
       for (int j = 0; j < member.getPetList().get(i).getCommunityPets().size(); j++) {
@@ -57,7 +56,9 @@ public abstract class MemberMapper {
         Community community = member.getPetList().get(i).getCommunityPets().get(j).getCommunity();
         CommunityDto.compactResponse compactResponse = new CommunityDto.compactResponse(community);
         compactResponse.setRepresentImgUrls(awsS3Service.getFileURL(compactResponse.getRepresentImgUrls()));
-        if (!communityList.contains(compactResponse)){
+
+        List<Long> communityIdList = communityList.stream().map(c -> c.getCommunityId()).collect(Collectors.toList());
+        if (!communityIdList.contains(compactResponse.getCommunityId())){
           communityList.add(compactResponse);
         }
       }
