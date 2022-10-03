@@ -41,8 +41,4 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="aws_cloud_watch_log"/>
     </root>
-    <logger name="c.m.walking.util.awsS3.AwsS3Service" level="info" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="aws_cloud_watch_log"/>
-    </logger>
 </configuration>
