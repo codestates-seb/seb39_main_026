@@ -1,10 +1,15 @@
 import axios from 'axios';
+import { yoilSort } from '../../util/sortYoil';
 import { dateToHMM, dateToYYYYMMDD } from '../../util/transformDate';
 import { API } from '../apis/api';
 import { WalksMoimOneDay, WalksMoimEveryWeek } from '../models/WalksMoim';
 
 export function usePostMoimImage() {
   const handlePostMoimImage = async (files: File[]) => {
+    if (files.length === 0) {
+      return null;
+    }
+
     const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
@@ -31,6 +36,10 @@ export function useAddOneDayMoim() {
     data: WalksMoimOneDay,
     moimImg: string[]
   ) => {
+    if (moimImg == null) {
+      moimImg = [];
+    }
+
     const res = await axios.post(
       `${API.WALKS}/post`,
       {
@@ -81,6 +90,10 @@ export function useAddEveryWeekMoim() {
     data: WalksMoimEveryWeek,
     moimImg: string[]
   ) => {
+    if (moimImg == null) {
+      moimImg = [];
+    }
+
     const res = await axios.post(
       `${API.WALKS}/post`,
       {
@@ -88,7 +101,7 @@ export function useAddEveryWeekMoim() {
         body: data.description,
         capacity: data.personCount,
         place: data.place,
-        dates: data.plannedDates,
+        dates: data.plannedDates.sort(yoilSort),
         time: dateToHMM(data.plannedTime),
         si: data.si,
         gu: data.gu,

@@ -35,10 +35,14 @@ export default function PageNav() {
   return (
     <ul css={pageNavContainer}>
       <li>
-        <NavLink href={`/walks/${walkId}`}>모임 소개</NavLink>
+        <NavLink href={`/walks/${walkId}`} scroll={false}>
+          모임 소개
+        </NavLink>
       </li>
       <li>
-        <NavLink href={`/walks/${walkId}/notice`}>모임 공지사항</NavLink>
+        <NavLink href={`/walks/${walkId}/notice`} scroll={false}>
+          모임 공지사항
+        </NavLink>
       </li>
     </ul>
   );
