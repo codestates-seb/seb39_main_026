@@ -45,9 +45,6 @@ public abstract class MemberMapper {
 
     response.petList(petList);
 
-
-    // TODO
-    //  멤버의 펫이 가입한 모임 정보를 출력
     //이..게...맞나...?
     List<CommunityDto.compactResponse> communityList = new ArrayList<>();
     for (int i = 0; i < member.getPetList().size(); i++) {

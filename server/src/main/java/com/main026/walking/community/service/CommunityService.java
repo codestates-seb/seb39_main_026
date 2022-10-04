@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 @RequiredArgsConstructor
-//TODO 엔티티를 반환하면 안됨
 public class CommunityService {
     private final CommunityRepository communityRepository;
     private final ImageRepository imageRepository;
@@ -108,7 +107,6 @@ public class CommunityService {
         List<Long> communityPetIdList = community.getCommunityPets()
                 .stream().map(p -> p.getPet().getId()).collect(Collectors.toList());
 
-        //TODO 같은애들이 계속가입됨
         for (Long petId : petIdList) {
             //가입하려는 애가 이미 있으면 건너뛰기
             if(communityPetIdList.contains(petId)){

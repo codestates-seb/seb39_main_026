@@ -28,7 +28,6 @@ public abstract class CommunityMapper {
     //  Post
     public abstract Community postDtoToEntity(CommunityDto.Post dto);
 
-    // TODO 매퍼 최적화 필요
     public CommunityDto.Response entityToDtoResponse(Community entity) {
         if (entity == null) {
             return null;

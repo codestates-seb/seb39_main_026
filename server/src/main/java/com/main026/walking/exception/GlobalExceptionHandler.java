@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    //Todo 예외 추가
     @ExceptionHandler(BusinessLogicException.class)
     public ResponseEntity<ErrorResponse> tokenExpired(BusinessLogicException ex){
         ErrorResponse errorResponse = new ErrorResponse(ex.getExceptionCode());
