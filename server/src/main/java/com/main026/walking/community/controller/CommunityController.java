@@ -110,12 +110,8 @@ public class CommunityController {
             @RequestBody CommunityDto.Patch dto,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        //TODO 인증로직은 서비스에서 처리
-        if(communityService.findCommunity(communityId).getMember().getId()!=principalDetails.getMember().getId()){
-            throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
-        }
 
-        CommunityDto.Response response = communityService.updateCommunity(communityId, dto);
+        CommunityDto.Response response = communityService.updateCommunity(communityId, dto,principalDetails);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
