@@ -14,11 +14,16 @@ const imgCarouselContainer = (
   }
 
   @media screen and (max-width: 600px) {
-    height: unset;
+    height: 300px;
+  }
+
+  @media screen and (max-width: 385px) {
+    height: 200px;
   }
 
   position: relative;
   overflow: hidden;
+  height: 200px;
   height: ${carouselDefaultHeight};
   width: 100%;
 
@@ -36,8 +41,8 @@ const imgCarouselContainer = (
 
   section {
     display: flex;
+    min-width: 100%;
     height: 100%;
-    align-items: center;
     transform: translateX(-${index * 100}%);
 
     img {
@@ -69,10 +74,10 @@ const imgCarouselContainer = (
 `;
 
 export default function Carousel({
-  // walkDetail,
+  walkDetail,
   carouselDefaultHeight,
 }: {
-  walkDetail: WalkDetail;
+  walkDetail?: WalkDetail;
   carouselDefaultHeight?: string;
 }) {
   const [imgCarouselIndex, setImgCarouselIndex] = useState(0);
@@ -80,26 +85,24 @@ export default function Carousel({
   const [slideEnd, setSlideEnd] = useState(0);
 
   const handleCarouselButtonClick = (type: string) => {
-    if (type === 'next') {
-      // if (imgCarouselIndex === walkDetail.imgUrls.length - 1) {
-      if (imgCarouselIndex === 2) {
-        return;
-      } else {
-        setImgCarouselIndex(imgCarouselIndex + 1);
-      }
-    } else if (type === 'prev') {
-      if (imgCarouselIndex === 0) {
-        return;
-      } else {
-        setImgCarouselIndex(imgCarouselIndex - 1);
+    if (walkDetail) {
+      if (type === 'next') {
+        if (imgCarouselIndex === walkDetail.imgUrls.length - 1) {
+          return;
+        } else {
+          setImgCarouselIndex(imgCarouselIndex + 1);
+        }
+      } else if (type === 'prev') {
+        if (imgCarouselIndex === 0) {
+          return;
+        } else {
+          setImgCarouselIndex(imgCarouselIndex - 1);
+        }
       }
     }
   };
 
   const handleCarouselSlide = () => {
-    console.log('slideStart', slideStart);
-    console.log('slideEnd', slideEnd);
-    console.log(slideStart - slideEnd);
     if (slideEnd === 0 || slideStart === 0) {
       return;
     }
@@ -116,8 +119,7 @@ export default function Carousel({
       css={imgCarouselContainer(imgCarouselIndex, carouselDefaultHeight)}
     >
       <p>
-        {/* {imgCarouselIndex + 1} / {walkDetail.imgUrls.length} */}
-        {imgCarouselIndex + 1} / 3
+        {imgCarouselIndex + 1} / {walkDetail?.imgUrls.length}
       </p>
       <section
         onTouchStart={(e) => {
@@ -128,26 +130,33 @@ export default function Carousel({
           handleCarouselSlide();
         }}
       >
-        {/* {walkDetail.imgUrls.map((img) => (
-          <img src={img} alt="walk" key={img} />
-        ))} */}
-        <img
-          src="https://cdn.pixabay.com/photo/2022/08/21/21/24/colours-7402147_960_720.jpg"
-          alt="기타치는 할아버지"
-        />
-        <img
-          src="https://cdn.pixabay.com/photo/2019/08/19/07/45/corgi-4415649_960_720.jpg"
-          alt="코기"
-        />
-        <img
-          src="https://cdn.pixabay.com/photo/2016/03/27/20/51/dogs-1284238_960_720.jpg"
-          alt="자고 있는 겸둥이 강쥐들"
-        />
+        {walkDetail?.imgUrls.map((img) => (
+          <div
+            key={img}
+            css={css`
+              min-width: 100%;
+            `}
+          >
+            <img src={img} alt="walk" />
+          </div>
+        ))}
       </section>
-      <button onClick={() => handleCarouselButtonClick('prev')}>
+      <button
+        onClick={() => handleCarouselButtonClick('prev')}
+        css={css`
+          display: ${imgCarouselIndex === 0 ? 'none' : 'block'};
+        `}
+      >
         <Icon icon="ooui:next-rtl" />
       </button>
-      <button onClick={() => handleCarouselButtonClick('next')}>
+      <button
+        onClick={() => handleCarouselButtonClick('next')}
+        css={css`
+          display: ${imgCarouselIndex + 1 === walkDetail?.imgUrls.length
+            ? 'none'
+            : 'block'};
+        `}
+      >
         <Icon icon="ooui:next-ltr" />
       </button>
     </article>
