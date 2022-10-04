@@ -15,8 +15,8 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
     box-shadow: 4px 4px 30px #00000020;
     margin: 1rem 0.5rem;
     border-radius: 15px;
+    overflow: hidden;
     .img {
-      border-radius: 15px 15px 0 0;
       object-fit: cover;
     }
     .walk_wrapper {
@@ -76,6 +76,9 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
             alt="산책 모임 대표 이미지"
             height="120px"
             width="321px"
+            placeholder="blur"
+            blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk5HSrBwABNADReNJYZwAAAABJRU5ErkJggg==
+            "
           />
           <div className="walk_wrapper">
             <div className="walk_info">

@@ -9,6 +9,8 @@ import LogoutButton from '../../components/users/LogoutButton';
 import PetInfo from '../../components/users/PetInfo';
 import UserInfo from '../../components/users/UserInfo';
 import WalksInfo from '../../components/users/WalksInfo';
+import LoadingPets from '../../components/users/skeleton/LoadingPets';
+import LoadingUsers from '../../components/users/skeleton/LoadingUsers';
 import { useGetUsersQuery } from '../../hooks/UsersQuery';
 import UserState from '../../states/UserState';
 import { Theme } from '../../styles/Theme';
@@ -71,6 +73,11 @@ export default function User({ userId }: { userId: string }) {
             )}
           </div>
           <WalksInfo walks={getUsersQuery.data?.memberCommunityList} />
+        </>
+      )}
+      {getUsersQuery.isLoading && (
+        <>
+          <LoadingUsers /> <LoadingPets />
         </>
       )}
       <footer
