@@ -46,6 +46,7 @@ public class CommunityService {
 
     //  Create
     public CommunityDto.Response createCommunity(CommunityDto.Post postDto,Member member) {
+        log.info("모임 등록 요청");
         Community community = communityMapper.postDtoToEntity(postDto);
 
         if(postDto.getJoinnedPetList()!=null) {
@@ -98,6 +99,8 @@ public class CommunityService {
     }
 
     public CommunityDto.Response joinPet(Long communityId, List<Long> petIdList) {
+        log.info("모임 가입 요청");
+
         Community community = communityRepository.findById(communityId).orElseThrow();
         isFull(community.getCapacity(),community.getCommunityPets().size(),petIdList.size());
         List<Long> communityPetIdList = community.getCommunityPets()
@@ -146,6 +149,7 @@ public class CommunityService {
 
         authorization(communityId,principalDetails);
 
+        log.info("모임 수정 요청");
         findVerifiedCommunity(communityId);
         Community community = communityRepository.findById(communityId).orElseThrow();
         community.update(patchDto);
@@ -166,6 +170,7 @@ public class CommunityService {
 
     //  Delete
     public void deleteCommunity(Long communityId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        log.info("모임 삭제 요청");
         authorization(communityId,principalDetails);
 
         findVerifiedCommunity(communityId);
@@ -243,6 +248,7 @@ public class CommunityService {
 //  Valid
     //  Author : 로그인한 유저 == 커뮤니티의 대표자 인지 확인
     public void authorization(long communityId, PrincipalDetails principalDetails){
+        log.info("회원 인증 로직");
         Community findCommunity = findVerifiedCommunity(communityId);
         long findMemberId = findCommunity.getRepresentMember().getId();
         long loginId = principalDetails.getMember().getId();

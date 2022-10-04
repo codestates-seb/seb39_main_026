@@ -27,9 +27,11 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("인증성공메서드");
+
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Member member = principalDetails.getMember();
+        log.info(member.getUsername()+" 의 OAuth2 로그인 성공");
+
         Long memberId = member.getId();
         String email = member.getEmail();
 

@@ -12,6 +12,7 @@ import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -28,6 +30,7 @@ public class CommentService {
 
     //  Create
     public CommentDto.Response createComment(Long communityId, CommentDto.Post dto, PrincipalDetails principalDetails) {
+        log.info("모임 Id "+communityId+" 에 댓글 등록 요청");
         Comment comment = mapper.postDtoToEntity(dto);
 
         Member member = principalDetails.getMember();
@@ -47,12 +50,10 @@ public class CommentService {
         return mapper.entityToDtoResponse(verifiedComment);
     }
 
-    public Page<Comment> findComments(int page, int size) {
-        return commentRepository.findAll(PageRequest.of(page, size, Sort.by("commentId").descending()));
-    }
-
     //  Update
     public CommentDto.Response updateComment(long commentId, CommentDto.Patch dto,PrincipalDetails principalDetails) {
+        log.info("댓글 수정 요청");
+        
         authorization(principalDetails,commentId);
 
         Comment comment = findVerifiedComment(commentId);
@@ -63,6 +64,7 @@ public class CommentService {
 
     //  Delete
     public void deleteComment(PrincipalDetails principalDetails,long commentId) {
+        log.info("댓글 삭제 요청");
         authorization(principalDetails,commentId);
         commentRepository.deleteById(commentId);
     }
@@ -78,6 +80,7 @@ public class CommentService {
     }
 
     public void authorization(PrincipalDetails principalDetails, Long commentId) {
+        log.info("댓글 인증 로직 실행");
         Long memberId = principalDetails.getMember().getId();
         Long commentMemberId = commentRepository.findById(commentId).orElseThrow().getMember().getId();
         if (memberId != commentMemberId) {
