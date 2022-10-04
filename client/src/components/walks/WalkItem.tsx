@@ -77,7 +77,8 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
             height="120px"
             width="321px"
             placeholder="blur"
-            blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8HM1QDwAE5gGvTdyrjAAAAABJRU5ErkJggg=="
+            blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk5HSrBwABNADReNJYZwAAAABJRU5ErkJggg==
+            "
           />
           <div className="walk_wrapper">
             <div className="walk_info">

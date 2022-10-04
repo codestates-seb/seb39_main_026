@@ -3,7 +3,6 @@ import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { MyPets } from '../../models/MyPets';
-import { skeletonGradient } from '../../styles/GlobalStyle';
 import { Theme } from '../../styles/Theme';
 import DogChoiceModal from '../walks/walksDetail/DogInfoModal';
 import PetEditOverlay from './PetEditOverlay';
@@ -27,12 +26,15 @@ export default function PetInfo({
       margin-right: 0.5rem;
       background-color: transparent;
       border: 0;
-      .petImg {
+      .petImgWrapper {
+        overflow: hidden;
         border-radius: 50%;
-        object-fit: cover;
         height: 50px;
         width: 50px;
         background-color: ${Theme.disableBgColor};
+      }
+      .petImg {
+        object-fit: cover;
       }
       .petName {
         font-size: 0.8rem;
@@ -73,33 +75,9 @@ export default function PetInfo({
     }
   `;
 
-  const loadingPets = css`
-    margin-bottom: 1.2rem;
-    display: flex;
-    .petInfo {
-      margin-right: 0.5rem;
-      .petImg {
-        border-radius: 50%;
-        object-fit: cover;
-        height: 50px;
-        width: 50px;
-        -webkit-animation: ${skeletonGradient} 1.8s infinite ease-in-out;
-        animation: ${skeletonGradient} 1.8s infinite ease-in-out;
-        color: transparent;
-      }
-      .petName {
-        font-size: 0.8rem;
-        text-align: center;
-        font-weight: 500;
-        -webkit-animation: ${skeletonGradient} 1.8s infinite ease-in-out;
-        animation: ${skeletonGradient} 1.8s infinite ease-in-out;
-        color: transparent;
-      }
-    }
-  `;
   return (
     <>
-      {pets ? (
+      {pets && (
         <div css={mypet}>
           {pets.map((pet: MyPets) => {
             return (
@@ -111,13 +89,17 @@ export default function PetInfo({
                     setPetId(pet.id);
                   }}
                 >
-                  <Image
-                    src={pet.imgUrl}
-                    height="50px"
-                    width="50px"
-                    alt={`${pet.petName}`}
-                    className="petImg"
-                  />
+                  <div className="petImgWrapper">
+                    <Image
+                      src={pet.imgUrl}
+                      height="50px"
+                      width="50px"
+                      alt={`${pet.petName}`}
+                      className="petImg"
+                      placeholder="blur"
+                      blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk5HSrBwABNADReNJYZwAAAABJRU5ErkJggg=="
+                    />
+                  </div>
                   <p className="petName">{pet.petName}</p>
                 </button>
               </React.Fragment>
@@ -149,36 +131,19 @@ export default function PetInfo({
               반려동물 등록하기
             </button>
           )}
-          {isValidated && isPetEditMode ? (
+          {isValidated && isPetEditMode && (
             <PetEditOverlay setIsPetEditMode={setIsPetEditMode} id={petId} />
-          ) : (
-            ''
           )}
-          {isValidated && isPetAddMode ? (
+          {isValidated && isPetAddMode && (
             <PetEditOverlay setIsPetEditMode={setIsPetAddMode} id={-1} />
-          ) : (
-            ''
           )}
-          {!isValidated && isPetEditMode ? (
+          {!isValidated && isPetEditMode && (
             <DogChoiceModal
               isDogInfoModalOpen={isPetEditMode}
               setIsDogInfoModalOpen={setIsPetEditMode}
               petId={petId}
             />
-          ) : (
-            ''
           )}
-        </div>
-      ) : (
-        <div css={loadingPets}>
-          <div className="petInfo">
-            <div className="petImg"></div>
-            <p className="petName">🐾</p>
-          </div>
-          <div className="petInfo">
-            <div className="petImg"></div>
-            <p className="petName">🐾</p>
-          </div>
         </div>
       )}
     </>
