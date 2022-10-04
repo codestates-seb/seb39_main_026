@@ -41,7 +41,7 @@ public class MemberService {
     }
 
     //  CREATE
-    public MemberDto.Response saveMember(MemberDto.Post postDto) throws IOException {
+    public MemberDto.Response saveMember(MemberDto.Post postDto) {
 
         verifyExistMemberWithEmail(postDto.getEmail());
         verifyExistMemberWithUsername(postDto.getUsername());
@@ -57,7 +57,7 @@ public class MemberService {
     }
 
     //  READ
-    public MemberDto.Response findMember(Long memberId,Boolean isOwner) throws IOException {
+    public MemberDto.Response findMember(Long memberId,Boolean isOwner) {
 
         MemberDto.Response response =
                 memberMapper.memberToMemberResponseDto(verifyExistMemberWithId(memberId));
@@ -66,7 +66,8 @@ public class MemberService {
     }
 
     //  UPDATE
-    public MemberDto.Response updateMember(Long memberId,MemberDto.Patch patchDto){
+    public MemberDto.Response updateMember(Long memberId,MemberDto.Patch patchDto,PrincipalDetails principalDetails){
+        authorization(memberId,principalDetails);
 
         verifyExistMemberWithUsername(patchDto.getUsername());
 
@@ -105,7 +106,8 @@ public class MemberService {
     }
 
     //D
-    public void deleteMember(Long memberId){
+    public void deleteMember(Long memberId,PrincipalDetails principalDetails){
+        authorization(memberId,principalDetails);
         String image = verifyExistMemberWithId(memberId).getImgUrl();
         memberRepository.deleteById(memberId);
         if(!image.equals("DEFAULT_MEMBER_IMAGE.jpg")) awsS3Service.deleteImage(image);
@@ -159,5 +161,13 @@ public class MemberService {
     private Member verifyExistMemberWithId(Long memberId){
         Optional<Member> checkMember = memberRepository.findById(memberId);
         return checkMember.orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+    private void authorization(Long memberId,PrincipalDetails principalDetails){
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        Member principalDetailsMember = principalDetails.getMember();
+        if(member.getId()!=principalDetailsMember.getId()){
+            throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
+        }
     }
 }
