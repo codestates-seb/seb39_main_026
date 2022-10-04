@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { useScrollTop } from '../../../hooks/Scroll';
 import { useWalksDetailQuery } from '../../../hooks/WalksQuery';
 import UserState from '../../../states/UserState';
 import CommonButton from '../../CommonButton';
@@ -31,15 +30,22 @@ export default function DetailLayout({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDogInfoModalOpen, setIsDogInfoModalOpen] = useState(false);
   const [petInfoId, setPetInfoId] = useState(1);
+  const [moimState, setMoimState] = useState(true);
   const [user] = useRecoilState(UserState);
-
-  const top = useScrollTop();
 
   const getPetId = (petId: number) => {
     setPetInfoId(petId);
   };
 
-  function getMoimState() {
+  const handleMoimJoimButtonClick = () => {
+    if (user == null) {
+      router.push('/login');
+      return;
+    }
+    return setIsModalOpen(true);
+  };
+
+  const getMoimState = () => {
     // 시간이 지남 => 모집마감
     // 참여자 >= 모집인원 => 모집마감
 
@@ -54,20 +60,21 @@ export default function DetailLayout({
       const moimDate = new Date(year, month, day);
 
       if (new Date() > moimDate) {
-        return '모집마감';
+        return setMoimState(false);
       }
     }
 
     if (walkDetail.capacity <= walkDetail.participant) {
-      return '모집마감';
+      return setMoimState(false);
     }
 
-    return '모집중';
-  }
+    return setMoimState(true);
+  };
 
-  if (walkDetail == null) {
-    return null;
-  }
+  useEffect(() => {
+    getMoimState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [walkDetail, moimState]);
 
   return (
     <>
@@ -82,8 +89,20 @@ export default function DetailLayout({
       </div>
       <section css={sancheckDetailLayout}>
         <div>
-          <Title walkDetail={walkDetail} getMoimState={getMoimState()} />
+          <Title walkDetail={walkDetail} moimState={moimState} />
           <Information walkDetail={walkDetail} />
+          {user && walkDetail?.member.id === user.id ? (
+            <></>
+          ) : (
+            <CommonButton
+              type="button"
+              onClick={handleMoimJoimButtonClick}
+              className="moim-join-button"
+              disabled={!moimState}
+            >
+              {moimState ? '모임 참여하기' : '다음 기회에...'}
+            </CommonButton>
+          )}
           <PageNav />
           {children}
           <ParticipantsInfo
@@ -97,29 +116,8 @@ export default function DetailLayout({
           <StickyInfo
             walkDetail={walkDetail}
             setIsModalOpen={setIsModalOpen}
-            getMoimState={getMoimState()}
+            moimState={moimState}
           />
-        </div>
-        <div css={mobileMoimJoin(top)}>
-          {user && walkDetail?.member.id === user.id ? (
-            <></>
-          ) : (
-            <CommonButton
-              type="button"
-              onClick={() => {
-                if (user == null) {
-                  router.push('/login');
-                  return;
-                }
-                return setIsModalOpen(true);
-              }}
-              className={
-                getMoimState() === '모집마감' ? 'disabled-join-button' : ''
-              }
-            >
-              {getMoimState() === '모집중' ? '모임 참여하기' : '다음 기회에...'}
-            </CommonButton>
-          )}
         </div>
       </section>
       {isModalOpen && (
@@ -144,74 +142,41 @@ const sancheckDetailLayout = css`
   display: grid;
   grid-template-columns: 1fr 310px;
   gap: 0 20px;
-  padding: 80px 36px 50px;
-  min-height: calc(100vh - 75px);
+  margin: 110px 36px 10px;
 
-  .disabled-join-button {
-    background-color: #969696;
-    pointer-events: none;
+  ul {
+    list-style: none;
   }
 
   @media screen and (max-width: 880px) {
+    margin: 30px 20px;
+    padding-bottom: 30px;
     grid-template-columns: 1fr;
-    padding: 28px 36px 36px;
 
     .sticky-info-container {
       display: none;
     }
   }
 
-  @media screen and (max-width: 525px) {
-    padding: 28px 26px 50px;
+  // 모임 참여하기 버튼 css
+  @media screen and (max-width: 300px) {
+    margin: 20px 20px 0px;
   }
 
-  @media screen and (max-width: 324px) {
-    padding: 28px 16px 50px;
-  }
-
-  ul {
-    list-style: none;
-  }
-`;
-
-const mobileMoimJoin = (top: number) => css`
-  opacity: 0;
-
-  @media screen and (max-width: 880px) {
-    position: fixed;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    padding: 0 20px;
-    opacity: ${top === 0 || top === 75 ? '1' : '0'};
-    animation: ${top === 0 || top === 75 ? 'fadeIn 0.3s' : 'fadeOut 0.3s'};
-    z-index: ${top === 0 || top === 75 ? '1' : '-1'};
-  }
-
-  @media screen and (max-width: 769px) {
-    bottom: 100px;
-    opacity: ${top === 0 ? '1' : '0'};
-    animation: ${top === 0 ? 'fadeIn 0.3s' : 'fadeOut 0.3s'};
-    z-index: ${top === 0 ? '1' : '-1'};
-  }
-
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
+  .moim-join-button {
+    @media screen and (min-width: 881px) {
+      display: none;
     }
 
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes fadeOut {
-    0% {
-      opacity: 1;
+    @media screen and (max-width: 450px) {
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 0.9rem;
     }
 
-    100% {
-      opacity: 0;
+    @media screen and (max-width: 324px) {
+      padding: 13px;
+      font-size: 0.7rem;
     }
   }
 `;
