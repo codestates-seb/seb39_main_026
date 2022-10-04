@@ -15,7 +15,7 @@ const contentContainer = css`
   min-height: 200px;
 
   p:first-of-type {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 20px;
   }

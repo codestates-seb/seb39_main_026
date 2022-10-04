@@ -11,7 +11,7 @@ import CommonButton from '../../CommonButton';
 import Carousel from '../Carousel';
 import LoadingStickyInfo from '../skeleton/walksDetail/LoadingStickyInfo';
 
-const infoContainer = (getMoimState: string | undefined) => css`
+const infoContainer = (moimState: boolean) => css`
   position: sticky;
   top: 100px;
   right: 0;
@@ -64,21 +64,19 @@ const infoContainer = (getMoimState: string | undefined) => css`
   }
 
   button.join-button {
-    background-color: ${getMoimState === '모집중'
-      ? Theme.mainColor
-      : '#969696'};
-    pointer-events: ${getMoimState === '모집중' ? '' : 'none'};
+    background-color: ${moimState ? Theme.mainColor : '#969696'};
+    pointer-events: ${moimState ? '' : 'none'};
   }
 `;
 
 export default function StickyInfo({
   walkDetail,
   setIsModalOpen,
-  getMoimState,
+  moimState,
 }: {
   walkDetail?: WalkDetail;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-  getMoimState: string | undefined;
+  moimState: boolean;
 }) {
   const [user] = useRecoilState(UserState);
   const router = useRouter();
@@ -95,7 +93,7 @@ export default function StickyInfo({
         height: 100%;
       `}
     >
-      <aside css={infoContainer(getMoimState)}>
+      <aside css={infoContainer(moimState)}>
         <div
           css={css`
             width: 100%;
@@ -135,7 +133,7 @@ export default function StickyInfo({
               }}
               className="join-button"
             >
-              {getMoimState === '모집중' ? '모임 참여하기' : '다음 기회에 ...'}
+              {moimState ? '모임 참여하기' : '다음 기회에 ...'}
             </CommonButton>
           )}
         </div>

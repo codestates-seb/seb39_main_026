@@ -4,7 +4,6 @@ import { Theme } from '../../../styles/Theme';
 import NavLink from '../../NavLink';
 
 const pageNavContainer = css`
-  /* border-bottom: 1px solid ${Theme.divisionLineColor}; */
   display: grid;
   grid-template-columns: 1fr 1fr;
 
@@ -26,6 +25,19 @@ const pageNavContainer = css`
       border-bottom: 2px solid ${Theme.mainColor};
       color: #000;
     }
+  }
+
+  @media screen and (max-width: 880px) {
+    margin-top: 32px;
+  }
+
+  @media screen and (max-width: 505px) {
+    margin-top: 12px;
+  }
+
+  @media screen and (max-width: 324px) {
+    margin-top: 6px;
+    font-size: 0.8rem;
   }
 `;
 
