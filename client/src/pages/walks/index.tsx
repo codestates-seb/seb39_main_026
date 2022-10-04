@@ -52,6 +52,7 @@ export default function Walks() {
       alert('동네를 선택해주세요');
       return;
     }
+
     console.log(user);
     setIsModalOpen(!isModalOpen);
   };

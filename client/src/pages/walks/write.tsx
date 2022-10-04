@@ -145,7 +145,6 @@ export default function Write() {
   };
 
   useEffect(() => {
-    console.log(pickPetsId);
     if (!window.localStorage.getItem('pickPetsId')) {
       alert('반려견을 선택해주세요.');
       router.push('/walks');
