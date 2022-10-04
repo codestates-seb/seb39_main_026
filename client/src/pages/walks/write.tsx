@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useRecoilState } from 'recoil';
 import CommonButton from '../../components/CommonButton';
 import TabTitle from '../../components/TabTitle';
 import DescriptionInput from '../../components/walks/wirte/DescriptionInput';
@@ -24,14 +23,12 @@ import {
   WalksMoimType,
   WalksMoimTypes,
 } from '../../models/WalksMoim';
-import UserState from '../../states/UserState';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Theme } from '../../styles/Theme';
 
 export default function Write() {
   const router = useRouter();
 
-  const [user] = useRecoilState(UserState);
   const [moimImages, setMoimImages] = useState<File[]>([]);
 
   const methods = useForm<WalksMoim>({
@@ -62,6 +59,8 @@ export default function Write() {
     (v: WalksMoimType) => setValue('type', v),
   ];
 
+  const [pickPetsId, setPickPetsId] = useState('');
+
   const onSubmitOneDay = (data: WalksMoimOneDay) => {
     const {
       type,
@@ -81,9 +80,10 @@ export default function Write() {
       personCount,
       plannedDate,
       plannedTime,
-      si: user.address.si,
-      gu: user.address.gu,
-      dong: user.address.dong,
+      si: localStorage.getItem('currentAddress')?.split(' ')[0] || '',
+      gu: localStorage.getItem('currentAddress')?.split(' ')[1] || '',
+      dong: localStorage.getItem('currentAddress')?.split(' ')[2] || '',
+      joinnedPetList: pickPetsId.slice(1, -1).split(',').map(Number),
     };
 
     return oneDayMoim;
@@ -108,9 +108,10 @@ export default function Write() {
       personCount,
       plannedDates,
       plannedTime,
-      si: user.address.si,
-      gu: user.address.gu,
-      dong: user.address.dong,
+      si: window.localStorage.getItem('currentAddress')?.split(' ')[0] || '',
+      gu: window.localStorage.getItem('currentAddress')?.split(' ')[1] || '',
+      dong: window.localStorage.getItem('currentAddress')?.split(' ')[2] || '',
+      joinnedPetList: pickPetsId.slice(1, -1).split(',').map(Number),
     };
 
     return everyWeekMoim;
@@ -142,6 +143,16 @@ export default function Write() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (!window.localStorage.getItem('pickPetsId')) {
+      alert('반려견을 선택해주세요.');
+      router.push('/walks');
+      return;
+    }
+    setPickPetsId(localStorage.getItem('pickPetsId') || '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pickPetsId]);
 
   useEffect(() => {
     resetField('plannedDate');

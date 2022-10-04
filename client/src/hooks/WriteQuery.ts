@@ -49,6 +49,7 @@ export function useAddOneDayMoim() {
         gu: data.gu,
         dong: data.dong,
         imgUrls: [...moimImg],
+        joinnedPetList: [...data.joinnedPetList],
       },
       {
         headers: {
@@ -70,6 +71,7 @@ export function useAddOneDayMoim() {
         gu: data.gu,
         dong: data.dong,
         imgUrls: [...moimImg],
+        joinnedPetList: [...data.joinnedPetList],
       },
       'moim'
     );
@@ -99,6 +101,7 @@ export function useAddEveryWeekMoim() {
         gu: data.gu,
         dong: data.dong,
         imgUrls: [...moimImg],
+        joinnedPetList: [...data.joinnedPetList],
       },
       {
         headers: {
@@ -120,6 +123,7 @@ export function useAddEveryWeekMoim() {
         gu: data.gu,
         dong: data.dong,
         imgUrls: [...moimImg],
+        joinnedPetList: [...data.joinnedPetList],
       },
       'moim'
     );

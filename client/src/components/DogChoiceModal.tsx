@@ -155,7 +155,7 @@ export default function DogChoiceModal({
 
   const handleGoTowalkClick = () => {
     if (goToWalksWrite) {
-      console.log(pickPetsId);
+      localStorage.setItem('pickPetsId', JSON.stringify(pickPetsId));
       router.push('/walks/write');
     } else if (!goToWalksWrite) {
       console.log(pickPetsId);
@@ -189,12 +189,7 @@ export default function DogChoiceModal({
           </p>
           <Link href={`/users/${user.id}`}>
             <a>
-              <CommonButton
-                type="button"
-                onClick={() => {
-                  setIsModalOpen(false);
-                }}
-              >
+              <CommonButton type="button" onClick={() => setIsModalOpen(false)}>
                 강아지 등록하러 가기
               </CommonButton>
             </a>

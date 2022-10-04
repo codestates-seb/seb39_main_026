@@ -47,6 +47,12 @@ export default function Walks() {
       router.push('/login');
       return;
     }
+
+    if (!localStorage.getItem('currentAddress')) {
+      alert('동네를 선택해주세요');
+      return;
+    }
+
     console.log(user);
     setIsModalOpen(!isModalOpen);
   };
