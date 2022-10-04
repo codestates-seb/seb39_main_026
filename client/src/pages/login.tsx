@@ -50,9 +50,14 @@ const loginButton = (gridColumn: string) => css`
 `;
 
 export default function Login() {
-  const handleLoginButtonClick = (event: MouseEvent) => {
+  const handleGoogleLoginClick = (event: MouseEvent) => {
     event.preventDefault();
-    console.log('login button clicked');
+    console.log('Google login button clicked');
+  };
+
+  const handleKakaoLoginClick = (event: MouseEvent) => {
+    event.preventDefault();
+    console.log('Kakao login button clicked');
   };
 
   const handlePasswordButtonClick = (event: MouseEvent) => {
@@ -92,13 +97,13 @@ export default function Login() {
           로그인 페이지
         </h1>
         <form css={signupButtonContainer}>
-          <LoginButton onClick={handleLoginButtonClick} buttonColor="#FAE100">
+          <LoginButton onClick={handleKakaoLoginClick} buttonColor="#FAE100">
             <span>
               <Icon icon="ri:kakao-talk-fill" />
             </span>
             카카오로 계속하기
           </LoginButton>
-          <LoginButton onClick={handleLoginButtonClick} buttonColor="#FDFFFD">
+          <LoginButton onClick={handleGoogleLoginClick} buttonColor="#FDFFFD">
             <span>
               <Icon icon="akar-icons:google-fill" />
             </span>
