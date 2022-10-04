@@ -62,14 +62,14 @@ public class PetController {
     }
 
     @PatchMapping("/{petId}")
-    public PetDto.Response patchPet(@PathVariable Long petId, @RequestBody PetDto.Patch patchDto){
-        return petService.editPet(petId,patchDto);
+    public PetDto.Response patchPet(@PathVariable Long petId, @RequestBody PetDto.Patch patchDto, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        return petService.editPet(petId,patchDto,principalDetails);
     }
 
     //굳이 문자열을 반환하는 이유 : 삭제가 되었음을 확인하면 좋을 것 같아서 -> 204응답을 해줘도 되지않을까?
     @DeleteMapping("/{petId}")
-    public String deletePet(@PathVariable Long petId){
-        petService.deletePet(petId);
+    public String deletePet(@PathVariable Long petId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        petService.deletePet(petId,principalDetails);
         return "삭제완료";
     }
 

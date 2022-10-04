@@ -6,9 +6,7 @@ import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.entity.Member;
 import com.main026.walking.pet.dto.PetDto;
 import com.main026.walking.util.awsS3.AwsS3Service;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;

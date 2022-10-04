@@ -7,10 +7,7 @@ import com.main026.walking.member.dto.FindPasswordForm;
 import com.main026.walking.member.dto.MemberDto;
 import com.main026.walking.member.service.MemberService;
 import com.main026.walking.util.awsS3.AwsS3Service;
-import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,12 +51,12 @@ public class MemberController {
                                           @RequestBody MemberDto.Patch patchDto,
                                           @AuthenticationPrincipal PrincipalDetails principalDetails){
         //인증로직
-        return memberService.updateMember(memberId,patchDto);
+        return memberService.updateMember(memberId,patchDto,principalDetails);
     }
 
     @DeleteMapping("/{memberId}")
-    public String deleteMember(@PathVariable Long memberId){
-        memberService.deleteMember(memberId);
+    public String deleteMember(@PathVariable Long memberId,@AuthenticationPrincipal PrincipalDetails principalDetails){
+        memberService.deleteMember(memberId,principalDetails);
         return "회원 삭제 완료";
     }
 

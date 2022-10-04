@@ -14,7 +14,7 @@ const inputContainer = css`
     background-color: #f7f7f5;
     border: 1px solid #f7f7f5;
     border-radius: 20px;
-    padding: 0 18px;
+    padding-left: 18px;
     box-shadow: 0 1px 2px hsl(0deg 0% 0% / 5%), 0 1px 4px hsl(0deg 0% 0% / 5%),
       0 2px 8px hsl(0deg 0% 0% / 5%);
   }

@@ -37,12 +37,15 @@ export default function EveryWeekPicker() {
                   display: flex;
                   align-items: center;
                   gap: 10px;
+                  overflow: scroll;
+                  padding-bottom: 10px;
                 `}
               >
                 <p
                   css={css`
                     font-size: 1rem;
                     font-weight: 500;
+                    word-break: keep-all;
                   `}
                 >
                   매주
