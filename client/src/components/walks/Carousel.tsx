@@ -17,6 +17,10 @@ const imgCarouselContainer = (
     height: 300px;
   }
 
+  @media screen and (max-width: 385px) {
+    height: 200px;
+  }
+
   position: relative;
   overflow: hidden;
   height: 200px;
