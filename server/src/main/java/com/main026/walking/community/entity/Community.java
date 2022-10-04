@@ -93,8 +93,6 @@ public class Community {
         this.body = patchDto.getBody();
         this.capacity = patchDto.getCapacity();
         this.place = patchDto.getPlace();
-        //this.weekInfo = patchDto.getTime();
-        //this.imgUrl = patchDto.getImgUrl();
     }
 
     public void setAddress(String si, String gu, String dong) {

@@ -69,8 +69,8 @@ public class PetService {
         pet.update(patchDto);
         parseAge(patchDto.getBirthDay(),pet);
 
-        Pet savedPet = petRepository.save(pet);
-        return petMapper.petToPetResponseDto(savedPet);
+        petRepository.save(pet);
+        return petMapper.petToPetResponseDto(pet);
     }
 
     public void deletePet(Long petId,PrincipalDetails principalDetails){
