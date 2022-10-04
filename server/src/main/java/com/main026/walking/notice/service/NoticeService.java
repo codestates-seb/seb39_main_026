@@ -12,6 +12,7 @@ import com.main026.walking.notice.mapper.NoticeMapper;
 import com.main026.walking.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -30,7 +31,9 @@ public class NoticeService {
         Notice entity = noticeMapper.postDtoToEntity(dto);
 
         Community findCommunity = communityRepository.findById(communityId).orElseThrow();
+
         log.info("모임 Id "+findCommunity.getId()+" 에서 공지 등록 요청");
+
         Member representMember = findCommunity.getRepresentMember();
         Member member = principalDetails.getMember();
         if (representMember.getId()!=member.getId()){

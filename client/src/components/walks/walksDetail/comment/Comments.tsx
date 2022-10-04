@@ -21,6 +21,10 @@ const commentContainer = css`
     border-bottom: 1px solid ${Theme.divisionLineColor};
     padding-bottom: 15px;
 
+    @media screen and (max-width: 324px) {
+      font-size: 0.8rem;
+    }
+
     span {
       margin-left: 4px;
     }
@@ -75,6 +79,20 @@ const commentContainer = css`
 
   p.comment-owner {
     font-weight: 600;
+    font-size: 1rem;
+
+    @media screen and (max-width: 324px) {
+      font-size: 0.9rem;
+    }
+  }
+
+  p.comment-content {
+    font-size: 1rem;
+
+    @media screen and (max-width: 324px) {
+      font-size: 0.9rem;
+    }
+    line-height: 1.25;
   }
 `;
 
@@ -176,7 +194,7 @@ export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
                       value={modifyCommentContent}
                     />
                   ) : (
-                    <p>{comment.body}</p>
+                    <p className="comment-content">{comment.body}</p>
                   )}
 
                   {/* NOTE: 수정 / 삭제 버튼 */}

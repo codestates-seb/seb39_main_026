@@ -53,7 +53,7 @@ public class CommentService {
     //  Update
     public CommentDto.Response updateComment(long commentId, CommentDto.Patch dto,PrincipalDetails principalDetails) {
         log.info("댓글 수정 요청");
-
+        
         authorization(principalDetails,commentId);
 
         Comment comment = findVerifiedComment(commentId);

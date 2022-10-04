@@ -7,7 +7,6 @@ import {
   useUpdateUsernameMutation,
 } from '../../hooks/UsersQuery';
 import { UserDefault } from '../../models/UserDefault';
-import { skeletonGradient } from '../../styles/GlobalStyle';
 import { Theme } from '../../styles/Theme';
 
 export default function UserInfo({
@@ -63,11 +62,9 @@ export default function UserInfo({
       height: 75px;
       background-color: ${Theme.disableBgColor};
       position: relative;
+      overflow: hidden;
     }
     .img {
-      border-radius: 50%;
-      width: 75px;
-      height: 75px;
       object-fit: cover;
     }
     .username {
@@ -111,31 +108,9 @@ export default function UserInfo({
     }
   `;
 
-  const LoadingUserInfo = css`
-    display: flex;
-    margin-bottom: 1.5rem;
-    .img {
-      border-radius: 50%;
-      object-fit: cover;
-      width: 75px;
-      height: 75px;
-      -webkit-animation: ${skeletonGradient} 1.8s infinite ease-in-out;
-      animation: ${skeletonGradient} 1.8s infinite ease-in-out;
-      color: transparent;
-    }
-    .username {
-      margin-top: 0.4rem;
-      font-size: 22px;
-      margin-left: 1rem;
-      -webkit-animation: ${skeletonGradient} 1.8s infinite ease-in-out;
-      animation: ${skeletonGradient} 1.8s infinite ease-in-out;
-      color: transparent;
-    }
-  `;
-
   return (
     <>
-      {data ? (
+      {data && (
         <div css={userInfo}>
           <div className="imgWrapper" onClick={onUploadImgClick}>
             <Image
@@ -144,6 +119,8 @@ export default function UserInfo({
               width="75px"
               height="75px"
               className="img"
+              placeholder="blur"
+              blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk5HSrBwABNADReNJYZwAAAABJRU5ErkJggg=="
             />
             {isValidated && (
               <Icon icon="ant-design:camera-twotone" className="camera" />
@@ -174,11 +151,6 @@ export default function UserInfo({
               />
             </>
           )}
-        </div>
-      ) : (
-        <div css={LoadingUserInfo}>
-          <div className="img"></div>
-          <p className="username">🐾🐾🐾</p>
         </div>
       )}
     </>

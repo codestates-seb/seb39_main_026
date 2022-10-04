@@ -100,6 +100,7 @@ public class CommunityService {
 
     public CommunityDto.Response joinPet(Long communityId, List<Long> petIdList) {
         log.info("모임 가입 요청");
+
         Community community = communityRepository.findById(communityId).orElseThrow();
         isFull(community.getCapacity(),community.getCommunityPets().size(),petIdList.size());
         List<Long> communityPetIdList = community.getCommunityPets()
@@ -147,6 +148,7 @@ public class CommunityService {
     public CommunityDto.Response updateCommunity(long communityId, CommunityDto.Patch patchDto,PrincipalDetails principalDetails) {
 
         authorization(communityId,principalDetails);
+
         log.info("모임 수정 요청");
         findVerifiedCommunity(communityId);
         Community community = communityRepository.findById(communityId).orElseThrow();
@@ -170,6 +172,7 @@ public class CommunityService {
     public void deleteCommunity(Long communityId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("모임 삭제 요청");
         authorization(communityId,principalDetails);
+
         findVerifiedCommunity(communityId);
 
         communityRepository.deleteById(communityId);

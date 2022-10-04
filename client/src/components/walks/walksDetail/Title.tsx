@@ -3,20 +3,43 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { WalkDetail } from '../../../models/WalkDefault';
 import { Theme } from '../../../styles/Theme';
-import MoimState from '../../MoimState';
+import MoimStateButton from '../../MoimStateButton';
 import LoadingTitle from '../skeleton/walksDetail/LoadingTitle';
 
 const titleContainer = css`
   border-bottom: 1px solid ${Theme.divisionLineColor};
 
+  div.moim-title {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+
+    @media screen and (max-width: 400px) {
+      gap: 10px;
+    }
+  }
+
   h1 {
     font-size: 1.6rem;
     letter-spacing: 0.4px;
+
     @media screen and (max-width: 525px) {
       font-size: 1.3rem;
     }
+
     @media screen and (max-width: 324px) {
       font-size: 1rem;
+    }
+  }
+
+  .moim-state-button {
+    @media screen and (max-width: 400px) {
+      padding: 5px 16px;
+    }
+
+    @media screen and (max-width: 324px) {
+      padding: 4px 12px;
+      font-size: 0.7rem;
     }
   }
 `;
@@ -24,8 +47,12 @@ const titleContainer = css`
 const postOwnerContainer = css`
   display: flex;
   align-items: center;
-  margin: 25px 0 28px;
+  margin: 25px 0px 28px;
   gap: 14px;
+
+  @media screen and (max-width: 525px) {
+    margin: 15px 0 18px;
+  }
 
   img {
     width: 32px;
@@ -37,16 +64,20 @@ const postOwnerContainer = css`
 
   p {
     font-weight: 600;
-    font-size: 0.88rem;
+    font-size: 1rem;
+
+    @media screen and (max-width: 324px) {
+      font-size: 0.9rem;
+    }
   }
 `;
 
 export default function Title({
   walkDetail,
-  getMoimState,
+  moimState,
 }: {
   walkDetail?: WalkDetail;
-  getMoimState: string | undefined;
+  moimState: boolean;
 }) {
   const router = useRouter();
 
@@ -60,14 +91,10 @@ export default function Title({
 
   return (
     <article css={titleContainer}>
-      <div
-        css={css`
-          display: flex;
-          gap: 18px;
-          align-items: center;
-        `}
-      >
-        <MoimState status={getMoimState}>{getMoimState}</MoimState>
+      <div className="moim-title">
+        <MoimStateButton moimState={moimState} className="moim-state-button">
+          {moimState ? '모집중' : '모집마감'}
+        </MoimStateButton>
         <h1>{walkDetail.name}</h1>
       </div>
       <div css={postOwnerContainer}>
