@@ -10,6 +10,11 @@ const participantContainer = css`
     font-size: 1rem;
     border-bottom: 1px solid ${Theme.divisionLineColor};
     padding-bottom: 15px;
+    letter-spacing: 0.4px;
+
+    @media screen and (max-width: 324px) {
+      font-size: 0.8rem;
+    }
   }
 
   ul {

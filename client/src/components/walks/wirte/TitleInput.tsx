@@ -42,7 +42,7 @@ export default function TitleInput({
     <>
       <input
         type="text"
-        id="moim-title"
+        id="moim-name"
         css={titleInputContainer}
         {...register('title', {
           validate: {
