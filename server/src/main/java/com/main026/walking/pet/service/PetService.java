@@ -1,5 +1,6 @@
 package com.main026.walking.pet.service;
 
+import com.main026.walking.auth.principal.PrincipalDetails;
 import com.main026.walking.exception.BusinessLogicException;
 import com.main026.walking.exception.ExceptionCode;
 import com.main026.walking.member.entity.Member;
@@ -61,7 +62,9 @@ public class PetService {
         return allPets;
     }
 
-    public PetDto.Response editPet(Long petId, PetDto.Patch patchDto){
+    public PetDto.Response editPet(Long petId, PetDto.Patch patchDto, PrincipalDetails principalDetails){
+        authorization(petId,principalDetails);
+
         Pet pet = petRepository.findById(petId).orElseThrow();
         pet.update(patchDto);
         parseAge(patchDto.getBirthDay(),pet);
@@ -70,7 +73,8 @@ public class PetService {
         return petMapper.petToPetResponseDto(savedPet);
     }
 
-    public void deletePet(Long petId){
+    public void deletePet(Long petId,PrincipalDetails principalDetails){
+        authorization(petId,principalDetails);
         petRepository.deleteById(petId);
     }
 
@@ -128,5 +132,13 @@ public class PetService {
     private Pet verifyExistPetWithId(Long petId){
         Optional<Pet> checkPet = petRepository.findById(petId);
         return checkPet.orElseThrow(() -> new BusinessLogicException(ExceptionCode.PET_NOT_FOUND));
+    }
+
+    private void authorization(Long petId,PrincipalDetails principalDetails){
+        Member member = petRepository.findById(petId).orElseThrow().getMember();
+        Member principalDetailsMember = principalDetails.getMember();
+        if(member.getId()!=principalDetailsMember.getId()){
+            throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
+        }
     }
 }
