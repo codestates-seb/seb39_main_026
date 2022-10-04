@@ -50,6 +50,9 @@ export function useUpdatePetMutation() {
       setIsPetEditMode: Dispatch<SetStateAction<boolean>>;
     }) => {
       const { id, editedData, setIsPetEditMode } = body;
+      if (editedData.imgUrl === '') {
+        delete editedData.imgUrl;
+      }
       await axios
         .patch(`${API.PETS}/${id}`, editedData, {
           headers: {
