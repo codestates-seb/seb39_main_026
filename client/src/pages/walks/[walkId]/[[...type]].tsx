@@ -15,7 +15,7 @@ export default function Page({ walkId, type }: WalksPageProps) {
 
   return (
     <>
-      <TabTitle prefix={walkId} />
+      <TabTitle prefix={walkDetail?.name} />
       <DetailLayout walkId={walkId}>
         {type === 'notice' ? (
           <MoimNotice walkDetail={walkDetail} />

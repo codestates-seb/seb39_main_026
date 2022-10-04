@@ -7,7 +7,7 @@ import { WalksMoimOneDay, WalksMoimEveryWeek } from '../models/WalksMoim';
 export function usePostMoimImage() {
   const handlePostMoimImage = async (files: File[]) => {
     if (files.length === 0) {
-      return null;
+      return [];
     }
 
     const formData = new FormData();
@@ -36,10 +36,6 @@ export function useAddOneDayMoim() {
     data: WalksMoimOneDay,
     moimImg: string[]
   ) => {
-    if (moimImg == null) {
-      moimImg = [];
-    }
-
     const res = await axios.post(
       `${API.WALKS}/post`,
       {
@@ -90,10 +86,6 @@ export function useAddEveryWeekMoim() {
     data: WalksMoimEveryWeek,
     moimImg: string[]
   ) => {
-    if (moimImg == null) {
-      moimImg = [];
-    }
-
     const res = await axios.post(
       `${API.WALKS}/post`,
       {
@@ -127,7 +119,6 @@ export function useAddEveryWeekMoim() {
         si: data.si,
         gu: data.gu,
         dong: data.dong,
-        // images: data.images,
         imgUrls: [...moimImg],
       },
       'moim'

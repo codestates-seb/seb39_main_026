@@ -35,12 +35,6 @@ export default function LoginModal({
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
   const setUser = useSetRecoilState(UserState);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      router.push('/');
-    }
-  }, [isLoggedIn, router]);
-
   const onClickLogin = async (value: UserLogin) => {
     try {
       const user = await handleLogin(value);
@@ -65,6 +59,13 @@ export default function LoginModal({
       alert(error.message);
     }
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push('/');
+    }
+  }, [isLoggedIn, router]);
+
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
