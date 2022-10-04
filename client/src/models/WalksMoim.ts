@@ -19,6 +19,7 @@ interface WalksMoimBase {
   si: string;
   gu: string;
   dong: string;
+  joinnedPetList: number[];
 }
 
 export const WalksMoimTypes = {
@@ -50,4 +51,5 @@ export interface EveryWeekMoimPost {
   si: string;
   gu: string;
   dong: string;
+  joinnedPetList: number[];
 }
