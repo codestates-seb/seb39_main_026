@@ -11,6 +11,7 @@ import com.main026.walking.pet.repository.PetRepository;
 import com.main026.walking.util.awsS3.AwsS3Service;
 import com.main026.walking.util.embedded.PetAge;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PetService {
@@ -29,7 +31,8 @@ public class PetService {
     private final PetMapper petMapper;
     private final AwsS3Service awsS3Service;
 
-    public PetDto.Response postPet(PetDto.Post postDto,Member member) throws IOException {
+    public PetDto.Response postPet(PetDto.Post postDto,Member member){
+        log.info("반려동물 등록 요청");
         Pet pet = petMapper.petPostDtoToPet(postDto);
 
         //나이 파싱 로직
@@ -41,7 +44,10 @@ public class PetService {
 
         //연관관계에 대한 고민 필요
         pet.setMember(member);
-        if(pet.getImgUrl().isEmpty()) pet.setImgUrl("DEFAULT_PET_IMAGE.jpg");
+        if(pet.getImgUrl().isEmpty()) {
+            log.info("기본 이미지 등록");
+            pet.setImgUrl("DEFAULT_PET_IMAGE.jpg");
+        }
         petRepository.save(pet);
 
         PetDto.Response dto = petMapper.petToPetResponseDto(pet);
@@ -63,6 +69,7 @@ public class PetService {
     }
 
     public PetDto.Response editPet(Long petId, PetDto.Patch patchDto, PrincipalDetails principalDetails){
+        log.info("반려견 Id " + petId + " 의 정보 수정 요청");
         authorization(petId,principalDetails);
 
         Pet pet = petRepository.findById(petId).orElseThrow();
@@ -74,6 +81,7 @@ public class PetService {
     }
 
     public void deletePet(Long petId,PrincipalDetails principalDetails){
+        log.info("반려견 Id "+petId+" 삭제 요청");
         authorization(petId,principalDetails);
         petRepository.deleteById(petId);
     }
