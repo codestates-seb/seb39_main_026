@@ -144,8 +144,11 @@ public class CommunityDto {
             this.name = community.getName();
             this.place = community.getPlace();
             this.time = community.getTime();
+            //TODO 수정필요
             if(community.getImages().size()!=0) {
                 this.representImgUrls = community.getImages().get(0).getStoreFilename();
+            }else{
+                this.representImgUrls = "DEFAULT_COMMUNITY_IMAGE.jpg";
             }
         }
     }

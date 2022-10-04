@@ -7,20 +7,20 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE,uses = MemberMapper.class)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = MemberMapper.class)
 public abstract class CommentMapper {
-  
-//  Post
-  public abstract Comment postDtoToEntity(CommentDto.Post dto);
 
-//  Patch
-  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-  public abstract void updateEntityFromDto(CommentDto.Patch dto, @MappingTarget Comment entity);
+    //  Post
+    public abstract Comment postDtoToEntity(CommentDto.Post dto);
 
-//  Response
-  @Mapping(source = "id",target = "commentId")
-  public abstract CommentDto.Response entityToDtoResponse(Comment comment);
+    //  Patch
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    public abstract void updateEntityFromDto(CommentDto.Patch dto, @MappingTarget Comment entity);
 
-  public abstract List<CommentDto.Response> multiEntityToDtoResponse(List<Comment> entities);
-  
+    //  Response
+    @Mapping(source = "id", target = "commentId")
+    public abstract CommentDto.Response entityToDtoResponse(Comment comment);
+
+    public abstract List<CommentDto.Response> multiEntityToDtoResponse(List<Comment> entities);
+
 }
