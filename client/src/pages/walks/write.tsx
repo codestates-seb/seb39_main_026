@@ -7,6 +7,7 @@ import CommonButton from '../../components/CommonButton';
 import TabTitle from '../../components/TabTitle';
 import DescriptionInput from '../../components/walks/wirte/DescriptionInput';
 import EveryWeekPicker from '../../components/walks/wirte/EveryWeekPicker';
+import ImageUploadZone from '../../components/walks/wirte/ImageUploadZone';
 import OneDayPicker from '../../components/walks/wirte/OneDayPicker';
 import PersonCountInput from '../../components/walks/wirte/PersonCountInput';
 import PlaceInput from '../../components/walks/wirte/PlaceInput';
@@ -31,6 +32,8 @@ export default function Write() {
   const router = useRouter();
 
   const [user] = useRecoilState(UserState);
+  const [moimImages, setMoimImages] = useState<File[]>([]);
+
   const methods = useForm<WalksMoim>({
     mode: 'onChange',
     defaultValues: {
@@ -42,20 +45,6 @@ export default function Write() {
   const { handleAddOneDayMoim } = useAddOneDayMoim();
   const { handleAddEveryWeekMoim } = useAddEveryWeekMoim();
   const { handlePostMoimImage } = usePostMoimImage();
-
-  // 이미지 관련
-  const [moimImages, setMoimImages] = useState<File[]>([]);
-
-  const handleMoimImageChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (event.target.files) {
-      console.log(event);
-      const imageFile = event.target.files;
-      setMoimImages([...moimImages, ...Array.from(imageFile)]);
-    }
-  };
-  console.log(moimImages);
 
   const {
     register,
@@ -164,21 +153,20 @@ export default function Write() {
     <>
       <TabTitle prefix="모임 글쓰기" />
       <section css={moimFormContainer}>
-        <h1>🐕 산책 모임 만들기</h1>
+        <h1
+          css={css`
+            margin-bottom: 20px;
+          `}
+        >
+          🐕 산책 모임 만들기
+        </h1>
 
         <FormProvider {...methods}>
           <form>
-            <ul>
-              <li>
-                <input
-                  multiple
-                  type="file"
-                  accept="image/*"
-                  onChange={handleMoimImageChange}
-                />
-              </li>
-              <li>미리보기</li>
-            </ul>
+            <ImageUploadZone
+              moimImages={moimImages}
+              setMoimImages={setMoimImages}
+            />
             <ul>
               <li>
                 <label htmlFor="moim-name">모임의 이름을 지어주세요.</label>
