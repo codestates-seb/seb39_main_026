@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,52 +28,40 @@ public class CommentController {
     @PostMapping("/post/{communityId}")
     public ResponseEntity postComment(@PathVariable Long communityId, @RequestBody CommentDto.Post dto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        Member member = principalDetails.getMember();
-        Comment comment = commentMapper.postDtoToEntity(dto);
 
-        Comment createdComment = commentService.createComment(communityId, comment, member);
+        CommentDto.Response comment = commentService.createComment(communityId, dto, principalDetails);
 
-        return new ResponseEntity(commentMapper.entityToDtoResponse(createdComment), HttpStatus.CREATED);
+        return new ResponseEntity(comment, HttpStatus.CREATED);
     }
 
     //  Read
     @GetMapping("/{comment-id}")
     public ResponseEntity getComment(
             @PathVariable("comment-id") long commentId) {
-        Comment comment = commentService.findComment(commentId);
+        CommentDto.Response comment = commentService.findComment(commentId);
 
-        return new ResponseEntity(commentMapper.entityToDtoResponse(comment), HttpStatus.OK);
+        return new ResponseEntity(comment, HttpStatus.OK);
     }
 
-//    @GetMapping
-//    public ResponseEntity getComments(
-//            @RequestParam(value = "page", defaultValue = "1") int page,
-//            @RequestParam(value = "size", defaultValue = "10") int size) {
-//
-//        Page<Comment> commentPage = commentService.findComments(page - 1, size);
-//
-//        List<Comment> comments = commentPage.getContent();
-//
-//        return new ResponseEntity(new MultiResponseDto<>(commentMapper.multiEntityToDtoResponse(comments), commentPage), HttpStatus.OK);
-//    }
 
     //  Update
     @PatchMapping("{comment-id}")
     public ResponseEntity patchComment(
             @PathVariable("comment-id") long commentId,
-            @RequestBody CommentDto.Patch dto) {
+            @RequestBody CommentDto.Patch dto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        commentService.updateComment(commentId, dto);
-        Comment comment = commentService.findComment(commentId);
+        CommentDto.Response response = commentService.updateComment(commentId, dto,principalDetails);
 
-        return new ResponseEntity<>(commentMapper.entityToDtoResponse(comment), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //  Delete
     @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(
-            @PathVariable("comment-id") long commentId) {
-        commentService.deleteComment(commentId);
+            @PathVariable("comment-id") long commentId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        commentService.deleteComment(principalDetails,commentId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

@@ -32,8 +32,6 @@ public class CommunityController {
     private final AwsS3Service awsS3Service;
 
     // Create
-    // TODO 모임 등록시 모임하는 사람의 펫도 등록
-    // TODO 리프레시 토큰 쿠키에다 저장(일단 테스트할때는)
 
     @PostMapping("/post")
     public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -49,7 +47,6 @@ public class CommunityController {
     }
 
     // Read
-    // TODO 커뮤니티 요청시 회원의 강아지를 응답해주고있는데 이것이 최선일까?
     @GetMapping("/{communityId}")
     public ResponseEntity getCommunity(@PathVariable long communityId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
@@ -106,7 +103,6 @@ public class CommunityController {
         return new ResponseEntity(communities, HttpStatus.OK);
     }
 
-    //TODO 기존 이미지를 보여주고 삭제할건 삭제하고, 변경할 수 있어야 한다. - 연관관계 때문
     //Update
     @PatchMapping("/{communityId}")
     public ResponseEntity patchCommunity(

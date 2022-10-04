@@ -45,7 +45,6 @@ public class InitData {
         Address address = new Address("뉴욕시","맨하튼구","동도동");
 
         log.info("멤버 추가");
-        //TODO 테스트용 김코딩 토큰
         Member kimcoding = Member.builder()
                 .email("kimcoding@codestates.com")
                 .address(address)
