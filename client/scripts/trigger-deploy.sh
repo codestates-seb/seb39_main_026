@@ -1,0 +1,1 @@
+nohup sh deploy.sh </dev/null >/dev/null 2>&1 &

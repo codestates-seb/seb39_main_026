@@ -11,18 +11,26 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@iconify/react": "^4.0.0",
     "axios": "^0.27.2",
+    "date-fns": "^2.29.3",
     "eslint-plugin-react-hooks": "^4.6.0",
     "next": "12.3.0",
     "react": "18.2.0",
+    "react-datepicker": "^4.8.0",
     "react-dom": "18.2.0",
+    "react-dropdown-date": "^2.2.7",
+    "react-hook-form": "^7.35.0",
     "react-query": "^3.39.2",
-    "recoil": "^0.7.5"
+    "recoil": "^0.7.5",
+    "recoil-persist": "^4.2.0"
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.10.2",
     "@types/node": "18.7.18",
     "@types/react": "18.0.20",
+    "@types/react-datepicker": "^4.4.2",
+    "@types/react-dates": "^21.8.3",
     "@types/react-dom": "18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "eslint": "8.23.1",
