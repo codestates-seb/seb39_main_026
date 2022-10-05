@@ -23,9 +23,16 @@ const participantContainer = css`
     margin: 18px 0 38px;
     overflow-x: scroll;
 
-    img {
+    li {
       width: 40px;
       height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       object-fit: cover;
       cursor: pointer;
@@ -84,9 +91,11 @@ export default function ParticipantsInfo({
           >
             <Image
               src={pet.imgUrl}
-              width="35px"
-              height="35px"
+              width="40px"
+              height="40px"
               alt={`${pet.petName} 의 사진`}
+              placeholder="blur"
+              blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk5HSrBwABNADReNJYZwAAAABJRU5ErkJggg=="
             />
           </li>
         ))}
