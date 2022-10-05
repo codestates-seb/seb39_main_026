@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { useWalksDetailQuery } from '../../../hooks/WalksQuery';
 import UserState from '../../../states/UserState';
 import CommonButton from '../../CommonButton';
 import DogChoiceModal from '../../DogChoiceModal';
+import LoginOfferModal from '../../LoginOfferModal';
 import Carousel from '../Carousel';
 import DogInfoModal from './DogInfoModal';
 import Information from './Information';
@@ -23,12 +23,11 @@ export default function DetailLayout({
   walkId: string;
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-
   const walkDetail = useWalksDetailQuery(walkId);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDogInfoModalOpen, setIsDogInfoModalOpen] = useState(false);
+  const [isLoginOfferModalOpen, setIsLoginOfferModalOpen] = useState(false);
   const [petInfoId, setPetInfoId] = useState(1);
   const [moimState, setMoimState] = useState(true);
   const [user] = useRecoilState(UserState);
@@ -39,7 +38,7 @@ export default function DetailLayout({
 
   const handleMoimJoimButtonClick = () => {
     if (user == null) {
-      router.push('/login');
+      setIsLoginOfferModalOpen(true);
       return;
     }
     return setIsModalOpen(true);
@@ -110,7 +109,10 @@ export default function DetailLayout({
             setIsDogInfoModalOpen={setIsDogInfoModalOpen}
             getPetId={getPetId}
           />
-          <Comments walkDetail={walkDetail} />
+          <Comments
+            walkDetail={walkDetail}
+            setIsLoginOfferModalOpen={setIsLoginOfferModalOpen}
+          />
         </div>
         <div className="sticky-info-container">
           <StickyInfo
@@ -120,6 +122,7 @@ export default function DetailLayout({
           />
         </div>
       </section>
+
       {isModalOpen && (
         <DogChoiceModal
           isModalOpen={isModalOpen}
@@ -134,6 +137,12 @@ export default function DetailLayout({
           petId={petInfoId}
         />
       )}
+      {isLoginOfferModalOpen && (
+        <LoginOfferModal
+          isLoginOfferModalOpen={isLoginOfferModalOpen}
+          setIsLoginOfferModalOpen={setIsLoginOfferModalOpen}
+        />
+      )}
     </>
   );
 }
@@ -143,6 +152,7 @@ const sancheckDetailLayout = css`
   grid-template-columns: 1fr 310px;
   gap: 0 20px;
   margin: 110px 36px 10px;
+  padding-bottom: 30px;
 
   ul {
     list-style: none;
@@ -150,7 +160,6 @@ const sancheckDetailLayout = css`
 
   @media screen and (max-width: 880px) {
     margin: 30px 20px;
-    padding-bottom: 30px;
     grid-template-columns: 1fr;
 
     .sticky-info-container {

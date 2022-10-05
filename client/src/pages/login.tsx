@@ -1,11 +1,14 @@
 import { css } from '@emotion/react';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
-import { MouseEvent, useState } from 'react';
+import { useRouter } from 'next/router';
+import { MouseEvent, useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import TabTitle from '../components/TabTitle';
 import LoginButton from '../components/login/LoginButton';
 import LoginModal from '../components/login/LoginModal';
 import PasswordModal from '../components/login/PasswordModal';
+import UserState from '../states/UserState';
 
 const signupButtonContainer = css`
   display: grid;
@@ -50,6 +53,12 @@ const loginButton = (gridColumn: string) => css`
 `;
 
 export default function Login() {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [user] = useRecoilState(UserState);
+
+  const router = useRouter();
+
   const handleGoogleLoginClick = (event: MouseEvent) => {
     event.preventDefault();
     console.log('Google login button clicked');
@@ -65,8 +74,12 @@ export default function Login() {
     setIsPasswordModalOpen(!isPasswordModalOpen);
   };
 
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  useEffect(() => {
+    if (user) {
+      router.replace('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
