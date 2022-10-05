@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import DogChoiceModal from '../../components/DogChoiceModal';
+import LoginOfferModal from '../../components/LoginOfferModal';
 import SearchInput from '../../components/SearchInput';
 import TabTitle from '../../components/TabTitle';
 import AddButton from '../../components/walks/AddButton';
@@ -40,11 +40,11 @@ export default function Walks() {
   const [user] = useRecoilState(UserState);
   const [query, setQuery] = useState('');
   const [address, setAddress] = useState('');
-  const router = useRouter();
+  const [isLoginOfferModalOpen, setIsLoginOfferModalOpen] = useState(false);
 
   const handleModalClick = () => {
     if (user == null) {
-      router.push('/login');
+      setIsLoginOfferModalOpen(true);
       return;
     }
 
@@ -99,6 +99,13 @@ export default function Walks() {
           <AddButton onClick={handleModalClick} />
         </div>
       </section>
+
+      {isLoginOfferModalOpen && (
+        <LoginOfferModal
+          isLoginOfferModalOpen={isLoginOfferModalOpen}
+          setIsLoginOfferModalOpen={setIsLoginOfferModalOpen}
+        />
+      )}
     </>
   );
 }

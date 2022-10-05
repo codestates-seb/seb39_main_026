@@ -62,7 +62,11 @@ export default function LoginModal({
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.push('/');
+      if (document.referrer && document.referrer.indexOf('/') !== -1) {
+        history.back(); // 뒤로가기
+      } else {
+        router.replace('/'); // 메인페이지로
+      }
     }
   }, [isLoggedIn, router]);
 
@@ -147,7 +151,6 @@ export default function LoginModal({
 
 const modalContainer = (isLoginModalOpen: boolean) => css`
   &.modal-wrapper {
-    justify-content: center;
     position: fixed;
     top: 0;
     left: 0;
@@ -157,6 +160,7 @@ const modalContainer = (isLoginModalOpen: boolean) => css`
     z-index: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
   }
 
   &.modal-wrapper section.modal {
