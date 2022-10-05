@@ -14,6 +14,7 @@ export default function LogoutButton() {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userId');
     localStorage.removeItem('currentAddress');
+    localStorage.removeItem('pickPetsId');
     setIsLogin(false);
     setUserState(null);
     router.push('/');
