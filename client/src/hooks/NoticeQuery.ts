@@ -17,8 +17,6 @@ export function usePostNotice() {
         },
       }
     );
-
-    console.log(res, 'PostRes');
     return res;
   };
   return { handlePostNotice } as const;
@@ -26,18 +24,12 @@ export function usePostNotice() {
 
 export function useDeleteNotice() {
   const handlDeleteNotice = async (id: number) => {
-    const res = await axios.delete<NoticePost>(
-      `${API.WALKS}/notice/${id}`,
-
-      {
-        headers: {
-          authorization: localStorage.getItem('accessToken') || '',
-          refresh_token: localStorage.getItem('refreshToken') || '',
-        },
-      }
-    );
-
-    console.log(res, 'DeleteRes');
+    const res = await axios.delete<NoticePost>(`${API.WALKS}/notice/${id}`, {
+      headers: {
+        authorization: localStorage.getItem('accessToken') || '',
+        refresh_token: localStorage.getItem('refreshToken') || '',
+      },
+    });
     return res;
   };
   return { handlDeleteNotice } as const;
@@ -58,8 +50,6 @@ export function usePatchNotice() {
         },
       }
     );
-
-    console.log(res, 'PatchRes');
     return res;
   };
   return { handlePatchNotice } as const;

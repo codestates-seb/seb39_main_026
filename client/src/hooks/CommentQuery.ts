@@ -17,7 +17,6 @@ export function usePostComment() {
       }
     );
 
-    console.log(res);
     return res.data;
   };
   return { handlePostComment } as const;
@@ -41,8 +40,6 @@ export function useDeleteComment() {
           localStorage.setItem('accessToken', res.headers.authorization);
           localStorage.setItem('refreshToken', res.headers.refresh_token);
         }
-        console.log(res);
-        console.log(res.data);
         return res.data;
       })
       .catch((err) => {
