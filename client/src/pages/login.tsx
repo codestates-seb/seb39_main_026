@@ -59,15 +59,15 @@ export default function Login() {
 
   const router = useRouter();
 
-  const handleGoogleLoginClick = (event: MouseEvent) => {
-    event.preventDefault();
-    console.log('Google login button clicked');
-  };
+  // const handleGoogleLoginClick = (event: MouseEvent) => {
+  //   event.preventDefault();
+  //   console.log('Google login button clicked');
+  // };
 
-  const handleKakaoLoginClick = (event: MouseEvent) => {
-    event.preventDefault();
-    console.log('Kakao login button clicked');
-  };
+  // const handleKakaoLoginClick = (event: MouseEvent) => {
+  //   event.preventDefault();
+  //   console.log('Kakao login button clicked');
+  // };
 
   const handlePasswordButtonClick = (event: MouseEvent) => {
     event.preventDefault();
@@ -110,7 +110,7 @@ export default function Login() {
           로그인 페이지
         </h1>
         <form css={signupButtonContainer}>
-          <LoginButton onClick={handleKakaoLoginClick} buttonColor="#FAE100">
+          {/* <LoginButton onClick={handleKakaoLoginClick} buttonColor="#FAE100">
             <span>
               <Icon icon="ri:kakao-talk-fill" />
             </span>
@@ -121,7 +121,7 @@ export default function Login() {
               <Icon icon="akar-icons:google-fill" />
             </span>
             구글로 계속하기
-          </LoginButton>
+          </LoginButton> */}
           <Link href="/signup">
             <a
               css={css`
