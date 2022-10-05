@@ -24,7 +24,6 @@ export function usePostMoimImage() {
       },
     });
 
-    console.log('PostMoimImage', res);
     return res.data;
   };
 
@@ -58,25 +57,6 @@ export function useAddOneDayMoim() {
         },
       }
     );
-
-    console.log(
-      {
-        name: data.title,
-        body: data.description,
-        capacity: data.personCount,
-        place: data.place,
-        date: dateToYYYYMMDD(data.plannedDate),
-        time: dateToHMM(data.plannedTime),
-        si: data.si,
-        gu: data.gu,
-        dong: data.dong,
-        imgUrls: [...moimImg],
-        joinnedPetList: [...data.joinnedPetList],
-      },
-      'moim'
-    );
-    console.log(res, 'onedayMoimRes');
-
     return res;
   };
 
@@ -110,25 +90,6 @@ export function useAddEveryWeekMoim() {
         },
       }
     );
-
-    console.log(
-      {
-        name: data.title,
-        body: data.description,
-        capacity: data.personCount,
-        place: data.place,
-        dates: data.plannedDates,
-        time: dateToHMM(data.plannedTime),
-        si: data.si,
-        gu: data.gu,
-        dong: data.dong,
-        imgUrls: [...moimImg],
-        joinnedPetList: [...data.joinnedPetList],
-      },
-      'moim'
-    );
-    console.log(res, 'everyWeekMoimRes');
-
     return res;
   };
 
