@@ -61,7 +61,9 @@ export default function Navbar() {
     width: 100%;
     top: 0;
     z-index: 2;
-
+    li {
+      list-style: none;
+    }
     a {
       text-decoration: none;
       color: black;
@@ -71,9 +73,11 @@ export default function Navbar() {
       }
     }
     .logo {
+      cursor: default;
       color: #dc602a;
       font-weight: 700;
       font-size: 2rem;
+      margin-right: 2rem;
     }
     .menus {
       display: flex;
@@ -133,17 +137,27 @@ export default function Navbar() {
       </nav>
       <nav css={desktop_navbar}>
         <div className="menus">
-          <div className="tabs">
-            <Link href="/">
-              <a className="logo">ㅅㅊ</a>
-            </Link>
-            <Link href="/">메인</Link>
-            <Link href="/walks">산책 찾기</Link>
-          </div>
+          <ul className="tabs">
+            <li className="logo">ㅅㅊ</li>
+            <li>
+              <Link href="/">
+                <a>홈</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/walks">
+                <a>산책 찾기</a>
+              </Link>
+            </li>
+          </ul>
           {isLoggedIn ? (
-            <Link href={`/users/${user.id}`}>마이페이지</Link>
+            <Link href={`/users/${user.id}`}>
+              <a>마이페이지</a>
+            </Link>
           ) : (
-            <Link href="/login">로그인/회원가입</Link>
+            <Link href="/login">
+              <a>로그인/회원가입</a>
+            </Link>
           )}
         </div>
       </nav>
