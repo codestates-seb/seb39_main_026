@@ -99,10 +99,6 @@ public class Community {
         this.address = new Address(si, gu, dong);
     }
 
-    public void addPet(CommunityPet communityPet) {
-        this.communityPets.add(communityPet);
-    }
-
     @Builder
     public Community(Long id, String name, String body, Address address, String place, List<String> dates, String date, String time, Member representMember, Integer capacity, Long viewed, Long liked, LocalDateTime createdAt) {
         this.id = id;
