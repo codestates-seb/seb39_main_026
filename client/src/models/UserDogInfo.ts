@@ -4,7 +4,10 @@ export interface UserDogInfo {
   member: Array<petOwner>;
   petGender: string;
   neuter: string;
-  petAge: string;
+  petAges: {
+    years: string;
+    months: string;
+  };
   personality: string;
   breed: string;
   imgUrl: string;

@@ -175,7 +175,9 @@ export default function DogChoiceModal({
           <li>이름</li>
           <li>{dogInfoData.petName}</li>
           <li>나이</li>
-          <li>{dogInfoData.petAge}</li>
+          <li>
+            {dogInfoData.petAges.years}살 {dogInfoData.petAges.months}개월
+          </li>
         </ul>
         <ul
           css={css`
