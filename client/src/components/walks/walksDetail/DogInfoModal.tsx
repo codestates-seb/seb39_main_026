@@ -165,12 +165,25 @@ export default function DogChoiceModal({
               border-bottom: none !important;
             `}
           >
-            <Image
-              src={dogInfoData.imgUrl}
-              alt={`${dogInfoData.petName}의 사진`}
-              height="100px"
-              width="100px"
-            />
+            <div
+              css={css`
+                width: 100px;
+                width: 100px;
+                border-radius: 50%;
+                font-size: 0;
+                overflow: hidden;
+              `}
+            >
+              <Image
+                src={dogInfoData.imgUrl}
+                alt={`${dogInfoData.petName}의 사진`}
+                height="100px"
+                width="100px"
+                placeholder="blur"
+                objectFit="cover"
+                blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk5HSrBwABNADReNJYZwAAAABJRU5ErkJggg=="
+              />
+            </div>
           </li>
           <li>이름</li>
           <li>{dogInfoData.petName}</li>
@@ -184,7 +197,6 @@ export default function DogChoiceModal({
               padding: 10px 23px;
               margin-top: 20px;
               color: ${Theme.mainColor};
-              text-align: center;
               font-size: 1.1rem;
               font-weight: 600;
 
@@ -197,7 +209,6 @@ export default function DogChoiceModal({
             li:nth-of-type(2n) {
               border-radius: 20px;
               padding: 10px 23px;
-              text-align: center;
               font-size: 1.1rem;
               font-weight: 600;
             }

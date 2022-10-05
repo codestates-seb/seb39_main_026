@@ -212,6 +212,8 @@ const modalContainer = (isLoginModalOpen: boolean) => css`
       width: 100%;
       height: 100%;
       padding: 6px 10px;
+      border: none;
+      border-bottom: 1px solid ${Theme.divisionLineColor};
     }
 
     @media screen and (max-width: 464px) {

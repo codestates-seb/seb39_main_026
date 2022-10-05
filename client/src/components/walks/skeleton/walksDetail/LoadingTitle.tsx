@@ -7,8 +7,8 @@ const postOwnerContainer = css`
   margin: 25px 0 28px;
 
   img {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     object-fit: cover;
     margin-right: 14px;
@@ -58,8 +58,8 @@ export default function LoadingTitle() {
       <div css={postOwnerContainer}>
         <div
           css={css`
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             object-fit: cover;
             margin-right: 14px;
