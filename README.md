@@ -1,6 +1,9 @@
 # 🐕 ㅅㅊ : 로컬 펫 개더링 플랫폼 
+<img src="https://github.com/codestates-seb/seb39_main_026/blob/main/metaImage.png?raw=true" width="300px" />
+
 ## ❗️ 프로젝트 요약
  > 개발기간: 2022.09.07 ~ 2022.10.12<br/>
+ 
 - 우리 강아지의 사회성 향상을 위한 <em>로컬 반려견 산책 모임</em> 플랫폼
   - ☝️ 겁 많아도 OK : 우리 강아지의 <em>성향을 고려</em>한 산책 모임 주최 및 참여
   - ✌️ 일회성도 OK : <em>정기/비정기 모임</em>을 자유롭게 설정할 수 있어 다양한 펫 이벤트 주최 및 참여 가능
