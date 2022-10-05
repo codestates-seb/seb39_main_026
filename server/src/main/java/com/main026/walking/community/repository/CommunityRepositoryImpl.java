@@ -5,9 +5,7 @@ import com.main026.walking.community.entity.Community;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Visitor;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -52,7 +50,8 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom{
                 .where(searchText(searchCond.getName()),
                         searchSi(searchCond.getSi()),
                         searchGu(searchCond.getGu()),
-                        searchDong(searchCond.getDong()))
+                        searchDong(searchCond.getDong()),
+                        isExpired(searchCond.getCond()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(boardSort(pageable))
@@ -83,6 +82,13 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom{
     private BooleanExpression searchText(String name){
         if(StringUtils.hasText(name)){
             return community.name.like("%"+name+"%");
+        }
+        return null;
+    }
+
+    private BooleanExpression isExpired(String cond){
+        if(StringUtils.hasText(cond)){
+            return community.capacity.ne(community.communityPets.size());
         }
         return null;
     }

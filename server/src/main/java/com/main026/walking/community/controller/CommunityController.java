@@ -87,7 +87,7 @@ public class CommunityController {
     public ResponseEntity getCommunitiesWithNew(CommunitySearchCond communitySearchCond) {
         Sort sortNew = Sort.by("new").descending();
         PageRequest pageRequest = PageRequest.of(0,4,sortNew);
-
+        communitySearchCond.setCond("new");
         CommunityListResponseDto communities = communityService.findCommunities(communitySearchCond, pageRequest);
 
         return new ResponseEntity(communities, HttpStatus.OK);
@@ -97,7 +97,7 @@ public class CommunityController {
     public ResponseEntity getCommunitiesWithHot(CommunitySearchCond communitySearchCond) {
         Sort sortHot = Sort.by("hot");
         PageRequest pageRequest = PageRequest.of(0,4,sortHot);
-
+        communitySearchCond.setCond("hot");
         CommunityListResponseDto communities = communityService.findCommunities(communitySearchCond, pageRequest);
 
         return new ResponseEntity(communities, HttpStatus.OK);

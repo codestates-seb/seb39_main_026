@@ -15,4 +15,5 @@ public class CommunitySearchCond {
     private String si;
     private String gu;
     private String dong;
+    private String cond;
 }
