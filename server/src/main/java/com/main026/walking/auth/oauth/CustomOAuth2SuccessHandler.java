@@ -41,7 +41,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.addHeader("Authorization", accessToken);
         response.addHeader("refresh_token",refreshToken);
 
-        getRedirectStrategy().sendRedirect(request,response,"https://sancheck.main026.shop");
+        getRedirectStrategy().sendRedirect(request,response,"http://localhost:3000");
         //response.getWriter().write("memberId : "+ memberId);
     }
 }
