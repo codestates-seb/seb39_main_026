@@ -96,7 +96,13 @@ const commentContainer = css`
   }
 `;
 
-export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
+export default function Comments({
+  walkDetail,
+  setIsLoginOfferModalOpen,
+}: {
+  walkDetail?: WalkDetail;
+  setIsLoginOfferModalOpen: (value: boolean) => void;
+}) {
   const router = useRouter();
 
   const { handlDeleteComment } = useDeleteComment();
@@ -148,7 +154,10 @@ export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
             <p className="comment-owner">댓글을 남겨주세요.</p>
           </li>
         </ul>
-        <CommentInput walkDetail={walkDetail} />
+        <CommentInput
+          walkDetail={walkDetail}
+          setIsLoginOfferModalOpen={setIsLoginOfferModalOpen}
+        />
       </article>
     );
   }
@@ -215,7 +224,10 @@ export default function Comments({ walkDetail }: { walkDetail?: WalkDetail }) {
           ))}
         </ul>
       </article>
-      <CommentInput walkDetail={walkDetail} />
+      <CommentInput
+        walkDetail={walkDetail}
+        setIsLoginOfferModalOpen={setIsLoginOfferModalOpen}
+      />
     </>
   );
 }

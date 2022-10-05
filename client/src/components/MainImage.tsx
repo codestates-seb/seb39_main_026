@@ -1,4 +1,6 @@
 import { css } from '@emotion/react';
+import { useState } from 'react';
+import NoticeModal from './NoticeModal';
 
 export default function MainImage() {
   const img = css`
@@ -24,12 +26,24 @@ export default function MainImage() {
       }
     }
   `;
+  const [isNoticeModalOpen, setIsNoticeModalOpen] = useState(false);
+  const handleNoticeClick = () => {
+    setIsNoticeModalOpen(!isNoticeModalOpen);
+  };
   return (
-    <section css={img}>
-      <div className="text">
-        <h1 className="image_title">산책 전, 이것만은 지켜주세요!</h1>
-        <p className="image_subtitle">슬기로운 산책을 위한 5가지 약속</p>
-      </div>
-    </section>
+    <>
+      <section css={img} onClick={handleNoticeClick}>
+        <div className="text">
+          <h1 className="image_title">산책 전, 이것만은 지켜주세요!</h1>
+          <p className="image_subtitle">슬기로운 산책을 위한 5가지 약속</p>
+        </div>
+      </section>
+      {isNoticeModalOpen && (
+        <NoticeModal
+          setIsNoticeModalOpen={setIsNoticeModalOpen}
+          isNoticeModalOpen={isNoticeModalOpen}
+        />
+      )}
+    </>
   );
 }

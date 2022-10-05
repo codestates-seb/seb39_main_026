@@ -81,7 +81,7 @@ export function useUpdatePetImgMutation() {
       const formData = new FormData();
       formData.append('imgFile', uploadImg);
       await axios
-        .post(`${process.env.NEXT_PUBLIC_BASE_URL}/pets/post/image`, formData, {
+        .post(`${API.PETS}/post/image`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             authorization: localStorage.getItem('accessToken') || '',

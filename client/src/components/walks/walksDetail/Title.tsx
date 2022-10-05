@@ -49,14 +49,22 @@ const postOwnerContainer = css`
   align-items: center;
   margin: 25px 0px 28px;
   gap: 14px;
+  overflow: hidden;
 
   @media screen and (max-width: 525px) {
     margin: 15px 0 18px;
   }
 
+  div {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+  }
+
   img {
-    width: 32px;
-    height: 32px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
@@ -98,13 +106,17 @@ export default function Title({
         <h1>{walkDetail.name}</h1>
       </div>
       <div css={postOwnerContainer}>
-        <Image
-          src={walkDetail.member.imgUrl}
-          alt={`작성자 ${walkDetail.member.username}의 사진`}
-          width="32px"
-          height="32px"
-          onClick={() => router.push(`/users/${walkDetail.member.id}`)}
-        />
+        <div>
+          <Image
+            src={walkDetail.member.imgUrl}
+            alt={`작성자 ${walkDetail.member.username}의 사진`}
+            width="40px"
+            height="40px"
+            onClick={() => router.push(`/users/${walkDetail.member.id}`)}
+            placeholder="blur"
+            blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk5HSrBwABNADReNJYZwAAAABJRU5ErkJggg=="
+          />
+        </div>
         <p>{walkDetail.member.username}</p>
       </div>
     </article>

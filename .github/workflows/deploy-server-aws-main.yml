@@ -1,10 +1,8 @@
-#name: Deploy-Server on AWS [dev]
-name: Deploy-Server on AWS [BE/feat/image-s3]
+name: Deploy-Server on AWS [main]
 
 on:
   push:
-#    branches: [ "dev" ]
-    branches: [ "BE/feat/image-s3" ]
+   branches: [ "main" ]
 
 permissions:
   contents: read
@@ -24,18 +22,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-
-#      - name: Set Properties
-#        uses: microsoft/variable-substitution@v1
-#        with:
-#          files: 'server/src/main/resources/application.yml'
-#        env:
-#          override.value: ${{ secrets.DI_APP_YML_SECRET }}
-#          cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
-#          cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          cloud.s3.bucket: ${{ secrets.AWS_S3_BUCKET_NAME }}
-#          jwt.refresh: ${{ secrets.JWT_REFRESH }}
-#          jwt.access: ${{ secrets.JWT_ACCESS }}
 
       - name: Set Properties
         run: |

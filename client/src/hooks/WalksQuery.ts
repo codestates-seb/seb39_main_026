@@ -25,10 +25,18 @@ export function useGetWalksQuery(query: string) {
 }
 
 export function useWalksDetailQuery(communityId: string) {
-  const { data, error } = useQuery('communityDetail', async () => {
-    const { data } = await axios.get<WalkDetail>(`${API.WALKS}/${communityId}`);
-    return data;
-  });
+  const { data, error } = useQuery(
+    'communityDetail',
+    async () => {
+      const { data } = await axios.get<WalkDetail>(
+        `${API.WALKS}/${communityId}`
+      );
+      return data;
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   if (error != null) {
     throw error;
@@ -50,8 +58,6 @@ export function useJoinWalksMoim() {
       localStorage.setItem('accessToken', res.headers.authorization);
       localStorage.setItem('refreshToken', res.headers.refresh_token);
     }
-
-    console.log(res, 'JoinWalksMoi');
     return res;
   };
   return { handleJoinWalksMoim } as const;

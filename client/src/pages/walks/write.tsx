@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
 import CommonButton from '../../components/CommonButton';
 import TabTitle from '../../components/TabTitle';
 import DescriptionInput from '../../components/walks/wirte/DescriptionInput';
@@ -24,12 +25,14 @@ import {
   WalksMoimTypes,
 } from '../../models/WalksMoim';
 import 'react-datepicker/dist/react-datepicker.css';
+import UserState from '../../states/UserState';
 import { Theme } from '../../styles/Theme';
 
 export default function Write() {
   const router = useRouter();
 
   const [moimImages, setMoimImages] = useState<File[]>([]);
+  const [user] = useRecoilState(UserState);
 
   const methods = useForm<WalksMoim>({
     mode: 'onChange',
@@ -128,6 +131,7 @@ export default function Write() {
         );
         const communityId = await moimResponse.data.communityId;
         await router.push(`/walks/${communityId}`);
+        localStorage.removeItem('pickPetsId');
       } else {
         const moimImageResponse = await handlePostMoimImage(moimImages);
         const oneDayMoimData = onSubmitOneDay(data);
@@ -137,6 +141,7 @@ export default function Write() {
         );
         const communityId = await moimResponse.data.communityId;
         await router.push(`/walks/${communityId}`);
+        localStorage.removeItem('pickPetsId');
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -145,8 +150,13 @@ export default function Write() {
   };
 
   useEffect(() => {
+    if (user == null) {
+      router.replace('/');
+      return;
+    }
+
     if (!window.localStorage.getItem('pickPetsId')) {
-      alert('반려견을 선택해주세요.');
+      alert('잘못된 접근입니다!');
       router.push('/walks');
       return;
     }

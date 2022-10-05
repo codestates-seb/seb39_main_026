@@ -51,7 +51,7 @@ export function useUpdateUsernameMutation() {
   return useMutation(async (body: UserDefault) => {
     const { id, username } = body;
     await axios.patch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/members/${id}`,
+      `${API.USERS}/${id}`,
       {
         username,
       },
@@ -77,17 +77,13 @@ export function useUpdateUserImgMutation() {
       const formData = new FormData();
       formData.append('imgFile', uploadImg);
       axios
-        .patch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/members/image/${id}`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              authorization: localStorage.getItem('accessToken') || '',
-              refresh_token: localStorage.getItem('refreshToken') || '',
-            },
-          }
-        )
+        .patch(`${API.USERS}/image/${id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: localStorage.getItem('accessToken') || '',
+            refresh_token: localStorage.getItem('refreshToken') || '',
+          },
+        })
         .then(() => {
           setImgSrc(URL.createObjectURL(uploadImg));
         });
@@ -97,16 +93,13 @@ export function useUpdateUserImgMutation() {
 
 export const useFindPasswordMutation = () => {
   return useMutation(async (email: { email: string }) => {
-    await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/members/findpassword`,
-      email
-    );
+    await axios.post(`${API.USERS}/findpassword`, email);
   });
 };
 
 export function useDeleteUserMutation() {
   return useMutation(async (id: string) => {
-    await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/members/${id}`, {
+    await axios.delete(`${API.USERS}/${id}`, {
       headers: {
         authorization: localStorage.getItem('accessToken') || '',
         refresh_token: localStorage.getItem('refreshToken') || '',

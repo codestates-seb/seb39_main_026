@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { WalkDefault } from '../../models/WalkDefault';
+import { Theme } from '../../styles/Theme';
 
 export default function WalkItem({ walk }: { walk: WalkDefault }) {
   const router = useRouter();
@@ -54,6 +55,9 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
         margin-bottom: 0.2rem;
         color: #dc602a;
       }
+      p.close {
+        color: ${Theme.disableColor};
+      }
       button {
         font-size: 14px;
         height: 30px;
@@ -62,6 +66,9 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
         border: none;
         background-color: #dc602a;
         color: white;
+      }
+      button.close {
+        background-color: ${Theme.disableColor};
       }
     }
   `;
@@ -98,14 +105,16 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
               <h4 className="walk_des">{walk.place}</h4>
             </div>
             <div className="status">
-              <p>
-                {walk.capacity <= walk.participant
-                  ? '다음 기회에...'
-                  : `${walk.capacity - walk.participant}자리 남았어요!`}
-              </p>
-              <button>
-                {walk.capacity <= walk.participant ? '모집마감' : '모집중'}
-              </button>
+              {walk.capacity <= walk.participant ? (
+                <p className="close">다음 기회에...</p>
+              ) : (
+                <p>{walk.capacity - walk.participant}자리 남았어요!</p>
+              )}
+              {walk.capacity <= walk.participant ? (
+                <button className="close">모집마감</button>
+              ) : (
+                <button>모집중</button>
+              )}
             </div>
           </div>
         </div>
