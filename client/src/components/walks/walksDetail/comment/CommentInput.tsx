@@ -1,8 +1,10 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useState, KeyboardEvent } from 'react';
+import { useRecoilState } from 'recoil';
 import { usePostComment } from '../../../../hooks/CommentQuery';
 import { WalkDetail } from '../../../../models/WalkDefault';
+import UserState from '../../../../states/UserState';
 import { Theme } from '../../../../styles/Theme';
 
 const inputContainer = css`
@@ -17,6 +19,10 @@ const inputContainer = css`
     padding-left: 18px;
     box-shadow: 0 1px 2px hsl(0deg 0% 0% / 5%), 0 1px 4px hsl(0deg 0% 0% / 5%),
       0 2px 8px hsl(0deg 0% 0% / 5%);
+
+    @media screen and (max-width: 300px) {
+      padding-left: 10px;
+    }
   }
 
   button {
@@ -38,10 +44,13 @@ const inputContainer = css`
 
 export default function CommentInput({
   walkDetail,
+  setIsLoginOfferModalOpen,
 }: {
   walkDetail: WalkDetail;
+  setIsLoginOfferModalOpen: (isLoginOfferModalOpen: boolean) => void;
 }) {
   const [body, setBody] = useState('');
+  const [user] = useRecoilState(UserState);
   const id = walkDetail.communityId;
   const { handlePostComment } = usePostComment();
   const router = useRouter();
@@ -64,6 +73,21 @@ export default function CommentInput({
       router.reload();
     }
   };
+
+  if (user == null) {
+    return (
+      <article css={inputContainer}>
+        <input
+          type="text"
+          placeholder="로그인 후 댓글을 작성할 수 있어요"
+          onClick={() => setIsLoginOfferModalOpen(true)}
+        />
+        <button type="button" onClick={handleRegisterClick}>
+          등록
+        </button>
+      </article>
+    );
+  }
 
   return (
     <article css={inputContainer}>

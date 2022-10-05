@@ -85,7 +85,7 @@ export default function Signup() {
     formState: { errors, isValid },
   } = methods;
 
-  const [, setUser] = useRecoilState(UserState);
+  const [user, setUser] = useRecoilState(UserState);
   const [, setIsLoggedIn] = useRecoilState(LoginState);
 
   const { handleSignup } = useSignup();
@@ -124,6 +124,13 @@ export default function Signup() {
   useEffect(() => {
     setFocus('email');
   }, [setFocus]);
+
+  useEffect(() => {
+    if (user) {
+      router.replace('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
