@@ -158,7 +158,6 @@ export default function DogChoiceModal({
       localStorage.setItem('pickPetsId', JSON.stringify(pickPetsId));
       router.push('/walks/write');
     } else if (!goToWalksWrite) {
-      console.log(pickPetsId);
       handleJoinWalksMoim(walkId, pickPetsId);
       router.reload();
     }
