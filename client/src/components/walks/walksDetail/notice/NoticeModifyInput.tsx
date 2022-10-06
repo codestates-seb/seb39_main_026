@@ -81,11 +81,9 @@ export default function NoticeModifyInput({
     }
 
     if (isRegisterNotice === 'noticePost') {
-      console.log('공지사항 등록');
       await handlePostNotice(communityId, noticeTitle, noticeContent);
       router.reload();
     } else if (isRegisterNotice === 'noticePatch') {
-      console.log('공지사항 수정');
       await handlePatchNotice(noticeId, noticeTitle, noticeContent);
       router.reload();
     } else {

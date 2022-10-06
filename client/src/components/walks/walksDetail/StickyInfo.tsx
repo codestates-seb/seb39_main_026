@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { css } from '@emotion/react';
 import { format } from 'date-fns';
-import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
 import { useRecoilState } from 'recoil';
 import { WalkDetail } from '../../../models/WalkDefault';
@@ -11,7 +10,7 @@ import CommonButton from '../../CommonButton';
 import Carousel from '../Carousel';
 import LoadingStickyInfo from '../skeleton/walksDetail/LoadingStickyInfo';
 
-const infoContainer = (moimState: boolean) => css`
+const infoContainer = (moimState: boolean, joinedMoimState: boolean) => css`
   position: sticky;
   top: 100px;
   right: 0;
@@ -64,8 +63,13 @@ const infoContainer = (moimState: boolean) => css`
   }
 
   button.join-button {
-    background-color: ${moimState ? Theme.mainColor : '#969696'};
-    pointer-events: ${moimState ? '' : 'none'};
+    background-color: ${joinedMoimState
+      ? '#969696'
+      : moimState
+      ? Theme.mainColor
+      : '#969696'};
+
+    pointer-events: ${joinedMoimState ? 'none' : moimState ? '' : 'none'};
   }
 `;
 
@@ -73,14 +77,24 @@ export default function StickyInfo({
   walkDetail,
   setIsModalOpen,
   moimState,
+  joinedMoimState,
+  setIsLoginOfferModalOpen,
 }: {
   walkDetail?: WalkDetail;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   moimState: boolean;
+  joinedMoimState: boolean;
+  setIsLoginOfferModalOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [user] = useRecoilState(UserState);
-  const router = useRouter();
 
+  const handleJoinButtonClick = () => {
+    if (user == null) {
+      setIsLoginOfferModalOpen(true);
+      return;
+    }
+    return setIsModalOpen(true);
+  };
   // 로딩중이거나, walkDetail이 없으면 로딩 스켈레톤 컴포넌트를 렌더링
   if (walkDetail == null || walkDetail.imgUrls == null) {
     return <LoadingStickyInfo />;
@@ -93,7 +107,7 @@ export default function StickyInfo({
         height: 100%;
       `}
     >
-      <aside css={infoContainer(moimState)}>
+      <aside css={infoContainer(moimState, joinedMoimState)}>
         <div
           css={css`
             width: 100%;
@@ -124,16 +138,14 @@ export default function StickyInfo({
           ) : (
             <CommonButton
               type="button"
-              onClick={() => {
-                if (user == null) {
-                  router.push('/login');
-                  return;
-                }
-                return setIsModalOpen(true);
-              }}
+              onClick={handleJoinButtonClick}
               className="join-button"
             >
-              {moimState ? '모임 참여하기' : '다음 기회에 ...'}
+              {joinedMoimState
+                ? '참여한 모임입니다'
+                : moimState
+                ? '모임 참여하기'
+                : '다음 기회에...'}
             </CommonButton>
           )}
         </div>
