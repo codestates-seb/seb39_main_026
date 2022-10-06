@@ -5,7 +5,7 @@ git remote update
 git reset --hard origin/main
 
 # frontend 디렉토리 진입
-cd client
+cd $(dirname $0)/../../client
 
 # 의존성 설치
 yarn 
@@ -16,7 +16,7 @@ rm -rf .next
 yarn build
 
 # 기존 프로세스 종료 (grep 프로세스는 제거)
-kill -9 $(ps -ef | grep "next start" | grep -v "grep" | awk '{print $2;}' | head -n 1)
+kill -9 $(ps -ef | grep "next start" | grep -v "grep" | awk '{print $2;}' | head -n 1) 2> /dev/null || echo "no-process-to-kill"
 
 # 새 프로세스 실행
 yarn start

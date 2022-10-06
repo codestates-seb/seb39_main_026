@@ -1,1 +1,1 @@
-nohup sh deploy.sh </dev/null >/dev/null 2>&1 &
+nohup sh "$(dirname $0)/deploy.sh" </dev/null >/dev/null 2>&1 &

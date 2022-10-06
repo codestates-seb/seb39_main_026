@@ -78,7 +78,7 @@ http
 
       try {
         await runDeploy(`${__dirname}/stop-previous-deploy.sh`);
-        await runDeploy(`${__dirname}/deploy.sh`);
+        await runDeploy(`${__dirname}/trigger-deploy.sh`);
       } catch (error) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error }));
