@@ -53,7 +53,6 @@ export default function Walks() {
       return;
     }
 
-    console.log(user);
     setIsModalOpen(!isModalOpen);
   };
 
