@@ -2,8 +2,10 @@
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import { useGetUsersQuery } from '../../../hooks/UsersQuery';
 import { useWalksDetailQuery } from '../../../hooks/WalksQuery';
 import UserState from '../../../states/UserState';
+import { Theme } from '../../../styles/Theme';
 import CommonButton from '../../CommonButton';
 import DogChoiceModal from '../../DogChoiceModal';
 import LoginOfferModal from '../../LoginOfferModal';
@@ -30,7 +32,9 @@ export default function DetailLayout({
   const [isLoginOfferModalOpen, setIsLoginOfferModalOpen] = useState(false);
   const [petInfoId, setPetInfoId] = useState(1);
   const [moimState, setMoimState] = useState(true);
+  const [joinedMoimState, setJoinedMoimState] = useState(false);
   const [user] = useRecoilState(UserState);
+  const userData = useGetUsersQuery(user?.id);
 
   const getPetId = (petId: number) => {
     setPetInfoId(petId);
@@ -70,10 +74,23 @@ export default function DetailLayout({
     return setMoimState(true);
   };
 
+  const getJoinedMoimState = () => {
+    if (walkDetail && userData.isSuccess) {
+      userData.data.memberCommunityList.map(
+        (community: { communityId: number }) => {
+          if (community.communityId === walkDetail.communityId) {
+            setJoinedMoimState(true);
+          }
+        }
+      );
+    }
+  };
+
   useEffect(() => {
     getMoimState();
+    getJoinedMoimState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [walkDetail, moimState]);
+  }, [walkDetail, moimState, joinedMoimState]);
 
   return (
     <>
@@ -86,7 +103,7 @@ export default function DetailLayout({
       >
         <Carousel carouselDefaultHeight={'400px'} walkDetail={walkDetail} />
       </div>
-      <section css={sancheckDetailLayout}>
+      <section css={sancheckDetailLayout(moimState, joinedMoimState)}>
         <div>
           <Title walkDetail={walkDetail} moimState={moimState} />
           <Information walkDetail={walkDetail} />
@@ -97,9 +114,12 @@ export default function DetailLayout({
               type="button"
               onClick={handleMoimJoimButtonClick}
               className="moim-join-button"
-              disabled={!moimState}
             >
-              {moimState ? '모임 참여하기' : '다음 기회에...'}
+              {joinedMoimState
+                ? '참여한 모임입니다'
+                : moimState
+                ? '모임 참여하기'
+                : '다음 기회에...'}
             </CommonButton>
           )}
           <PageNav />
@@ -119,6 +139,8 @@ export default function DetailLayout({
             walkDetail={walkDetail}
             setIsModalOpen={setIsModalOpen}
             moimState={moimState}
+            joinedMoimState={joinedMoimState}
+            setIsLoginOfferModalOpen={setIsLoginOfferModalOpen}
           />
         </div>
       </section>
@@ -147,7 +169,10 @@ export default function DetailLayout({
   );
 }
 
-const sancheckDetailLayout = css`
+const sancheckDetailLayout = (
+  moimState: boolean,
+  joinedMoimState: boolean
+) => css`
   display: grid;
   grid-template-columns: 1fr 310px;
   gap: 0 20px;
@@ -173,6 +198,14 @@ const sancheckDetailLayout = css`
   }
 
   .moim-join-button {
+    background-color: ${joinedMoimState
+      ? '#969696'
+      : moimState
+      ? Theme.mainColor
+      : '#969696'};
+
+    pointer-events: ${joinedMoimState ? 'none' : moimState ? '' : 'none'};
+
     @media screen and (min-width: 881px) {
       display: none;
     }
