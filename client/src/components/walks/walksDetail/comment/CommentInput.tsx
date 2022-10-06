@@ -20,7 +20,7 @@ const inputContainer = css`
     box-shadow: 0 1px 2px hsl(0deg 0% 0% / 5%), 0 1px 4px hsl(0deg 0% 0% / 5%),
       0 2px 8px hsl(0deg 0% 0% / 5%);
 
-    @media screen and (max-width: 300px) {
+    @media screen and (max-width: 350px) {
       padding-left: 10px;
     }
   }

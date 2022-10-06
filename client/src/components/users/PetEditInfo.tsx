@@ -86,7 +86,7 @@ export default function PetEditInfo({
   };
 
   const handleDeleteClick = () => {
-    deletePetMutation({id, setIsPetEditMode});
+    deletePetMutation({ id, setIsPetEditMode });
   };
 
   const handlePetNameEdit = (event: React.FormEvent<HTMLInputElement>) => {
@@ -116,12 +116,14 @@ export default function PetEditInfo({
   };
 
   const petInfo = css`
-    margin: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 80%;
+    margin: 1rem auto;
     background-color: white;
+
     .img {
       position: relative;
       width: 100px;
@@ -144,9 +146,9 @@ export default function PetEditInfo({
       display: none;
     }
     dl {
-      width: 80%;
       display: grid;
-      grid-template-columns: 50% 50%;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
       font-size: 18px;
       dt {
         font-weight: 600;
@@ -158,6 +160,7 @@ export default function PetEditInfo({
         border-bottom: 1px solid ${Theme.divisionLineColor};
         text-align: right;
         input {
+          width: 100%;
           text-align: right;
           font-size: 18px;
           border: 0;
@@ -171,11 +174,11 @@ export default function PetEditInfo({
       }
       .birthday {
         text-align: right;
-        width: 100%;
         select {
           border: 0;
           font-size: 1rem;
           margin-right: 0.3rem;
+          cursor: pointer;
           :focus {
             outline: none;
           }
@@ -187,18 +190,18 @@ export default function PetEditInfo({
       }
     }
     .submitBtn {
-      margin: 2rem 2rem 0 2rem;
-      width: 70%;
+      margin-top: 2rem;
+    }
+    .submitBtn + .deleteBtn {
+      margin-top: 1rem;
     }
     .deleteBtn {
-      margin: 2rem;
-      margin: 1rem 2rem 7rem 2rem;
-      width: 70%;
+      margin-bottom: 7rem;
     }
+
     @media screen and (max-width: 768px) {
       dl {
-        grid-template-columns: 100%;
-        width: 80%;
+        display: block;
         dt {
           border-bottom: 0;
         }
