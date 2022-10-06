@@ -8,8 +8,7 @@ const http = require('http');
 const url = require('url');
 
 const secret = process.env.WEBHOOK_SECRET;
-const filename = process.env.WEBHOOK_DEPLOY_FILENAME;
-const port = process.env.WEBHOOK_PORT;
+const port = 8888;
 
 http
   .createServer(function (req, res) {
@@ -58,7 +57,7 @@ http
         return res.end(JSON.stringify({ error: 'invalid repository' }));
       }
 
-      if (ref !== 'refs/heads/dev') {
+      if (ref !== 'refs/heads/main') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error: 'invalid branch' }));
       }
@@ -78,7 +77,8 @@ http
       }
 
       try {
-        await runDeploy(filename);
+        await runDeploy(`${__dirname}/stop-previous-deploy.sh`);
+        await runDeploy(`${__dirname}/deploy.sh`);
       } catch (error) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error }));
