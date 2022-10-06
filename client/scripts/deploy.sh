@@ -2,7 +2,7 @@
 git remote update
 
 # 현재 브랜치를 기준 최신 커밋으로 업데이트
-git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
+git reset --hard origin/main
 
 # frontend 디렉토리 진입
 cd client
