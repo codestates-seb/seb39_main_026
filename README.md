@@ -16,6 +16,9 @@
 | [@liean17](https://github.com/liean17) | [@pseudopool](https://github.com/pseudopool) | [@devEdok13](https://github.com/devEdok13) | [@pongdang](https://github.com/pongdang) |
 
 ## 🛠 개발 환경
+
+<img src="https://user-images.githubusercontent.com/98731086/194207144-1c1971be-224a-4358-aa21-ce0e751ee146.png" width="700px"/>
+
 ### Frontend
 [![Typescript](https://img.shields.io/badge/Typescript-4.8.3-blue)]()
 [![Next.js](https://img.shields.io/badge/Next.js-12.3-white)]()
@@ -36,13 +39,15 @@
 [![AWS](https://img.shields.io/badge/AWS-2.16.65-yellow)]()
 
 
-
-
-
-
-
 ## 🏃 기술적 도전
 - TBD
 
 ## 프로젝트 시연
-- TBD
+
+| 반려견 등록하기 | 산책 모임 만들기 |
+|:-:|:-:|
+| <img src="https://user-images.githubusercontent.com/98731086/194207603-0b1ab749-f22c-4c01-8f93-f1a42700d9b3.gif" width="250px" /> | <img src="https://user-images.githubusercontent.com/98731086/194207454-1560a308-e0c3-4fa3-ac30-facc2041b753.gif" width="250px" /> |
+| 요일/날짜 선택 | 산책 모임 검색 |
+| <img src="https://user-images.githubusercontent.com/98731086/194208063-18bcb69b-5cab-4f95-94c1-0778ac41d94d.gif" width="250px" /> | <img src="https://user-images.githubusercontent.com/98731086/194208102-630abc97-46d0-48ab-9aae-5777801d9d68.gif" width="250px" /> |
+
+
