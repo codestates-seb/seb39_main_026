@@ -31,7 +31,6 @@ export default function PetEditOverlay({
     padding-top: 1rem;
     .closeBtn {
       cursor: pointer;
-      /* margin: 1rem; */
       border: 0;
       background-color: transparent;
       margin-left: 1rem;
