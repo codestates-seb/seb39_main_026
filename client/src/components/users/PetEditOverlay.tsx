@@ -26,15 +26,14 @@ export default function PetEditOverlay({
     top: 0;
     left: 0;
     right: 0;
-    height: 100%;
     width: 100%;
     background-color: white;
     padding-top: 1rem;
     .closeBtn {
       cursor: pointer;
-      margin: 1rem;
       border: 0;
       background-color: transparent;
+      margin-left: 1rem;
       .closeIcon {
         font-size: 1.5rem;
         color: ${Theme.mainColor};

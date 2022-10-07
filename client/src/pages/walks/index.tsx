@@ -62,13 +62,8 @@ export default function Walks() {
 
   return (
     <>
-      {isModalOpen && (
-        <DogChoiceModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          goToWalksWrite={true}
-        />
-      )}
+      <TabTitle prefix="모임 둘러보기" />
+
       <h1
         css={css`
           cursor: default;
@@ -79,7 +74,6 @@ export default function Walks() {
         모임 둘러보기
       </h1>
       <section>
-        <TabTitle prefix="모임 둘러보기" />
         <div css={header}>
           <SearchInput setQuery={setQuery} />
           <AddressPicker setAddress={setAddress} />
@@ -103,6 +97,14 @@ export default function Walks() {
         <LoginOfferModal
           isLoginOfferModalOpen={isLoginOfferModalOpen}
           setIsLoginOfferModalOpen={setIsLoginOfferModalOpen}
+        />
+      )}
+
+      {isModalOpen && (
+        <DogChoiceModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          goToWalksWrite={true}
         />
       )}
     </>

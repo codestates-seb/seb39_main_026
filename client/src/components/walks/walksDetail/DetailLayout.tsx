@@ -186,6 +186,7 @@ const sancheckDetailLayout = (
   @media screen and (max-width: 880px) {
     margin: 30px 20px;
     grid-template-columns: 1fr;
+    display: block;
 
     .sticky-info-container {
       display: none;
