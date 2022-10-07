@@ -40,14 +40,14 @@
 
 
 ## 🏃 기술적 도전
+### Frontend
+- 🪄 데이터 상태 관리를 위한 React Query 도입
+- 🥠 옵셔널 루트를 이용한 Next JS 리페치 방지
 ### Backend
 - 📨 그럴듯한 메일 전송을 위한 스프링부트 세팅
 - 📃 배포를 위한 별도의 VPC 환경 구축
 - 🖥 CLOUD-WATCH 적용으로 AWS 콘솔에서 로그 확인
 - 💿 AWS-SDK와 S3를 이용해 서버와 저장스토리지를 분리
-### Frontend
-- 🪄 데이터 상태 관리를 위한 React Query 도입
-- 🥠 옵셔널 루트를 이용한 Next JS 리페치 방지
 
 ## 프로젝트 시연
 
