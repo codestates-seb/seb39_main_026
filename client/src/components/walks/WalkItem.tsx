@@ -17,6 +17,11 @@ export default function WalkItem({ walk }: { walk: WalkDefault }) {
     margin: 1rem 0.5rem;
     border-radius: 15px;
     overflow: hidden;
+
+    @media screen and (max-width: 330px) {
+      max-width: 250px;
+    }
+
     .img {
       object-fit: cover;
     }

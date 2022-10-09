@@ -6,11 +6,13 @@ export default function NavLink({
   children,
   className,
   scroll,
+  replace,
 }: {
   href: string;
   children: React.ReactNode;
   className?: string;
   scroll?: boolean;
+  replace?: boolean;
 }) {
   const { asPath } = useRouter();
 
@@ -25,7 +27,7 @@ export default function NavLink({
   }
 
   return (
-    <Link href={href} scroll={scroll}>
+    <Link href={href} scroll={scroll} replace={replace}>
       <a className={className}>{children}</a>
     </Link>
   );

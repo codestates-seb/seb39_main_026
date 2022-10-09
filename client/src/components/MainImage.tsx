@@ -4,6 +4,15 @@ import NoticeModal from './NoticeModal';
 
 export default function MainImage() {
   const img = css`
+    position: absolute;
+
+    @media screen and (max-width: 768px) {
+      top: 0px;
+    }
+
+    top: 75px;
+    left: 0;
+    right: 0;
     width: 100%;
     background-size: cover;
     background-position-y: 30%;

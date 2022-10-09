@@ -40,6 +40,10 @@ export default function User({ userId }: { userId: string }) {
         margin: 0 0.2rem 0rem 0rem;
       }
     }
+
+    @media screen and (max-width: 450px) {
+      margin: 15vw 10vw;
+    }
   `;
 
   useEffect(() => {
