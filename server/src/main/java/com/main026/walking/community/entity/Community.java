@@ -76,6 +76,8 @@ public class Community {
     @OneToMany(mappedBy = "community",cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+
+
     public void setComment(Comment comment) {
         comments.add(comment);
         if (comment.getCommunity() != this) {

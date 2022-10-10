@@ -32,21 +32,16 @@ public class CommunityController {
     private final AwsS3Service awsS3Service;
 
     // Create
-
     @PostMapping("/post")
     public ResponseEntity postCommunity(@RequestBody CommunityDto.Post postDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        if(principalDetails==null){
-            throw new RuntimeException("로그인하지않은 사용자 입니다.");
-        }
-        Member loginMember = principalDetails.getMember();
-
-        CommunityDto.Response createdCommunity = communityService.createCommunity(postDto,loginMember);
+        CommunityDto.Response createdCommunity = communityService.createCommunity(postDto,principalDetails);
 
         return new ResponseEntity(createdCommunity, HttpStatus.CREATED);
     }
 
     // Read
+    // TODO 세션멤버의 정보를 뿌려주는 것은 프론트에서 가능한 일
     @GetMapping("/{communityId}")
     public ResponseEntity getCommunity(@PathVariable long communityId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
@@ -63,8 +58,7 @@ public class CommunityController {
 
     @PostMapping("/{communityId}")
     public ResponseEntity joinCommunity(@PathVariable long communityId,
-                                        @RequestBody List<Long> petIdList
-    ) {
+                                        @RequestBody List<Long> petIdList) {
         CommunityDto.Response community = communityService.joinPet(communityId, petIdList);
 
         return new ResponseEntity<>(community,HttpStatus.OK);
@@ -109,7 +103,6 @@ public class CommunityController {
             @PathVariable long communityId,
             @RequestBody CommunityDto.Patch dto,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
 
         CommunityDto.Response response = communityService.updateCommunity(communityId, dto,principalDetails);
 

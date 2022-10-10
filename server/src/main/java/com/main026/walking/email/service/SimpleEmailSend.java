@@ -1,5 +1,6 @@
 package com.main026.walking.email.service;
 
+import com.main026.walking.email.dto.MailDto;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -15,14 +16,13 @@ public class SimpleEmailSend {
         this.javaMailSender = javaMailSender;
     }
 
-
-    public void send(String to, String subject, String context) throws MessagingException {
+    public void send(MailDto mailDto) throws MessagingException {
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mailMessage, "UTF-8");
 
-        mimeMessageHelper.setTo(to);
-        mimeMessageHelper.setSubject(subject);
-        mimeMessageHelper.setText(context,true);
+        mimeMessageHelper.setTo(mailDto.getTo());
+        mimeMessageHelper.setSubject(mailDto.getSubject());
+        mimeMessageHelper.setText(mailDto.getContent(),true);
         javaMailSender.send(mailMessage);
         System.out.println("Sent simple email!");
     }

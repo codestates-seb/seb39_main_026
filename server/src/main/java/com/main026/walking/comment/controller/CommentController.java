@@ -21,7 +21,6 @@ import java.util.List;
 @RequestMapping("/comment")
 @RequiredArgsConstructor
 public class CommentController {
-    private final CommentMapper commentMapper;
     private final CommentService commentService;
 
     //  Create
@@ -42,7 +41,6 @@ public class CommentController {
 
         return new ResponseEntity(comment, HttpStatus.OK);
     }
-
 
     //  Update
     @PatchMapping("{comment-id}")

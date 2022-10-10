@@ -45,7 +45,14 @@ public class CommunityService {
 
 
     //  Create
-    public CommunityDto.Response createCommunity(CommunityDto.Post postDto,Member member) {
+    public CommunityDto.Response createCommunity(CommunityDto.Post postDto,PrincipalDetails principalDetails) {
+
+        if(principalDetails==null){
+            throw new BusinessLogicException(ExceptionCode.NO_AUTHORIZATION);
+        }
+
+        Member loginMember = principalDetails.getMember();
+
         log.info("모임 등록 요청");
         Community community = communityMapper.postDtoToEntity(postDto);
 
@@ -72,7 +79,7 @@ public class CommunityService {
         }
 
         community.setDates(dayList);
-        community.setRepresentMember(member);
+        community.setRepresentMember(loginMember);
         community.setAddress(postDto.getSi(), postDto.getGu(), postDto.getDong());
 
         //이미지 세팅
@@ -102,7 +109,9 @@ public class CommunityService {
         log.info("모임 가입 요청");
 
         Community community = communityRepository.findById(communityId).orElseThrow();
+
         isFull(community.getCapacity(),community.getCommunityPets().size(),petIdList.size());
+
         List<Long> communityPetIdList = community.getCommunityPets()
                 .stream().map(p -> p.getPet().getId()).collect(Collectors.toList());
 

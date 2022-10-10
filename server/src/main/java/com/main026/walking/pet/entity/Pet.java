@@ -62,7 +62,6 @@ public class Pet {
 
 
     public void update(PetDto.Patch patchDto) {
-        //TODO 비우면 null or 원래값
         this.petName = patchDto.getPetName();
         this.petGender = patchDto.getPetGender();
         this.neuter = patchDto.getNeuter();

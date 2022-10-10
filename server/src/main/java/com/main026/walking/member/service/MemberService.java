@@ -10,6 +10,7 @@ import com.main026.walking.member.entity.Member;
 import com.main026.walking.member.mapper.MemberMapper;
 import com.main026.walking.member.repository.MemberRepository;
 import com.main026.walking.util.awsS3.AwsS3Service;
+import com.main026.walking.util.datainit.EV;
 import com.main026.walking.util.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -96,7 +96,7 @@ public class MemberService {
 
         Member member = verifyNotExistMemberWithEmail(form.getEmail());
         log.info(member.getUsername()+"님의 비밀번호 변경 요청");
-        String temPassword = UUID.randomUUID().toString();
+        String temPassword = EV.makeUUID();
         //임시비밀번호로 교체
         try {
             member.setPassword(passwordEncoder.encode(temPassword));
