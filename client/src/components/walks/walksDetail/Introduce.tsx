@@ -12,6 +12,7 @@ export default function Introduce({ walkDetail }: { walkDetail?: WalkDetail }) {
       <article css={contentContainer}>
         <p
           css={css`
+            line-height: 1.5;
             border-radius: 10px;
             -webkit-animation: ${skeletonGradient} 1.8s infinite ease-in-out;
             animation: ${skeletonGradient} 1.8s infinite ease-in-out;

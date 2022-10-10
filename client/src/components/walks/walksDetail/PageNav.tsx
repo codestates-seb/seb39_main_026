@@ -47,12 +47,12 @@ export default function PageNav() {
   return (
     <ul css={pageNavContainer}>
       <li>
-        <NavLink href={`/walks/${walkId}`} scroll={false}>
+        <NavLink href={`/walks/${walkId}`} scroll={false} replace={true}>
           모임 소개
         </NavLink>
       </li>
       <li>
-        <NavLink href={`/walks/${walkId}/notice`} scroll={false}>
+        <NavLink href={`/walks/${walkId}/notice`} scroll={false} replace={true}>
           모임 공지사항
         </NavLink>
       </li>

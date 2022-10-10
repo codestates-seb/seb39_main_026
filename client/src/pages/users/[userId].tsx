@@ -15,32 +15,36 @@ import { useGetUsersQuery } from '../../hooks/UsersQuery';
 import UserState from '../../states/UserState';
 import { Theme } from '../../styles/Theme';
 
+const userPage = css`
+  margin: 15vw 20vw;
+  display: flex;
+  flex-direction: column;
+  .walks {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid ${Theme.divisionLineColor};
+    font-weight: 500;
+    .icon {
+      margin-right: 0.5rem;
+      font-size: 1.7rem;
+    }
+    span {
+      font-weight: 600;
+      color: ${Theme.mainColor};
+      margin: 0 0.2rem 0rem 0rem;
+    }
+  }
+
+  @media screen and (max-width: 450px) {
+    margin: 15vw 10vw;
+  }
+`;
+
 export default function User({ userId }: { userId: string }) {
   const [isValidated, setIsValidated] = useState(false);
   const [user] = useRecoilState(UserState);
   const getUsersQuery = useGetUsersQuery(userId);
-
-  const userPage = css`
-    margin: 15vw 20vw;
-    display: flex;
-    flex-direction: column;
-    .walks {
-      display: flex;
-      align-items: center;
-      padding: 1rem 0;
-      border-bottom: 1px solid ${Theme.divisionLineColor};
-      font-weight: 500;
-      .icon {
-        margin-right: 0.5rem;
-        font-size: 1.7rem;
-      }
-      span {
-        font-weight: 600;
-        color: ${Theme.mainColor};
-        margin: 0 0.2rem 0rem 0rem;
-      }
-    }
-  `;
 
   useEffect(() => {
     if (user) {

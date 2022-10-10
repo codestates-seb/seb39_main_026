@@ -9,6 +9,12 @@ import { Theme } from '../styles/Theme';
 
 const index = css`
   margin-bottom: 4rem;
+  margin-top: calc(30vh + 75px + 1rem);
+
+  @media screen and (max-width: 768px) {
+    margin-top: calc(30vh + 1rem);
+  }
+
   .new_walks,
   .hot_walks {
     margin: 1rem;
@@ -32,35 +38,37 @@ const Home: NextPage = () => {
   }, []);
 
   return (
-    <section css={index}>
+    <>
       <TabTitle prefix="지금 핫한 모임" />
-      <MainImage />
-      <AddressPicker setAddress={setAddress} />
-      <div className="new_walks">
-        <h2 className="walks_title">✨ 동네 신규 산책</h2>
-        {address ? (
-          <WalksList
-            query={`/new?si=${address?.split(' ')[0]}&gu=${
-              address?.split(' ')[1]
-            }&dong=${address?.split(' ')[2]}`}
-          />
-        ) : (
-          <p className="alert">동네를 선택하세요</p>
-        )}
-      </div>
-      <div className="hot_walks">
-        <h2 className="walks_title">🔥 마감 임박 산책 </h2>
-        {address ? (
-          <WalksList
-            query={`/hot?si=${address?.split(' ')[0]}&gu=${
-              address?.split(' ')[1]
-            }&dong=${address?.split(' ')[2]}`}
-          />
-        ) : (
-          <p className="alert">동네를 선택하세요</p>
-        )}
-      </div>
-    </section>
+      <section css={index}>
+        <MainImage />
+        <AddressPicker setAddress={setAddress} />
+        <div className="new_walks">
+          <h2 className="walks_title">✨ 동네 신규 산책</h2>
+          {address ? (
+            <WalksList
+              query={`/new?si=${address?.split(' ')[0]}&gu=${
+                address?.split(' ')[1]
+              }&dong=${address?.split(' ')[2]}`}
+            />
+          ) : (
+            <p className="alert">동네를 선택하세요</p>
+          )}
+        </div>
+        <div className="hot_walks">
+          <h2 className="walks_title">🔥 마감 임박 산책 </h2>
+          {address ? (
+            <WalksList
+              query={`/hot?si=${address?.split(' ')[0]}&gu=${
+                address?.split(' ')[1]
+              }&dong=${address?.split(' ')[2]}`}
+            />
+          ) : (
+            <p className="alert">동네를 선택하세요</p>
+          )}
+        </div>
+      </section>
+    </>
   );
 };
 

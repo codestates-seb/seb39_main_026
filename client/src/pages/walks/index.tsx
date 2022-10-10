@@ -22,6 +22,8 @@ const header = css`
 `;
 
 const walksWrapper = css`
+  margin: 0 1rem;
+
   h2 {
     font-weight: 500;
     font-size: 22px;
