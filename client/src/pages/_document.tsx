@@ -10,6 +10,7 @@ export default function Document() {
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.5/dist/web/static/pretendard.css"
         />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <body>
         <Main />
