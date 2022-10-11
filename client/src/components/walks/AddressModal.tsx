@@ -171,7 +171,6 @@ export default function AddressModal({
     display: flex;
     flex-direction: column;
     justify-content: center;
-    position: relative;
 
     select {
       background-color: ${Theme.inputBgColor};
