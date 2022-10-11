@@ -87,13 +87,14 @@ export default function AddressModal({
     }
 
     &.modal-wrapper section.modal {
+      position: fixed;
+      bottom: 0;
       width: 100%;
       max-width: 1200px;
       border-radius: 20px 20px 0 0;
       padding: 42px 41px 22px;
       background-color: #fff;
       z-index: 1;
-      position: fixed;
 
       h1 {
         font-size: 1.3rem;
@@ -170,16 +171,27 @@ export default function AddressModal({
     display: flex;
     flex-direction: column;
     justify-content: center;
+
     select {
       background-color: ${Theme.inputBgColor};
       text-align: center;
       font-size: 11px;
       border-radius: 0.5rem;
       border: 0;
-      padding: 1rem;
+      padding: 1rem 1.5rem 1rem 1rem;
       margin-bottom: 1rem;
       font-weight: 500;
       height: 3rem;
+      cursor: pointer;
+
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url('/arrow-down.svg');
+      background-repeat: no-repeat;
+      background-position: right 0.5rem top 50%;
+      background-size: 1rem;
+
       :focus {
         outline: none;
       }

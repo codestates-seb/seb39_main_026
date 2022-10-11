@@ -27,7 +27,6 @@ export default function LoginModal({
   const {
     register,
     handleSubmit,
-    setFocus,
     formState: { errors, isValid },
     reset,
   } = methods;
@@ -76,10 +75,6 @@ export default function LoginModal({
       document.body.style.overflow = 'unset';
     };
   }, []);
-
-  useEffect(() => {
-    setFocus('email');
-  }, [setFocus]);
 
   return (
     <div
@@ -211,6 +206,10 @@ const modalContainer = (isLoginModalOpen: boolean) => css`
     font-weight: 600;
     color: ${Theme.mainColor};
     gap: 0px 10px;
+
+    dt {
+      word-break: keep-all;
+    }
 
     input {
       width: 100%;

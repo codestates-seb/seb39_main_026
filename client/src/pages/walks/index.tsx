@@ -23,7 +23,7 @@ const header = css`
 
 const walksWrapper = css`
   margin: 0 1rem;
-  padding-bottom: 90px;
+  padding-bottom: 100px;
 
   h2 {
     font-weight: 500;

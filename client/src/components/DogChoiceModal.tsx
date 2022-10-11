@@ -26,6 +26,8 @@ const modalContainer = (isModalOpen: boolean) => css`
   }
 
   &.modal-wrapper section.modal {
+    position: fixed;
+    bottom: 0;
     width: 100%;
     max-width: 1200px;
     border-radius: 20px 20px 0 0;

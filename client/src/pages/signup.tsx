@@ -53,6 +53,17 @@ const signUpContainer = css`
     }
   }
 
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('/arrow-down.svg');
+    background-repeat: no-repeat;
+    background-position: right 0.5rem top 50%;
+    background-size: 1rem;
+    cursor: pointer;
+  }
+
   h2 {
     font-size: 1.1rem;
   }
