@@ -192,11 +192,6 @@ export default function AddressModal({
       background-position: right 0.5rem top 50%;
       background-size: 1rem;
 
-      text-align-last: center;
-      text-align: center;
-      -ms-text-align-last: center;
-      -moz-text-align-last: center;
-
       :focus {
         outline: none;
       }
