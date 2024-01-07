@@ -13,7 +13,7 @@
 |:-:|:-:|:-:|:-:|
 | 강도경 | 송송이 | 👑이동관 | 전이진 |
 | Backend | Frontend | Backend | Frontend |
-| [@liean17](https://github.com/liean17) | [@pseudopool](https://github.com/pseudopool) | [@devEdok13](https://github.com/devEdok13) | [@pongdang](https://github.com/pongdang) |
+| [@liean17](https://github.com/liean17) | [@pseudopool](https://github.com/pseudopool) | [@devEdok13](https://github.com/devEdok13) | [@im-binary](https://github.com/im-binary) |
 
 ## 🛠 개발 환경
 
